@@ -1,5 +1,9 @@
 # Compforge
 
+![CI](https://github.com/LooSung/compforge/actions/workflows/lint.yml/badge.svg)
+![Examples](https://github.com/LooSung/compforge/actions/workflows/examples.yml/badge.svg)
+![License](https://img.shields.io/github/license/LooSung/compforge)
+
 > **AI가 UI를 만든다. Compforge가 컴포넌트 아키텍처를 지킨다.**
 >
 > *바이브 코딩이 프론트엔드를 망가뜨리지 않게 하는 하니스 엔지니어링.*
@@ -14,7 +18,7 @@ Claude Code, Codex CLI, Cursor 등 호환 에이전트가 코드를 쓰기 전�
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-> **상태: v0.2 — 스캐폴드 + 실행 가능한 예제.** 설치, 스킬, Craft 진입점, 그리고 실행 가능한 레퍼런스 예제 2종(테스트 + 스택별 아키텍처 린트 포함)이 동작합니다. 대상 프로젝트용 CI 템플릿과 proof 프로토콜은 계획 단계입니다. [docs/roadmap.md](docs/roadmap.md) 참고. 이 문서는 존재하는 것만 주장합니다.
+> **상태: v0.3 — 1장 완결.** 설치, 스킬, Craft 진입점, 실행 가능한 레퍼런스 예제 2종(테스트 + 스택별 아키텍처 린트), 그리고 푸시마다 이 모든 것을 검증하는 리포 CI가 동작합니다. 대상 프로젝트용 CI 템플릿, 안티패턴 탐지기, proof 프로토콜은 2장 이후입니다. [docs/roadmap.md](docs/roadmap.md) 참고. 이 문서는 존재하는 것만 주장합니다.
 
 ---
 

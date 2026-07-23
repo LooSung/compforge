@@ -1,0 +1,30 @@
+name: Examples
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: ${{ matrix.example }} (lint/arch + tsc + tests)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [todo-react-feature, todo-react-fsd]
+    defaults:
+      run:
+        working-directory: examples/${{ matrix.example }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: examples/${{ matrix.example }}/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Check (lint/arch + tsc --noEmit + vitest)
+        run: npm run check

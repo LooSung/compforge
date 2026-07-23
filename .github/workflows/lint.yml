@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-skills:
+    name: Skill lint (frontmatter + 200-line limit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run skill lint
+        run: bash scripts/ci/lint-skills.sh
+
+  doctor:
+    name: Pack structure (doctor)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run doctor against the repo pack
+        run: bash scripts/setup/doctor.sh

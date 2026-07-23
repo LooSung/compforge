@@ -1,5 +1,9 @@
 # Compforge
 
+![CI](https://github.com/LooSung/compforge/actions/workflows/lint.yml/badge.svg)
+![Examples](https://github.com/LooSung/compforge/actions/workflows/examples.yml/badge.svg)
+![License](https://img.shields.io/github/license/LooSung/compforge)
+
 > **AI ships the UI. Compforge keeps the component architecture.**
 >
 > *Harness engineering that stops vibe coding from wrecking your frontend.*
@@ -14,7 +18,7 @@ Sister project: [OOPforge](https://github.com/LooSung/oopforge) — the same har
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-> **Status: v0.2 — scaffold + runnable examples.** Install, skills, the Craft entry point, and two runnable reference examples (with tests and per-stack architecture lint) work. Target-project CI templates and the proof protocol are planned; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
+> **Status: v0.3 — chapter 1 complete.** Install, skills, the Craft entry point, two runnable reference examples (tests + per-stack architecture lint), and repo CI that verifies all of it on every push. Target-project CI templates, antipattern detectors, and the proof protocol are chapter 2+; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
 
 ---
 

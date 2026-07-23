@@ -60,9 +60,9 @@ What we read, what we adopted, what we rejected. Feeds Hard Rules v0.2 and the s
 - **stitch-skills**: design-to-code pipeline tooling; stay out.
 - **agent-native** (BuilderIO): apps *containing* agents — different axis entirely.
 
-## Open items for Hard Rules v0.2 (validate against reference examples)
+## Hard Rules v0.2 decisions (closed 2026-07-23, after the reference examples shipped)
 
-1. Prop drilling limit: 2 vs 3 levels.
-2. MUST/SHOULD/NEVER phrasing migration.
-3. Whether `react-next-app` needs its own boundary enforcement recipe (server/client import rules).
-4. Numbers to re-baseline: 200 lines/file, ~15-line logic-in-component threshold, ~7 props.
+1. **Prop drilling limit: keep 2 levels.** Neither example ever needed more than 1 level of pass-through; agent-skills' 3-level allowance gains nothing at todo scale. Re-open only if a larger example forces it.
+2. **MUST/SHOULD/NEVER phrasing migration: deferred.** Cosmetic at this stage; revisit in chapter 2 when antipattern detectors need machine-checkable phrasing — migrate then, once, instead of twice.
+3. **`react-next-app` boundary recipe: deferred** until that stack ships an example (no rules without a runnable reference).
+4. **Numbers kept as-is** (200 lines/file, ~15-line logic threshold, ~7 props). Both examples satisfied every limit without exceptions. Largest file: `TodosPage.tsx` at ~45 lines. Larger examples may still re-baseline.

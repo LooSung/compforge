@@ -3,6 +3,18 @@
 All notable changes to Compforge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
+## [0.3.0] — 2026-07-23
+
+Chapter 1 close: the install → use → self-verify loop is complete.
+
+### Added
+
+- **Repo CI** (`.github/workflows/`): `lint.yml` (skill lint + pack doctor) and `examples.yml` (both examples run `npm ci && npm run check` in a matrix) on every push/PR to main. README badges added.
+
+### Changed
+
+- **Hard Rules promoted to v0.2** — validated against both reference examples; all research-doc open items decided: prop-drilling limit stays at 2 levels, MUST/SHOULD/NEVER phrasing deferred to chapter 2 detectors, numeric limits kept as written (`docs/research/competitor-skills.md`).
+
 ## [0.2.0] — 2026-07-23
 
 ### Added

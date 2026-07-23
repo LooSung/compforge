@@ -80,7 +80,7 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | useEffect abuse (derived state, fetch chains) | `skills/antipatterns/useeffect-abuse.md` |
 | Prop drilling | `skills/antipatterns/prop-drilling.md` |
 
-## Hard Rules (v0.1 draft — to be validated against reference examples before 1.0)
+## Hard Rules (v0.2 — validated against `examples/` at todo scale; larger examples may re-baseline. Decisions: `docs/research/competitor-skills.md`)
 
 These limits are intentionally measurable. They come from review focus and agent context size, not arbitrary style:
 
