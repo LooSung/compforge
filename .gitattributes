@@ -1,0 +1,16 @@
+# Normalize line endings
+* text=auto eol=lf
+
+# Shell scripts must stay LF
+*.sh text eol=lf
+
+# Markdown
+*.md text
+
+# JSON
+*.json text
+
+# Binary
+*.png binary
+*.jpg binary
+*.gif binary

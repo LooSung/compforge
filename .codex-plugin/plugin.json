@@ -1,0 +1,42 @@
+{
+    "name": "compforge",
+    "version": "0.1.0",
+    "description": "Component architecture, state placement, and TypeScript discipline skills for Codex.",
+    "author": {
+        "name": "Mr.Louis",
+        "url": "https://github.com/LooSung"
+    },
+    "homepage": "https://github.com/LooSung/compforge",
+    "repository": "https://github.com/LooSung/compforge",
+    "license": "MIT",
+    "keywords": [
+        "react",
+        "typescript",
+        "frontend",
+        "component-architecture",
+        "feature-sliced-design",
+        "state-management",
+        "korean",
+        "methodology"
+    ],
+    "skills": "./skills/",
+    "interface": {
+        "displayName": "Compforge",
+        "shortDescription": "Frontend component discipline for coding agents",
+        "longDescription": "Use Compforge to guide Codex through Discovery, Design, Skeleton, and Implement workflows with component boundaries, state placement rules, and TypeScript-strict frontend architecture.",
+        "developerName": "Mr.Louis",
+        "category": "Coding",
+        "capabilities": [
+            "Interactive",
+            "Read",
+            "Write"
+        ],
+        "defaultPrompt": [
+            "React로 Todo 기능을 Compforge 규칙에 맞춰 설계해줘.",
+            "새 화면을 Discovery 단계부터 시작해줘."
+        ],
+        "websiteURL": "https://github.com/LooSung/compforge",
+        "brandColor": "#0EA5E9",
+        "screenshots": []
+    }
+}
