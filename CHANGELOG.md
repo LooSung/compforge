@@ -3,6 +3,28 @@
 All notable changes to Compforge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
+## [0.2.0] — 2026-07-23
+
+### Added
+
+- **Runnable reference examples** (`examples/`): the same todo app on both shipped stacks, each passing `npm run check` (lint/arch + `tsc --noEmit` + vitest):
+  - `todo-react-feature` — feature folders, app-level composition, no barrels; boundaries enforced by ESLint `import/no-restricted-paths` zones (12 tests).
+  - `todo-react-fsd` — FSD layers with slice public APIs; architecture enforced by steiger (9 tests).
+- Both examples demonstrate the full state-placement ladder (query layer / URL via `useSyncExternalStore` / local draft / derived-at-render) with **zero `useEffect` in application code**.
+- `examples/README.md` index documenting what stays identical and what differs on purpose.
+
+### Fixed (found by dogfooding the examples)
+
+- ESLint's default node resolver does not resolve `.ts`/`.tsx` imports, which **silently disables** `import/no-restricted-paths`. The example config adds resolver extensions; verified with a negative test (violation → exit 1).
+- steiger's `fsd/insignificant-slice` flags every slice in a one-page app; disabled in the example config with a documented reason (keep it on in real multi-page apps).
+
+### Deep-dive applied (competitor research)
+
+- Corrected barrel-file rule: `react-vite-feature` forbids cross-feature imports and barrels (Vite tree-shaking, per bulletproof-react); FSD keeps slice public APIs.
+- Named per-stack enforcement: ESLint zones / steiger.
+- Adopted agent-skills' Rationalizations table into `skills/principles/component-discipline.md`.
+- Findings recorded in `docs/research/competitor-skills.md`.
+
 ## [0.1.0] — 2026-07-23
 
 Initial scaffold, mirroring the [OOPforge](https://github.com/LooSung/oopforge) pack structure.

@@ -14,7 +14,7 @@ Sister project: [OOPforge](https://github.com/LooSung/oopforge) — the same har
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-> **Status: v0.1 — scaffold.** Install, skills, and the Craft entry point work. Runnable reference examples, CI architecture lint, and the proof protocol are planned; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
+> **Status: v0.2 — scaffold + runnable examples.** Install, skills, the Craft entry point, and two runnable reference examples (with tests and per-stack architecture lint) work. Target-project CI templates and the proof protocol are planned; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
 
 ---
 
@@ -152,6 +152,8 @@ function CartPage() {
 | `react-vite-fsd` | Feature-Sliced Design layers | Complex apps, larger teams |
 | `react-next-app` | Next.js App Router + feature folders | SSR/SEO, server components |
 
+Runnable proof: [examples/README.md](examples/README.md) — the same todo app across both shipped stacks, each with tests and its own architecture lint.
+
 Vue (Nuxt) is planned — gated behind the React vertical being proven and enforced first. See [docs/roadmap.md](docs/roadmap.md).
 
 ---
@@ -160,6 +162,10 @@ Vue (Nuxt) is planned — gated behind the React vertical being proven and enfor
 
 ```text
 compforge/
+├── examples/
+│   ├── README.md              Stack ↔ folder index
+│   ├── todo-react-feature/    Feature folders + ESLint boundary zones
+│   └── todo-react-fsd/        Feature-Sliced Design + steiger
 ├── skills/
 │   ├── SKILL.md         Codex skill entry point
 │   ├── workflow/        Discovery → Design → Skeleton → Implement → Test,

@@ -14,7 +14,7 @@ Claude Code, Codex CLI, Cursor 등 호환 에이전트가 코드를 쓰기 전�
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-> **상태: v0.1 — 스캐폴드.** 설치, 스킬, Craft 진입점이 동작합니다. 실행 가능한 레퍼런스 예제, CI 아키텍처 린트, proof 프로토콜은 계획 단계입니다. [docs/roadmap.md](docs/roadmap.md) 참고. 이 문서는 존재하는 것만 주장합니다.
+> **상태: v0.2 — 스캐폴드 + 실행 가능한 예제.** 설치, 스킬, Craft 진입점, 그리고 실행 가능한 레퍼런스 예제 2종(테스트 + 스택별 아키텍처 린트 포함)이 동작합니다. 대상 프로젝트용 CI 템플릿과 proof 프로토콜은 계획 단계입니다. [docs/roadmap.md](docs/roadmap.md) 참고. 이 문서는 존재하는 것만 주장합니다.
 
 ---
 
@@ -151,6 +151,8 @@ function CartPage() {
 | `react-vite-feature` | 기능 폴더 | 중소형 앱, MVP |
 | `react-vite-fsd` | Feature-Sliced Design 레이어 | 복잡한 앱, 큰 팀 |
 | `react-next-app` | Next.js App Router + 기능 폴더 | SSR/SEO, 서버 컴포넌트 |
+
+실행 가능한 증명: [examples/README.md](examples/README.md) — 같은 Todo 앱을 두 스택으로 각각 구현, 테스트와 스택별 아키텍처 린트 포함.
 
 Vue (Nuxt)는 계획 항목입니다 — React 수직이 먼저 증명·강제되는 것이 게이트입니다. [docs/roadmap.md](docs/roadmap.md) 참고.
 

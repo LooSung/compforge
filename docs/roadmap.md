@@ -18,8 +18,8 @@ Compforge's slot: **methodology (skills) + hard rules (lint/CI) + runnable refer
 ## Short term (v0.1 → v0.3)
 
 1. ~~**Competitor skill deep-dive**~~ — **done 2026-07-23**; findings and adopted changes in [docs/research/competitor-skills.md](research/competitor-skills.md) (Rationalizations table adopted; barrel-file rule corrected; steiger identified as the FSD archlint).
-2. **Reference examples** — the same small app (todo or cart) across `react-vite-feature` and `react-vite-fsd`, runnable with tests. Examples validate the Hard Rules; rules that examples can't satisfy get fixed or dropped.
-3. **Hard Rules v0.2** — re-baseline the draft limits against the finished examples; resolve the open items list in the research doc (prop depth 2 vs 3, MUST/SHOULD/NEVER phrasing).
+2. ~~**Reference examples**~~ — **done 2026-07-23**; `examples/todo-react-feature` (ESLint zones, 12 tests) and `examples/todo-react-fsd` (steiger, 9 tests), both passing `npm run check`. Dogfooding findings: the ESLint node resolver silently skips `.ts` imports without extension settings (boundary rule was a no-op until fixed — CI template must include this); steiger's `insignificant-slice` needs a documented exception for single-page apps.
+3. **Hard Rules v0.2** — re-baseline the draft limits against the finished examples; resolve the open items list in the research doc (prop depth 2 vs 3, MUST/SHOULD/NEVER phrasing). Both examples satisfied every Hard Rule as written — no rule changes forced yet; larger examples may still force them.
 
 ## Medium term
 
