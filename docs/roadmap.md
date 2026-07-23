@@ -1,6 +1,6 @@
 # Compforge Roadmap
 
-Direction, priorities, and non-goals. Mirrors OOPforge's phase discipline: **prove and enforce one vertical before multiplying it.**
+Direction, priorities, and non-goals — future-facing only; history lives in [`CHANGELOG.md`](../CHANGELOG.md). Mirrors OOPforge's phase discipline: **prove and enforce one vertical before multiplying it.**
 
 ## Identity
 
@@ -15,20 +15,23 @@ Adjacent projects and why we differ:
 
 Compforge's slot: **methodology (skills) + hard rules (lint/CI) + runnable reference examples + agent runtime**, for the frontend vertical specifically.
 
-## Short term (v0.1 → v0.3)
+## Chapter 1 — self-verifying pack ✅ (closed at v0.3.0, 2026-07-23)
 
-1. ~~**Competitor skill deep-dive**~~ — **done 2026-07-23**; findings and adopted changes in [docs/research/competitor-skills.md](research/competitor-skills.md) (Rationalizations table adopted; barrel-file rule corrected; steiger identified as the FSD archlint).
-2. ~~**Reference examples**~~ — **done 2026-07-23**; `examples/todo-react-feature` (ESLint zones, 12 tests) and `examples/todo-react-fsd` (steiger, 9 tests), both passing `npm run check`. Dogfooding findings: the ESLint node resolver silently skips `.ts` imports without extension settings (boundary rule was a no-op until fixed — CI template must include this); steiger's `insignificant-slice` needs a documented exception for single-page apps.
-3. ~~**Hard Rules v0.2**~~ — **done 2026-07-23**; all open items decided and recorded in the research doc (prop depth stays 2; MUST/NEVER phrasing deferred to chapter 2's detectors; numbers kept — both examples satisfied every rule as written).
+Install → use → self-verify loop: pack + Craft + two runnable examples + repo CI + Hard Rules v0.2. Details in `CHANGELOG.md`; decisions in [`research/competitor-skills.md`](research/competitor-skills.md).
 
-**Chapter 1 closed at v0.3.0** — install → use → self-verify loop complete (pack + Craft + examples + repo CI). Chapter 2 starts at item 4.
+## Chapter 2 — enforcement distribution (next)
 
-## Medium term
+1. **Target-project lint templates** — per-stack enforcement extracted from the examples: ESLint `import/no-restricted-paths` zones for `react-vite-feature` (must include the `.ts` resolver-extensions fix, or the rule is silently a no-op); steiger for `react-vite-fsd`. Plus a GitHub Actions workflow template that blocks violating PRs.
+2. **Antipattern detectors** — mechanical checks for the catalog where possible (derived-state-in-effect, query-data-in-`useState` heuristics). Migrate Hard Rules to MUST/SHOULD/NEVER phrasing here, once, when detectors need machine-checkable wording.
 
-4. **Architecture lint for target projects** — per-stack enforcement templates (`archlint` equivalent): ESLint `import/no-restricted-paths` zones for `react-vite-feature`; steiger (`@feature-sliced/steiger-plugin`) for `react-vite-fsd`. CI workflow template that blocks violating PRs.
-5. **Detector rules** — mechanical checks for the antipattern catalog where possible (derived-state-in-effect, query-data-in-useState heuristics).
-6. **Proof protocol** — port OOPforge's control/treatment comparison to a frontend task; publish reproducible before/after runs before making improvement claims.
-7. **Library-loan-style walkthrough** — one end-to-end tutorial (Discovery → Test) on a realistic feature.
+## Chapter 3 — proof
+
+1. **Proof protocol** — port OOPforge's control/treatment comparison to a frontend task; publish reproducible before/after runs before making improvement claims.
+
+## After chapter 3
+
+- **Library-loan-style walkthrough** — one end-to-end tutorial (Discovery → Test) on a realistic feature.
+- **`react-next-app` stack** — example + boundary recipe (server/client import rules) before any skill claims it.
 
 ## Long term
 
@@ -36,9 +39,9 @@ Compforge's slot: **methodology (skills) + hard rules (lint/CI) + runnable refer
 
 Expanding to Vue means replicating a **proven, enforced vertical**. Expanding before React is proven multiplies unverified methodology. Gates, in order:
 
-1. **Proof runs public** — reproducible evidence on the React stack. Gate #1.
+1. **Proof runs public** — reproducible evidence on the React stack (chapter 3). Gate #1.
 2. **Repo hygiene + docs link-integrity CI** — expansion = N× docs/examples = N× drift surface.
-3. **Lint enforcement mature** — boundaries/dependency-cruiser templates enforced in CI for both React stacks, so Vue arrives with enforcement, not just examples.
+3. **Lint enforcement mature** — the chapter 2 templates (`no-restricted-paths` / steiger) enforced in CI for both React stacks, so Vue arrives with enforcement, not just examples.
 4. **SKILL.md frontmatter standardization** — portability across harnesses.
 
 ### Expansion targets
