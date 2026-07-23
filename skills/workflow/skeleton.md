@@ -16,14 +16,14 @@ After Design is approved. Before implementing any behavior.
 - [ ] Empty components: props typed, body renders a placeholder
 - [ ] Empty hooks: signature typed, body throws `NotImplemented` or returns fixtures
 - [ ] Shared types from the Design contracts (`types.ts` or `model/`)
-- [ ] Public API per feature (`index.ts` exporting only the public surface)
+- [ ] Import boundaries per stack: no cross-feature imports (`react-vite-feature`) or slice public APIs (`react-vite-fsd`) — see `skills/skeleton/frontend-skeleton.md`
 
 ## Self-check (mandatory)
 
 After creating the skeleton, print the directory tree and confirm:
 
 - Every feature is its own folder; no app-wide `components/` dumping ground.
-- Each feature exposes `index.ts`; nothing else is imported across features.
+- Import boundaries hold for the chosen stack (no cross-feature imports, or FSD public APIs).
 - No file contains business logic — placeholders only.
 - Type-check passes (`tsc --noEmit`).
 

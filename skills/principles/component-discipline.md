@@ -103,3 +103,14 @@ adjacent code, comments, formatting, or naming while delivering the task.
 - Clean up orphans **your change** created (unused imports, dead props).
 - Pre-existing dead code: mention it; do not delete it in the same change.
 - Do not mix unrelated refactoring with a feature or bug fix.
+
+## Rationalizations (do not accept these from yourself)
+
+| Excuse | Reality |
+|---|---|
+| "I'll just add this state here for now" | Misplaced state is the bug you will debug later. Use the ladder (#3). |
+| "A useEffect is the quickest way to sync this" | Sync effects are the defect, not the fix (`antipatterns/useeffect-abuse.md`). |
+| "This component is already long, a bit more won't hurt" | 200 lines is the line. Split before adding (`react/component-boundary.md`). |
+| "Tests after the UI is done" | Untested logic hooks do not ship (Hard Rule). Hooks first, with tests. |
+| "It's just a prototype" | Prototypes become production. Structure is cheapest now. |
+| "The skeleton stage is overhead for this" | Skipping boundaries is how god components start. Small task? Use Craft's small paths instead. |

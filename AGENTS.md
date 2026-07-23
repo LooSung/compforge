@@ -94,7 +94,7 @@ These limits are intentionally measurable. They come from review focus and agent
 - **Server state is not client state** — data fetched from an API lives in a query layer (TanStack Query or equivalent), never in `useState` + `useEffect` fetch chains.
 - **useEffect is a last resort** — effects synchronize with external systems only; no derived state, no data transformation, no event handling in effects.
 - **No prop drilling beyond 2 levels** — use composition (`children`) first, context second.
-- **Feature imports point inward** — a feature folder exposes a public API (`index.ts`); other features import that, never internals. Import direction: `shared ← entities ← features ← pages/app`.
+- **No cross-feature imports** — features are composed at the app/pages level. In `react-vite-feature`, a feature never imports from a sibling feature (barrel `index.ts` files are also avoided — they hurt Vite tree-shaking; import directly). In `react-vite-fsd`, every slice exposes a public API and cross-slice imports go through it only. Import direction: `shared ← entities ← features ← pages/app`.
 - Do not commit logic hooks or pure domain functions without tests.
 - Comments explain "why"; names explain "what".
 - **Surgical changes only** — touch what the request requires; no drive-by edits to adjacent code, comments, or formatting. Clean orphans your change created; mention pre-existing dead code instead of deleting it in the same change.
@@ -104,7 +104,7 @@ These limits are intentionally measurable. They come from review focus and agent
 - **Each feature is its own folder** — grouping files only by type (`components/`, `hooks/`, `utils/` at the top level for the whole app) is a violation once the app has more than one feature.
 - **Pages/routes must not contain business logic** — they compose features.
 - After skeleton, list the directory tree and confirm the feature folders exist with the right file types. See `skills/skeleton/frontend-skeleton.md` self-check.
-- CI enforcement (eslint-plugin-boundaries / dependency-cruiser) is planned; see `docs/roadmap.md`.
+- CI enforcement planned per stack: ESLint `import/no-restricted-paths` zones for `react-vite-feature`; steiger (`@feature-sliced/steiger-plugin`) for `react-vite-fsd`. See `docs/roadmap.md` and `docs/research/competitor-skills.md`.
 
 ## Repository Discipline
 

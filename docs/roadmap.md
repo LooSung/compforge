@@ -17,13 +17,13 @@ Compforge's slot: **methodology (skills) + hard rules (lint/CI) + runnable refer
 
 ## Short term (v0.1 → v0.3)
 
-1. **Competitor skill deep-dive** — read the actual skill files of agent-skills, ui-skills, stitch-skills; extract what works (verification sections, rationalization tables) and what to avoid. Feed findings into Hard Rules v0.2.
+1. ~~**Competitor skill deep-dive**~~ — **done 2026-07-23**; findings and adopted changes in [docs/research/competitor-skills.md](research/competitor-skills.md) (Rationalizations table adopted; barrel-file rule corrected; steiger identified as the FSD archlint).
 2. **Reference examples** — the same small app (todo or cart) across `react-vite-feature` and `react-vite-fsd`, runnable with tests. Examples validate the Hard Rules; rules that examples can't satisfy get fixed or dropped.
-3. **Hard Rules v0.2** — re-baseline the draft limits (200 lines/file, prop depth, etc.) against the finished examples.
+3. **Hard Rules v0.2** — re-baseline the draft limits against the finished examples; resolve the open items list in the research doc (prop depth 2 vs 3, MUST/SHOULD/NEVER phrasing).
 
 ## Medium term
 
-4. **Architecture lint for target projects** — eslint-plugin-boundaries or dependency-cruiser config templates per stack (`archlint` equivalent): import direction, feature public APIs, no cross-feature internals. CI workflow template that blocks violating PRs.
+4. **Architecture lint for target projects** — per-stack enforcement templates (`archlint` equivalent): ESLint `import/no-restricted-paths` zones for `react-vite-feature`; steiger (`@feature-sliced/steiger-plugin`) for `react-vite-fsd`. CI workflow template that blocks violating PRs.
 5. **Detector rules** — mechanical checks for the antipattern catalog where possible (derived-state-in-effect, query-data-in-useState heuristics).
 6. **Proof protocol** — port OOPforge's control/treatment comparison to a frontend task; publish reproducible before/after runs before making improvement claims.
 7. **Library-loan-style walkthrough** — one end-to-end tutorial (Discovery → Test) on a realistic feature.

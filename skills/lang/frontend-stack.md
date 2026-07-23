@@ -48,4 +48,7 @@ Default when the user has no preference: **`react-vite-feature`** — smallest s
 shared  ←  entities  ←  features  ←  pages/app
 ```
 
-Lower layers never import from higher layers. Features never import sibling feature internals — public API (`index.ts`) only.
+Lower layers never import from higher layers. Cross-feature imports:
+
+- `react-vite-feature`: **forbidden** — compose features at the app level; no barrel `index.ts` (Vite tree-shaking). Enforce with ESLint `import/no-restricted-paths`.
+- `react-vite-fsd`: through each slice's public API (`index.ts`) only. Enforce with steiger.

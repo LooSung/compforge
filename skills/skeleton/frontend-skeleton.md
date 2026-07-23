@@ -18,7 +18,6 @@ src/
 │   └── providers.tsx
 ├── features/
 │   └── cart/
-│       ├── index.ts     # public API — the only import point for other features
 │       ├── components/
 │       │   └── CartList.tsx
 │       ├── hooks/
@@ -33,6 +32,10 @@ src/
 └── main.tsx
 ```
 
+Import rules for this stack: **no cross-feature imports** — compose features at the
+`app/` level. **No barrel `index.ts` files** — they hurt Vite tree-shaking; import
+files directly. Enforce with ESLint `import/no-restricted-paths` zones.
+
 ## `react-vite-fsd`
 
 ```text
@@ -45,18 +48,19 @@ src/
 └── shared/              # ui kit, api client, lib, config
 ```
 
-Every slice (`features/add-to-cart/`, `entities/product/`) exposes `index.ts`.
+Every slice (`features/add-to-cart/`, `entities/product/`) exposes `index.ts` —
+this is FSD's public-api rule, enforceable with steiger (`@feature-sliced/steiger-plugin`).
 
 ## Empty-file conventions
 
 - Component: typed props, body returns a placeholder (`<div>CartList</div>`).
 - Hook: typed signature; body returns typed fixtures or throws `new Error("NotImplemented")` — pick one per project and stay consistent.
 - `types.ts`: real types from the Design contracts — types are not placeholders.
-- `index.ts`: export only what the Design marked public.
+- `index.ts` (FSD only): export only what the Design marked public.
 
 ## Self-check (run after creating)
 
 - [ ] Print the tree; every Design tree node has exactly one file.
 - [ ] No app-wide `components/`, `hooks/`, `utils/` dumping grounds (shared primitives live under `shared/`).
-- [ ] Cross-feature imports go through `index.ts` only.
+- [ ] No cross-feature imports (`react-vite-feature`); cross-slice via `index.ts` only (`react-vite-fsd`).
 - [ ] `tsc --noEmit` passes.

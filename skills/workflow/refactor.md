@@ -29,7 +29,7 @@ Never combine with a feature or bug fix. If a feature is also needed, do two pas
 | Server data in `useState`+`useEffect` | Move to query layer |
 | Derived state stored | Delete the state; compute at render |
 | Props drilled 3+ levels | Recompose with `children`, or context if truly shared |
-| App-wide type folders | Regroup by feature; add `index.ts` public APIs |
+| App-wide type folders | Regroup by feature; restore import boundaries per stack |
 
 ## Prohibited
 - **No behavior changes** — visible output and interactions stay identical.
