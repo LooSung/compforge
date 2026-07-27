@@ -50,7 +50,7 @@ decide the outcome.
 | `PROOF_STARTER` | Architecture | What it tests |
 |---|---|---|
 | `examples/todo-react-feature` (default) | Already correct: query layer, URL state, pure filter module, feature folders | Whether Compforge helps when good patterns are already there to copy. [First run](./results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/result.md): it did not — the starter carried the control. |
-| `docs/proof/starters/todo-react-legacy` | Deliberately wrong: server data in `useState` behind a fetch effect, derived state synced by two more effects, filter in `useState`, one god component, type-grouped folders, handlers drilled three levels | Whether Compforge stops an agent from extending an antipattern codebase — the case the first starter cannot measure |
+| `docs/proof/starters/todo-react-legacy` | Deliberately wrong: server data in `useState` behind a fetch effect, derived state synced by two more effects, filter in `useState`, one god component, type-grouped folders, handlers drilled three levels | Whether Compforge stops an agent from extending an antipattern codebase. [Second run](./results/2026-07-27-legacy-cursor-claude-opus-5-thinking-high-fast/result.md): it did — 4 violations versus 1, with both arms passing their checks. |
 
 The legacy starter runs, lints, type-checks, and passes its tests. It is bad
 architecture, not broken code, and it carries the same dependencies and configs
@@ -192,10 +192,19 @@ After inspecting the raw artifacts:
 
 ## Results
 
-- [2026-07-27 — Opus 5 Thinking High Fast](./results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/result.md):
+- [2026-07-27 — clean starter, Opus 5 Thinking High Fast](./results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/result.md):
   no measurable difference. Both arms scored zero violations and passed the
   checks; the starter's architecture carried the control. The task as written
   cannot discriminate on a clean starter.
+- [2026-07-27 — legacy starter, Opus 5 Thinking High Fast](./results/2026-07-27-legacy-cursor-claude-opus-5-thinking-high-fast/result.md):
+  4 violations versus 1. The control mirrored the URL into `useState` and added
+  two effects to keep them in sync; the treatment used a subscription and added
+  none. Both passed lint, types, and their own tests, so only review would have
+  caught it.
+
+Read the two together: the pair that differs is the one where the surrounding
+code models the wrong patterns. On a codebase that already demonstrates the
+right ones, the methodology had nothing to add.
 
 ## Validity threats
 

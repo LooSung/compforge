@@ -36,6 +36,11 @@ INPUT_ID = re.compile(r'id="([^"]+)"')
 # The rendered sentence, not a zero-check: a god component is full of unrelated
 # `length === 0` guards, and any of them would pass a structural test.
 NO_MATCH_COPY = re.compile(r"no(?:thing)?\s+[\w\s\u2019'\"]{0,30}?(match|result)", re.I)
+# A named definition, not a stray word: "completed" appears in every status
+# filter, and matching it accepted a component-inlined bulk loop as extracted.
+DEFINITION = re.compile(r"(?:function|const|let)\s+(\w+)\s*[=(<:]")
+BULK_VERB = re.compile(r"complete", re.I)
+BULK_SCOPE = re.compile(r"all|many|match|todos|bulk", re.I)
 
 ALLOWED_OUTSIDE_SRC = {".gitignore", "package.json", "package-lock.json"}
 
@@ -161,6 +166,16 @@ def search_input_is_labelled(production: dict[str, str]) -> bool:
     return False
 
 
+def bulk_completion_is_extracted(production: dict[str, str]) -> bool:
+    for rel, body in production.items():
+        if is_component(rel):
+            continue
+        for name in DEFINITION.findall(body):
+            if BULK_VERB.search(name) and BULK_SCOPE.search(name):
+                return True
+    return False
+
+
 def coverage_checks(sources: dict[str, str]) -> dict[str, bool]:
     production = {rel: body for rel, body in sources.items() if not is_test(rel)}
     tests = {rel: body for rel, body in sources.items() if is_test(rel)}
@@ -173,11 +188,7 @@ def coverage_checks(sources: dict[str, str]) -> dict[str, bool]:
     return {
         "query_in_url": "useSearchParamState" in joined or "URLSearchParams" in joined,
         "matching_logic_extracted": bool(CASE_FOLD.search(logic) and NARROWING.search(logic)),
-        "bulk_completion_outside_component": any(
-            SEARCH_TERM.search(body) and ("useMutation" in body or "complete" in body.lower())
-            for rel, body in production.items()
-            if not is_component(rel)
-        ),
+        "bulk_completion_outside_component": bulk_completion_is_extracted(production),
         "accessible_label": search_input_is_labelled(production),
         "live_region": "aria-live" in joined or 'role="status"' in joined,
         "empty_state_for_no_matches": bool(NO_MATCH_COPY.search(joined)),
