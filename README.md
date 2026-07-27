@@ -8,7 +8,7 @@
 >
 > *Harness engineering that stops vibe coding from wrecking your frontend.*
 
-**Forge small. Compose forever.** Compforge defines disciplined React/TypeScript as a dialect your agent follows — skills are the grammar, hard rules are the lint, reference `examples/` are planned as the proof, and install + commands are the runtime. A methodology pack plus agent harness, not a UI library or a general agent framework.
+**Forge small. Compose forever.** Compforge defines disciplined React/TypeScript as a dialect your agent follows — skills are the grammar, hard rules are the lint, runnable `examples/` are the reference implementations, and install + commands are the runtime. A methodology pack plus agent harness, not a UI library or a general agent framework.
 
 It gives Claude Code, Codex CLI, Cursor, and compatible agents a clear way to design around **component boundaries**, **state placement** (server / client / URL), **custom hooks**, and **feature-based structure** before writing code.
 
@@ -18,7 +18,7 @@ Sister project: [OOPforge](https://github.com/LooSung/oopforge) — the same har
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-> **Status: v0.3 — chapter 1 complete.** Install, skills, the Craft entry point, two runnable reference examples (tests + per-stack architecture lint), and repo CI that verifies all of it on every push. Target-project CI templates, antipattern detectors, and the proof protocol are chapter 2+; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
+> **Status: v0.3 — the install → use → self-verify loop is complete.** Install, skills, the Craft entry point, two runnable reference examples (tests + per-stack architecture lint), and repo CI that verifies all of it on every push. The proof protocol, target-project CI templates, and antipattern detectors are next, in that order; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
 
 ---
 
@@ -120,7 +120,7 @@ Most teams already know *what* a clean React codebase looks like. The hard part 
 | **Measurable** | 200 lines/component file, 1 export/file — reviewable units |
 | **Workflow-first** | Discovery → Test with human checkpoints |
 | **State-first** | Every piece of state has exactly one named home |
-| **Proof over philosophy** | Runnable examples planned before broad claims |
+| **Proof over philosophy** | Runnable examples ship first; effect claims wait for proof runs |
 
 ### Before (typical agent output)
 
@@ -195,7 +195,7 @@ compforge/
 
 ## **Hard Rules**
 
-The enforceable, measurable rules live in [`AGENTS.md`](./AGENTS.md) (v0.1 draft, to be validated against reference examples before 1.0). Highlights: 200 lines/component file, 1 export/file, TS strict + no `any`, no direct mutation, server state in the query layer, useEffect as last resort, no prop drilling past 2 levels, feature imports through public APIs only.
+The enforceable, measurable rules live in [`AGENTS.md`](./AGENTS.md) (v0.2 — validated against `examples/` at todo scale; larger examples may re-baseline). Highlights: 200 lines/component file, 1 export/file, TS strict + no `any`, no direct mutation, server state in the query layer, useEffect as last resort, no prop drilling past 2 levels, feature imports through public APIs only.
 
 ---
 

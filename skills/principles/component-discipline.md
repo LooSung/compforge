@@ -10,6 +10,33 @@ stability: experimental
 Read this before starting frontend work.
 In the completion report, mention only the principles that actually changed a design decision.
 
+## The ladder
+
+Decide what not to write, then where state lives. Climb from the top; stop at the first rung that holds.
+
+```text
+Before writing a component
+1. Does it need to exist?         -> no: don't build it
+2. Platform feature?              -> use it (<dialog>, <form>, CSS, the URL)
+3. Framework or installed dep?    -> use it
+
+Before storing a value
+4. Derivable from what you have?  -> derive at render; don't store it
+5. Comes from the server?         -> query layer, never useState
+6. Belongs in the URL?            -> search params / route params
+7. Shared across distant nodes?   -> composition first, then context or store
+8. Only then                      -> local state, the minimum that works
+```
+
+Both halves are the same move: **don't create it; if it must exist, it has exactly one home.**
+
+**Never on the chopping block:** loading, error, and empty states; accessible names
+and roles; focus management and keyboard paths; input validation. These cost lines
+and are the first thing a brevity heuristic deletes. Small code is a consequence of
+building only what the screen needs, never a target.
+
+The rungs are expanded by principles #3 and #7 below.
+
 ## 1. Components render; hooks decide
 
 Business logic belongs in custom hooks or pure functions,
@@ -24,15 +51,8 @@ where server data enters, and which props cross which boundaries.
 
 ## 3. Name the state's home before creating it
 
-Every piece of state has exactly one correct home. Ask in order:
-
-```
-1. Can it be derived from existing state/props? -> derive it; do not store it
-2. Does it come from the server?                -> query layer (TanStack Query or equivalent)
-3. Does it belong in the URL?                   -> route params / search params
-4. Is it shared across distant components?      -> store (Zustand or equivalent) or context
-5. Otherwise                                    -> local useState in the owning component
-```
+Every piece of state has exactly one correct home — walk rungs 4–8 of the ladder
+before creating any of it.
 
 Storing derived or server data in `useState` is the root of most React bugs.
 
@@ -51,18 +71,9 @@ boolean flags. Three `is*` props on one component is a split signal.
 Fix a bug by first writing a reproducible failing test (hook test or component test).
 Then resolve it with the smallest change.
 
-## 7. Subtract before abstracting — the pre-write ladder
+## 7. Subtract before abstracting
 
-Writing code is the last resort. Climb from the top; stop at the first rung that holds.
-
-```
-1. Does this need to exist?          -> no: don't build it (YAGNI)
-2. Platform / language feature?      -> use it (CSS, <form>, <dialog>, URL)
-3. Framework default?                -> use it (React/Vite/Next built-ins)
-4. Already-installed dependency?     -> use it
-5. One line / one hook?              -> finish it there
-6. Only then                         -> write the minimum that works
-```
+Writing code is the last resort — walk rungs 1–3 of the ladder before adding any.
 
 **Essential vs accidental.** The ladder cuts only *accidental complexity*
 (needless abstraction, wrapper components, unused flexibility). *Essential

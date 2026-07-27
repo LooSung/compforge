@@ -9,6 +9,10 @@ Use this skill when the user asks for Compforge, component architecture, state m
 
 **Stack scope:** Compforge targets **TypeScript + React** frontends (Vite or Next.js). Vue support is planned but **not yet available** — do not claim it works. If a request leaves the stack unspecified, steer the user to TypeScript + React rather than picking silently. If it targets an unsupported stack (Vue today, Angular, Svelte, plain JS, mobile-native, backend), tell the user Compforge does not apply there; only build it as a plain (non-Compforge) task if the user explicitly insists. See `lang/frontend-stack.md`.
 
+## The ladder
+
+One thing to remember before any frontend change: **decide what not to write, then where state lives.** The eight rungs, and what is never cut to save lines (loading/error/empty states, accessibility, focus and keyboard paths, validation), are in `principles/component-discipline.md`.
+
 ## Command Routing
 
 Treat **`/compforge:craft`** as the Compforge user entry point on **Claude Code** (installed slash command).
