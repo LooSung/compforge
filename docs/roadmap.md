@@ -38,7 +38,16 @@ Both halves are the same move: **don't create it; if it must exist, it has exact
    re-run twice on the same model and once on Sonnet 4.5 Thinking; the
    pre-declared criterion (treatment below control in ≥2 of 3 pairs) was met in
    all three, so the claim below stands. Results: [`proof/README.md`](proof/README.md#results).
-2. **Enforcement distribution** — per-stack lint templates extracted from the examples: ESLint `import/no-restricted-paths` zones for `react-vite-feature` (must include the `.ts` resolver-extensions fix, or the rule is silently a no-op); steiger for `react-vite-fsd`. Plus a GitHub Actions template that blocks violating PRs.
+2. ~~**Enforcement distribution**~~ — done 2026-07-27 as `compforge init`
+   (v0.5.0): [`templates/`](../templates/README.md) extracted from the
+   examples, `scripts/setup/init.sh` with stack detection, per-feature zone
+   generation, a no-overwrite rule, and a negative self-test (a deliberate
+   cross-feature import must fail, or init refuses to succeed). Verified on a
+   fresh Vite project: violating commit fails the delivered CI command.
+   Deliberately deferred until someone needs them: `compforge-lock.json` +
+   drift detection, brownfield config merge, pre-commit fallback for
+   runner-less environments. Init delivers enforcement only — it is not a
+   scaffold, and the Promise above is unchanged.
 3. **Antipattern detectors** — mechanical checks where possible (derived-state-in-effect, query-data-in-`useState` heuristics). Start from `scripts/proof/evaluate-run.py`, which already detects several of them and has two documented failure modes to fix first: the bulk-completion false negative and net-versus-added effect counting (a run that removes N effects and adds N reports zero). Migrate Hard Rules to MUST/SHOULD/NEVER phrasing here, once, when detectors need machine-checkable wording.
 
 **What the evidence currently supports**, and nothing wider: *Compforge stops an agent from copying a codebase's bad patterns; it adds nothing to a codebase that already has good ones, and on a weaker model it reduces violations without preventing the core one.* On a [clean starter](proof/results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/result.md) the two arms were indistinguishable; on an antipattern starter the gap repeated across three same-model pairs — [4 versus 1](proof/results/2026-07-27-legacy-cursor-claude-opus-5-thinking-high-fast/result.md), [3 versus 1](proof/results/2026-07-27-legacy-r2-cursor-claude-opus-5-thinking-high-fast/result.md), [3 versus 1](proof/results/2026-07-27-legacy-r3-cursor-claude-opus-5-thinking-high-fast/result.md) — and narrowed to [5 versus 4](proof/results/2026-07-27-legacy-cursor-claude-4.5-sonnet-thinking/result.md) on Sonnet 4.5, with every arm passing lint, types, and tests.

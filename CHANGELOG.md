@@ -3,6 +3,24 @@
 All notable changes to Compforge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
+## [0.5.0] — 2026-07-27
+
+The claim survived repetition, and the pack now delivers its enforcement into target projects. This closes the chapter that began with the proof harness: measure first, then distribute what the measurement justified.
+
+### Added
+
+- **`compforge init`** (`scripts/setup/init.sh`): copies the stack's enforcement into a target project — ESLint `import/no-restricted-paths` zones for feature folders, steiger for FSD, and a GitHub Actions workflow that blocks violating PRs. Detects the stack from `src/` and refuses to guess when detection fails.
+- **`templates/`**: the enforcement configs, extracted from the runnable examples where CI exercises them. The FSD template keeps `fsd/insignificant-slice` on; the example turns it off only because a one-page demo has single-consumer slices.
+- **Negative self-test in init**: after installing, a deliberate cross-feature import must fail lint (and a compliant file must pass), or init exits non-zero. The `.ts` resolver trap makes the zone rule silently a no-op when misconfigured — a delivered-but-dead guard is worse than none, so init proves the mechanism can fail before reporting success.
+- **Per-feature zone generation**: cross-feature zones are enumerated from the directories under `src/features/` at init time, inside a marked block that a re-run regenerates idempotently. Files init did not generate are never overwritten; an existing `eslint.config.js` gets a printed merge snippet instead.
+- **Three repeat proof runs** (`docs/proof/results/`): the legacy-starter pair re-run twice on Opus 5 (3v1, 3v1) and once on Sonnet 4.5 Thinking (5v4 hand-corrected). The pre-declared criterion — treatment below control in at least 2 of 3 pairs — was met in all three.
+
+### Changed
+
+- **The claim narrowed instead of coming down**: *Compforge stops an agent from copying a codebase's bad patterns; it adds nothing to a codebase that already has good ones, and on a weaker model it reduces violations without preventing the core one.* The Sonnet 4.5 treatment mirrored the URL into `useState` despite loading the skill — recorded, published, and reflected in README and roadmap.
+- **A second evaluator failure mode is documented**: baseline subtraction counts net effects, not added ones — a run that removes two effects and adds two reports zero `useeffect-added`. Fix queued as the first task of the antipattern-detector roadmap item.
+- Quickstart gains the init step; `doctor.sh` validates `templates/` and `init.sh`; roadmap marks proof repetition and enforcement distribution done. Init is enforcement delivery only — not a scaffold; the Promise paragraph is unchanged.
+
 ## [0.4.1] — 2026-07-27
 
 Documentation catch-up after the proof work. No behavior change to install, skills, or the harness.
