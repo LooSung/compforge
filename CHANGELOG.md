@@ -3,9 +3,9 @@
 All notable changes to Compforge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
-## [Unreleased]
+## [0.4.0] — 2026-07-27
 
-The proof harness is live with two published runs. Together they support one narrow claim: **Compforge stops an agent from copying a codebase's bad patterns, and adds nothing to a codebase that already has good ones.** No broader claim is made from two runs.
+Compforge starts measuring itself. The proof harness is live with two published runs. Together they support one narrow claim: **Compforge stops an agent from copying a codebase's bad patterns, and adds nothing to a codebase that already has good ones.** No broader claim is made from two runs.
 
 ### Added
 
@@ -20,6 +20,7 @@ The proof harness is live with two published runs. Together they support one nar
 
 ### Changed
 
+- **Surgical scope narrowed, using the proof run as the evidence.** Hard Rule and principle #11 now say that a defect your feature makes newly reachable or materially worse is *inside* the request: fix it minimally and say so, rather than deferring a bug you amplified. The first run showed the old wording making the treatment leave a history-pollution bug in place with a comment while the control simply fixed it. A matching Rationalizations row blocks "that bug was already there".
 - **The ladder is the first thing an agent reads.** The pre-write and state-home ladders are merged into one eight-rung ladder at the top of `skills/principles/component-discipline.md`; principles #3 and #7 now point at it instead of restating it. `skills/SKILL.md` carries a one-line summary and a pointer rather than a copy, so there is exactly one canonical text to keep correct.
 - **"Never on the chopping block" guard** ships next to the ladder: loading, error, and empty states, accessible names and roles, focus management, and input validation are exempt from subtraction. Small code is a consequence of building only what the screen needs, never a target.
 - **Roadmap restructured** as promise → ladder → now → not doing → gates, with chapter numbering dropped. Proof moves ahead of enforcement distribution, and the success metric is stated outright: architecture-violation and rework rates plus state and accessibility coverage, never lines of code. Orchestration, long-term agent memory, and wrapping the git/PR cycle are recorded as non-goals.

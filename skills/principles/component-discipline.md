@@ -114,6 +114,10 @@ adjacent code, comments, formatting, or naming while delivering the task.
 - Clean up orphans **your change** created (unused imports, dead props).
 - Pre-existing dead code: mention it; do not delete it in the same change.
 - Do not mix unrelated refactoring with a feature or bug fix.
+- **A defect your feature makes newly reachable or materially worse is inside
+  the request.** That is not adjacent code you would like to improve — it is
+  your feature's behavior. Make the smallest fix that serves the feature and
+  name it in the summary. Do not ship a comment deferring a bug you amplified.
 
 ## Rationalizations (do not accept these from yourself)
 
@@ -124,4 +128,5 @@ adjacent code, comments, formatting, or naming while delivering the task.
 | "This component is already long, a bit more won't hurt" | 200 lines is the line. Split before adding (`react/component-boundary.md`). |
 | "Tests after the UI is done" | Untested logic hooks do not ship (Hard Rule). Hooks first, with tests. |
 | "It's just a prototype" | Prototypes become production. Structure is cheapest now. |
+| "That bug was already there, it's out of scope" | Not once your feature makes it worse. A per-keystroke version of a per-click bug is yours (#11). |
 | "The skeleton stage is overhead for this" | Skipping boundaries is how god components start. Small task? Use Craft's small paths instead. |

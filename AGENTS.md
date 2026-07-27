@@ -97,7 +97,7 @@ These limits are intentionally measurable. They come from review focus and agent
 - **No cross-feature imports** — features are composed at the app/pages level. In `react-vite-feature`, a feature never imports from a sibling feature (barrel `index.ts` files are also avoided — they hurt Vite tree-shaking; import directly). In `react-vite-fsd`, every slice exposes a public API and cross-slice imports go through it only. Import direction: `shared ← entities ← features ← pages/app`.
 - Do not commit logic hooks or pure domain functions without tests.
 - Comments explain "why"; names explain "what".
-- **Surgical changes only** — touch what the request requires; no drive-by edits to adjacent code, comments, or formatting. Clean orphans your change created; mention pre-existing dead code instead of deleting it in the same change.
+- **Surgical changes only** — touch what the request requires; no drive-by edits to adjacent code, comments, or formatting. Clean orphans your change created; mention pre-existing dead code instead of deleting it in the same change. A defect your feature makes newly reachable or materially worse is *inside* the request: fix it minimally and say so, rather than deferring a bug you amplified.
 
 ### Layer layout
 
