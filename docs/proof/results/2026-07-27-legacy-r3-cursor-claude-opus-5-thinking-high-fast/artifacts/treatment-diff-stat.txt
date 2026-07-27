@@ -1,0 +1,13 @@
+ .gitignore                           |   1 +
+ src/App.test.tsx                     | 147 +++++++++++++++++++++++++++++++++++
+ src/App.tsx                          |  53 ++++++++-----
+ src/components/TodoList.tsx          |   6 +-
+ src/components/TodoMatchSummary.tsx  |  22 ++++++
+ src/components/TodoPanel.tsx         |   4 +-
+ src/components/TodoSearch.tsx        |  19 +++++
+ src/hooks/useTodoSearchQuery.test.ts |  62 +++++++++++++++
+ src/hooks/useTodoSearchQuery.ts      |  41 ++++++++++
+ src/types.ts                         |   2 +
+ src/utils/todoFilter.test.ts         |  69 ++++++++++++++++
+ src/utils/todoFilter.ts              |  19 +++++
+ 12 files changed, 423 insertions(+), 22 deletions(-)

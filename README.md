@@ -18,7 +18,7 @@ Sister project: [OOPforge](https://github.com/LooSung/oopforge) — the same har
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-> **Status: v0.4 — the pack now measures itself.** On top of the install → use → self-verify loop (install, skills, the Craft entry point, two runnable reference examples, repo CI), there is a reproducible control-versus-Compforge harness and [two published runs](docs/proof/) — one favourable, one not. What they support is narrow: *Compforge stops an agent from copying a codebase's bad patterns; it adds nothing to a codebase that already has good ones.* Repeat runs, target-project CI templates, and antipattern detectors are next; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
+> **Status: v0.4 — the pack now measures itself, repeatedly.** On top of the install → use → self-verify loop (install, skills, the Craft entry point, two runnable reference examples, repo CI), there is a reproducible control-versus-Compforge harness and [five published runs](docs/proof/) — favourable and not. What they support is narrow: *Compforge stops an agent from copying a codebase's bad patterns; it adds nothing to a codebase that already has good ones, and on a weaker model it reduces violations without preventing the core one.* The antipattern-starter gap repeated across three same-model pairs (4v1, 3v1, 3v1) and narrowed on Sonnet 4.5 (5v4). Target-project CI templates and antipattern detectors are next; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
 
 ---
 

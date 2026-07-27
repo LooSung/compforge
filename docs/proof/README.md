@@ -201,10 +201,26 @@ After inspecting the raw artifacts:
   two effects to keep them in sync; the treatment used a subscription and added
   none. Both passed lint, types, and their own tests, so only review would have
   caught it.
+- [2026-07-27 — legacy starter repeat 2, Opus 5 Thinking High Fast](./results/2026-07-27-legacy-r2-cursor-claude-opus-5-thinking-high-fast/result.md):
+  3 versus 1. Same asymmetry, fresh sessions; this control skipped the
+  `popstate` listener, so it counts one violation fewer while behaving worse.
+- [2026-07-27 — legacy starter repeat 3, Opus 5 Thinking High Fast](./results/2026-07-27-legacy-r3-cursor-claude-opus-5-thinking-high-fast/result.md):
+  3 versus 1. This control extracted a custom hook — the same file boundary as
+  the treatment — and implemented a `useState` mirror synced by an effect
+  inside it. Surface structure converged; the state model did not.
+- [2026-07-27 — legacy starter, Sonnet 4.5 Thinking](./results/2026-07-27-legacy-cursor-claude-4.5-sonnet-thinking/result.md):
+  5 versus 4 after hand correction. The direction held on a weaker model, but
+  the treatment itself mirrored the URL into state, and the machine evaluator
+  missed two of its effects because the run removed two old effects and added
+  two new ones — baseline subtraction counts net, not added. Least favourable
+  valid pair; documents a second evaluator failure mode.
 
-Read the two together: the pair that differs is the one where the surrounding
-code models the wrong patterns. On a codebase that already demonstrates the
-right ones, the methodology had nothing to add.
+Read them together: on the antipattern starter the asymmetry repeated across
+three same-model pairs (4v1, 3v1, 3v1) — the pre-declared repetition criterion
+(treatment below control in at least 2 of 3 pairs) is met. On a clean starter
+the arms were indistinguishable, and on a weaker model the gap narrowed to one
+rule. The pair that differs is always the one where the surrounding code models
+the wrong patterns.
 
 ## Validity threats
 
@@ -214,7 +230,10 @@ right ones, the methodology had nothing to add.
   greenfield task would show. This protocol covers one existing-feature task
   only.
 - The heuristic evaluator cannot replace human review; regex cannot tell a
-  derived value from a cached one in every case.
+  derived value from a cached one in every case. Two failure modes are already
+  documented: a false negative on bulk-completion extraction (first legacy
+  pair) and net-versus-added effect counting — a run that removes N effects and
+  adds N new ones reports zero `useeffect-added` (Sonnet 4.5 pair).
 - Missing `.craft/` creation invalidates the treatment skill load.
 - A control workspace that can discover Compforge instructions invalidates the
   control run.

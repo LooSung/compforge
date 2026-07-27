@@ -1,0 +1,705 @@
+diff --git a/src/App.test.tsx b/src/App.test.tsx
+index 527b79b..b04d6c8 100644
+--- a/src/App.test.tsx
++++ b/src/App.test.tsx
+@@ -43,3 +43,223 @@ describe('App', () => {
+     expect(screen.getByText('Write the spec')).toBeInTheDocument();
+   });
+ });
++
++describe('App search', () => {
++  beforeEach(() => {
++    resetTodosDb([
++      { id: '1', title: 'Write the spec', completed: false },
++      { id: '2', title: 'Ship the release', completed: true },
++      { id: '3', title: 'Review SPEC feedback', completed: true },
++      { id: '4', title: 'Book the venue', completed: false },
++    ]);
++  });
++
++  it('gives the search input an accessible label', async () => {
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    expect(screen.getByLabelText('Search todos')).toBeInTheDocument();
++  });
++
++  it('filters by title, ignoring case', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.type(screen.getByLabelText('Search todos'), 'SPEC');
++
++    await waitFor(() => {
++      expect(screen.queryByText('Ship the release')).not.toBeInTheDocument();
++    });
++    expect(screen.getByText('Write the spec')).toBeInTheDocument();
++    expect(screen.getByText('Review SPEC feedback')).toBeInTheDocument();
++    expect(screen.queryByText('Book the venue')).not.toBeInTheDocument();
++  });
++
++  it('combines the search with the status filter', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.type(screen.getByLabelText('Search todos'), 'spec');
++    await user.click(screen.getByRole('button', { name: 'active' }));
++
++    await waitFor(() => {
++      expect(screen.queryByText('Review SPEC feedback')).not.toBeInTheDocument();
++    });
++    expect(screen.getByText('Write the spec')).toBeInTheDocument();
++  });
++
++  it('announces how many todos match', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    expect(await screen.findByText('4 matching todos')).toBeInTheDocument();
++
++    await user.type(screen.getByLabelText('Search todos'), 'spec');
++
++    const count = await screen.findByText('2 matching todos');
++    expect(count).toHaveAttribute('role', 'status');
++
++    await user.type(screen.getByLabelText('Search todos'), ' feedback');
++    expect(await screen.findByText('1 matching todo')).toBeInTheDocument();
++  });
++
++  it('shows a distinct empty state when nothing matches', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.type(screen.getByLabelText('Search todos'), 'zzz');
++
++    expect(await screen.findByText('No todos match "zzz".')).toBeInTheDocument();
++    expect(
++      screen.queryByText('No todos yet. Add your first one above.'),
++    ).not.toBeInTheDocument();
++    expect(screen.getByText('0 matching todos')).toBeInTheDocument();
++  });
++
++  it('keeps the plain empty state when there are no todos at all', async () => {
++    resetTodosDb([]);
++    render(<App />);
++
++    expect(
++      await screen.findByText('No todos yet. Add your first one above.'),
++    ).toBeInTheDocument();
++  });
++
++  it('keeps the query in the URL', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.type(screen.getByLabelText('Search todos'), 'spec');
++
++    await waitFor(() => {
++      expect(window.location.search).toBe('?q=spec');
++    });
++  });
++
++  it('clears the query from the URL when the search is emptied', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.type(screen.getByLabelText('Search todos'), 'spec');
++    await waitFor(() => expect(window.location.search).toBe('?q=spec'));
++
++    await user.clear(screen.getByLabelText('Search todos'));
++
++    await waitFor(() => {
++      expect(window.location.search).toBe('');
++    });
++  });
++
++  it('restores the query from the URL on load', async () => {
++    window.history.replaceState(null, '', '?q=spec');
++    render(<App />);
++
++    expect(await screen.findByText('Write the spec')).toBeInTheDocument();
++    expect(screen.getByLabelText('Search todos')).toHaveValue('spec');
++    expect(screen.getByText('Review SPEC feedback')).toBeInTheDocument();
++    expect(screen.queryByText('Book the venue')).not.toBeInTheDocument();
++    expect(screen.getByText('2 matching todos')).toBeInTheDocument();
++  });
++});
++
++describe('App complete all matches', () => {
++  beforeEach(() => {
++    resetTodosDb([
++      { id: '1', title: 'Write the spec', completed: false },
++      { id: '2', title: 'Ship the release', completed: true },
++      { id: '3', title: 'Review SPEC feedback', completed: true },
++      { id: '4', title: 'Book the venue', completed: false },
++    ]);
++  });
++
++  it('completes matching todos and leaves completed ones completed', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.type(screen.getByLabelText('Search todos'), 'spec');
++    await screen.findByText('2 matching todos');
++
++    await user.click(screen.getByRole('button', { name: 'Complete all matches' }));
++
++    await waitFor(() => {
++      expect(screen.getByRole('checkbox', { name: 'Write the spec' })).toBeChecked();
++    });
++    expect(
++      screen.getByRole('checkbox', { name: 'Review SPEC feedback' }),
++    ).toBeChecked();
++  });
++
++  it('leaves todos outside the match alone', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.type(screen.getByLabelText('Search todos'), 'spec');
++    await screen.findByText('2 matching todos');
++    await user.click(screen.getByRole('button', { name: 'Complete all matches' }));
++    await waitFor(() => {
++      expect(screen.getByRole('checkbox', { name: 'Write the spec' })).toBeChecked();
++    });
++
++    await user.clear(screen.getByLabelText('Search todos'));
++
++    expect(
++      await screen.findByRole('checkbox', { name: 'Book the venue' }),
++    ).not.toBeChecked();
++    expect(
++      screen.getByRole('checkbox', { name: 'Ship the release' }),
++    ).toBeChecked();
++    expect(screen.getByText('1 active item')).toBeInTheDocument();
++  });
++
++  it('respects the status filter when choosing what to complete', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.click(screen.getByRole('button', { name: 'active' }));
++    await screen.findByText('2 matching todos');
++
++    await user.click(screen.getByRole('button', { name: 'Complete all matches' }));
++
++    await waitFor(() => {
++      expect(screen.getByText('0 matching todos')).toBeInTheDocument();
++    });
++    expect(screen.getByText('0 active items')).toBeInTheDocument();
++  });
++
++  it('is disabled when every match is already completed', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.type(screen.getByLabelText('Search todos'), 'release');
++
++    await waitFor(() => {
++      expect(
++        screen.getByRole('button', { name: 'Complete all matches' }),
++      ).toBeDisabled();
++    });
++  });
++
++  it('is disabled when nothing matches', async () => {
++    const user = userEvent.setup();
++    render(<App />);
++    await screen.findByText('Write the spec');
++
++    await user.type(screen.getByLabelText('Search todos'), 'zzz');
++
++    await waitFor(() => {
++      expect(
++        screen.getByRole('button', { name: 'Complete all matches' }),
++      ).toBeDisabled();
++    });
++  });
++});
+diff --git a/src/App.tsx b/src/App.tsx
+index 02ae0a1..cbd4ef6 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -1,18 +1,17 @@
+ import { useEffect, useState, type FormEvent } from 'react';
+ import { createTodo, deleteTodo, fetchTodos, toggleTodo } from './api';
+ import { TodoPanel } from './components/TodoPanel';
+-import type { Todo } from './types';
++import { FILTERS, type Filter, type Todo } from './types';
+ import { formatCount } from './utils/format';
+-
+-const FILTERS = ['all', 'active', 'completed'] as const;
+-
+-type Filter = (typeof FILTERS)[number];
++import { selectMatchingTodos } from './utils/search';
++import { readQueryParam, writeQueryParam } from './utils/url';
+ 
+ export default function App() {
+   const [todos, setTodos] = useState<Todo[]>([]);
+   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+   const [activeCount, setActiveCount] = useState(0);
+   const [filter, setFilter] = useState<Filter>('all');
++  const [query, setQuery] = useState(() => readQueryParam(window.location.search));
+   const [draft, setDraft] = useState('');
+   const [loading, setLoading] = useState(true);
+   const [failed, setFailed] = useState(false);
+@@ -38,19 +37,22 @@ export default function App() {
+   }, []);
+ 
+   useEffect(() => {
+-    if (filter === 'active') {
+-      setVisibleTodos(todos.filter((todo) => !todo.completed));
+-    } else if (filter === 'completed') {
+-      setVisibleTodos(todos.filter((todo) => todo.completed));
+-    } else {
+-      setVisibleTodos(todos);
+-    }
+-  }, [todos, filter]);
++    setVisibleTodos(selectMatchingTodos(todos, filter, query));
++  }, [todos, filter, query]);
+ 
+   useEffect(() => {
+     setActiveCount(todos.filter((todo) => !todo.completed).length);
+   }, [todos]);
+ 
++  useEffect(() => {
++    const search = writeQueryParam(window.location.search, query);
++    window.history.replaceState(
++      null,
++      '',
++      `${window.location.pathname}${search}${window.location.hash}`,
++    );
++  }, [query]);
++
+   async function reload() {
+     const data = await fetchTodos();
+     setTodos(data);
+@@ -81,6 +83,19 @@ export default function App() {
+     setBusy(false);
+   }
+ 
++  async function handleCompleteMatches() {
++    // Toggling only the incomplete matches leaves already-completed ones completed.
++    const pending = visibleTodos.filter((todo) => !todo.completed);
++    if (pending.length === 0) return;
++    setBusy(true);
++    await Promise.all(pending.map((todo) => toggleTodo(todo.id)));
++    await reload();
++    setBusy(false);
++  }
++
++  const ready = !loading && !failed;
++  const pendingMatchCount = visibleTodos.filter((todo) => !todo.completed).length;
++
+   return (
+     <main>
+       <h1>Todos</h1>
+@@ -98,6 +113,17 @@ export default function App() {
+         </button>
+       </form>
+ 
++      <div className="todo-search">
++        <label htmlFor="todo-search">Search todos</label>
++        <input
++          id="todo-search"
++          type="search"
++          value={query}
++          onChange={(event) => setQuery(event.target.value)}
++          placeholder="Filter by title"
++        />
++      </div>
++
+       <div className="todo-filters">
+         {FILTERS.map((option) => (
+           <button
+@@ -111,10 +137,24 @@ export default function App() {
+         ))}
+       </div>
+ 
++      <div className="todo-matches">
++        <p role="status">
++          {ready ? formatCount(visibleTodos.length, 'matching todo') : ''}
++        </p>
++        <button
++          type="button"
++          onClick={handleCompleteMatches}
++          disabled={busy || !ready || pendingMatchCount === 0}
++        >
++          Complete all matches
++        </button>
++      </div>
++
+       <TodoPanel
+         todos={visibleTodos}
+         loading={loading}
+         failed={failed}
++        query={query}
+         onToggle={handleToggle}
+         onRemove={handleRemove}
+       />
+diff --git a/src/components/TodoList.tsx b/src/components/TodoList.tsx
+index c62b1e4..06e49de 100644
+--- a/src/components/TodoList.tsx
++++ b/src/components/TodoList.tsx
+@@ -1,15 +1,24 @@
+ import type { Todo } from '../types';
++import { normalizeQuery } from '../utils/search';
+ import { TodoItem } from './TodoItem';
+ 
+ interface TodoListProps {
+   todos: Todo[];
+   loading: boolean;
+   failed: boolean;
++  query: string;
+   onToggle: (id: string) => void;
+   onRemove: (id: string) => void;
+ }
+ 
+-export function TodoList({ todos, loading, failed, onToggle, onRemove }: TodoListProps) {
++export function TodoList({
++  todos,
++  loading,
++  failed,
++  query,
++  onToggle,
++  onRemove,
++}: TodoListProps) {
+   if (loading) {
+     return <p role="status">Loading todos…</p>;
+   }
+@@ -19,6 +28,9 @@ export function TodoList({ todos, loading, failed, onToggle, onRemove }: TodoLis
+   }
+ 
+   if (todos.length === 0) {
++    if (normalizeQuery(query).length > 0) {
++      return <p role="status">{`No todos match "${query.trim()}".`}</p>;
++    }
+     return <p role="status">No todos yet. Add your first one above.</p>;
+   }
+ 
+diff --git a/src/components/TodoPanel.tsx b/src/components/TodoPanel.tsx
+index 505575d..6e9358a 100644
+--- a/src/components/TodoPanel.tsx
++++ b/src/components/TodoPanel.tsx
+@@ -5,11 +5,19 @@ interface TodoPanelProps {
+   todos: Todo[];
+   loading: boolean;
+   failed: boolean;
++  query: string;
+   onToggle: (id: string) => void;
+   onRemove: (id: string) => void;
+ }
+ 
+-export function TodoPanel({ todos, loading, failed, onToggle, onRemove }: TodoPanelProps) {
++export function TodoPanel({
++  todos,
++  loading,
++  failed,
++  query,
++  onToggle,
++  onRemove,
++}: TodoPanelProps) {
+   return (
+     <section className="todo-panel">
+       <h2>Your list</h2>
+@@ -17,6 +25,7 @@ export function TodoPanel({ todos, loading, failed, onToggle, onRemove }: TodoPa
+         todos={todos}
+         loading={loading}
+         failed={failed}
++        query={query}
+         onToggle={onToggle}
+         onRemove={onRemove}
+       />
+diff --git a/src/styles.css b/src/styles.css
+index 1c0d84a..2235786 100644
+--- a/src/styles.css
++++ b/src/styles.css
+@@ -7,6 +7,19 @@ body {
+   padding: 0 1rem;
+ }
+ 
++.todo-search,
++.todo-matches {
++  display: flex;
++  align-items: center;
++  gap: 0.5rem;
++  margin: 0.5rem 0;
++}
++
++.todo-matches p {
++  margin: 0;
++  flex: 1;
++}
++
+ .todo-list {
+   list-style: none;
+   padding: 0;
+diff --git a/src/types.ts b/src/types.ts
+index 476a3f9..b5371e7 100644
+--- a/src/types.ts
++++ b/src/types.ts
+@@ -3,3 +3,7 @@ export interface Todo {
+   title: string;
+   completed: boolean;
+ }
++
++export const FILTERS = ['all', 'active', 'completed'] as const;
++
++export type Filter = (typeof FILTERS)[number];
+diff --git a/src/utils/search.test.ts b/src/utils/search.test.ts
+new file mode 100644
+index 0000000..8909dda
+--- /dev/null
++++ b/src/utils/search.test.ts
+@@ -0,0 +1,134 @@
++import { describe, expect, it } from 'vitest';
++import type { Todo } from '../types';
++import {
++  matchesFilter,
++  matchesQuery,
++  normalizeQuery,
++  selectMatchingTodos,
++} from './search';
++
++const todo = (overrides: Partial<Todo> = {}): Todo => ({
++  id: '1',
++  title: 'Write the spec',
++  completed: false,
++  ...overrides,
++});
++
++const TODOS: Todo[] = [
++  { id: '1', title: 'Write the spec', completed: false },
++  { id: '2', title: 'Ship the release', completed: true },
++  { id: '3', title: 'Review SPEC feedback', completed: true },
++  { id: '4', title: 'Book the venue', completed: false },
++];
++
++const titles = (todos: Todo[]) => todos.map((item) => item.title);
++
++describe('normalizeQuery', () => {
++  it('trims and lowercases', () => {
++    expect(normalizeQuery('  SpEc  ')).toBe('spec');
++  });
++
++  it('collapses whitespace-only input to empty', () => {
++    expect(normalizeQuery('   ')).toBe('');
++  });
++});
++
++describe('matchesQuery', () => {
++  it('matches every todo for an empty query', () => {
++    expect(matchesQuery(todo(), '')).toBe(true);
++    expect(matchesQuery(todo(), '   ')).toBe(true);
++  });
++
++  it('matches a substring of the title', () => {
++    expect(matchesQuery(todo(), 'the')).toBe(true);
++    expect(matchesQuery(todo(), 'Write the spec')).toBe(true);
++  });
++
++  it('ignores case on both sides', () => {
++    expect(matchesQuery(todo({ title: 'Write the SPEC' }), 'spec')).toBe(true);
++    expect(matchesQuery(todo({ title: 'write the spec' }), 'SPEC')).toBe(true);
++  });
++
++  it('ignores surrounding whitespace in the query', () => {
++    expect(matchesQuery(todo(), '  spec  ')).toBe(true);
++  });
++
++  it('rejects titles that do not contain the query', () => {
++    expect(matchesQuery(todo(), 'release')).toBe(false);
++  });
++
++  it('does not treat the query as a regular expression', () => {
++    expect(matchesQuery(todo({ title: 'Write the spec' }), 'w.ite')).toBe(false);
++    expect(matchesQuery(todo({ title: 'Cost is $5 (net)' }), '$5 (net)')).toBe(true);
++  });
++
++  it('matches on the title only, not the id', () => {
++    expect(matchesQuery(todo({ id: 'abc', title: 'Write the spec' }), 'abc')).toBe(
++      false,
++    );
++  });
++});
++
++describe('matchesFilter', () => {
++  it('accepts everything for "all"', () => {
++    expect(matchesFilter(todo({ completed: false }), 'all')).toBe(true);
++    expect(matchesFilter(todo({ completed: true }), 'all')).toBe(true);
++  });
++
++  it('accepts only incomplete todos for "active"', () => {
++    expect(matchesFilter(todo({ completed: false }), 'active')).toBe(true);
++    expect(matchesFilter(todo({ completed: true }), 'active')).toBe(false);
++  });
++
++  it('accepts only completed todos for "completed"', () => {
++    expect(matchesFilter(todo({ completed: false }), 'completed')).toBe(false);
++    expect(matchesFilter(todo({ completed: true }), 'completed')).toBe(true);
++  });
++});
++
++describe('selectMatchingTodos', () => {
++  it('returns everything when the filter is "all" and the query is empty', () => {
++    expect(selectMatchingTodos(TODOS, 'all', '')).toEqual(TODOS);
++  });
++
++  it('applies the query case-insensitively', () => {
++    expect(titles(selectMatchingTodos(TODOS, 'all', 'spec'))).toEqual([
++      'Write the spec',
++      'Review SPEC feedback',
++    ]);
++  });
++
++  it('combines the query with the active filter', () => {
++    expect(titles(selectMatchingTodos(TODOS, 'active', 'spec'))).toEqual([
++      'Write the spec',
++    ]);
++  });
++
++  it('combines the query with the completed filter', () => {
++    expect(titles(selectMatchingTodos(TODOS, 'completed', 'spec'))).toEqual([
++      'Review SPEC feedback',
++    ]);
++  });
++
++  it('returns nothing when the query matches no title', () => {
++    expect(selectMatchingTodos(TODOS, 'all', 'nothing here')).toEqual([]);
++  });
++
++  it('returns nothing when the query matches but the filter excludes it', () => {
++    expect(selectMatchingTodos(TODOS, 'completed', 'venue')).toEqual([]);
++  });
++
++  it('preserves the original order', () => {
++    expect(titles(selectMatchingTodos(TODOS, 'all', 'the'))).toEqual([
++      'Write the spec',
++      'Ship the release',
++      'Book the venue',
++    ]);
++  });
++
++  it('does not mutate the input', () => {
++    const input = [...TODOS];
++    selectMatchingTodos(input, 'active', 'spec');
++    expect(input).toEqual(TODOS);
++  });
++});
+diff --git a/src/utils/search.ts b/src/utils/search.ts
+new file mode 100644
+index 0000000..6f5be09
+--- /dev/null
++++ b/src/utils/search.ts
+@@ -0,0 +1,27 @@
++import type { Filter, Todo } from '../types';
++
++export function normalizeQuery(query: string): string {
++  return query.trim().toLowerCase();
++}
++
++export function matchesQuery(todo: Todo, query: string): boolean {
++  const needle = normalizeQuery(query);
++  if (needle.length === 0) return true;
++  return todo.title.toLowerCase().includes(needle);
++}
++
++export function matchesFilter(todo: Todo, filter: Filter): boolean {
++  if (filter === 'active') return !todo.completed;
++  if (filter === 'completed') return todo.completed;
++  return true;
++}
++
++export function selectMatchingTodos(
++  todos: Todo[],
++  filter: Filter,
++  query: string,
++): Todo[] {
++  return todos.filter(
++    (todo) => matchesFilter(todo, filter) && matchesQuery(todo, query),
++  );
++}
+diff --git a/src/utils/url.test.ts b/src/utils/url.test.ts
+new file mode 100644
+index 0000000..a34dbfb
+--- /dev/null
++++ b/src/utils/url.test.ts
+@@ -0,0 +1,45 @@
++import { describe, expect, it } from 'vitest';
++import { readQueryParam, writeQueryParam } from './url';
++
++describe('readQueryParam', () => {
++  it('returns an empty string when the param is absent', () => {
++    expect(readQueryParam('')).toBe('');
++    expect(readQueryParam('?filter=active')).toBe('');
++  });
++
++  it('reads the query param', () => {
++    expect(readQueryParam('?q=spec')).toBe('spec');
++  });
++
++  it('decodes escaped characters', () => {
++    expect(readQueryParam('?q=write%20the%20spec')).toBe('write the spec');
++  });
++});
++
++describe('writeQueryParam', () => {
++  it('adds the param', () => {
++    expect(writeQueryParam('', 'spec')).toBe('?q=spec');
++  });
++
++  it('replaces an existing value', () => {
++    expect(writeQueryParam('?q=old', 'new')).toBe('?q=new');
++  });
++
++  it('encodes special characters', () => {
++    expect(writeQueryParam('', 'write the spec')).toBe('?q=write+the+spec');
++  });
++
++  it('drops the param for an empty or blank query', () => {
++    expect(writeQueryParam('?q=spec', '')).toBe('');
++    expect(writeQueryParam('?q=spec', '   ')).toBe('');
++  });
++
++  it('keeps unrelated params intact', () => {
++    expect(writeQueryParam('?page=2', 'spec')).toBe('?page=2&q=spec');
++    expect(writeQueryParam('?page=2&q=spec', '')).toBe('?page=2');
++  });
++
++  it('round-trips through readQueryParam', () => {
++    expect(readQueryParam(writeQueryParam('', 'Spec & Design'))).toBe('Spec & Design');
++  });
++});
+diff --git a/src/utils/url.ts b/src/utils/url.ts
+new file mode 100644
+index 0000000..6313cec
+--- /dev/null
++++ b/src/utils/url.ts
+@@ -0,0 +1,17 @@
++export const QUERY_PARAM = 'q';
++
++export function readQueryParam(search: string): string {
++  return new URLSearchParams(search).get(QUERY_PARAM) ?? '';
++}
++
++/** Returns the `?...` string (empty when no params remain) for the given query. */
++export function writeQueryParam(search: string, query: string): string {
++  const params = new URLSearchParams(search);
++  if (query.trim().length === 0) {
++    params.delete(QUERY_PARAM);
++  } else {
++    params.set(QUERY_PARAM, query);
++  }
++  const serialized = params.toString();
++  return serialized.length === 0 ? '' : `?${serialized}`;
++}

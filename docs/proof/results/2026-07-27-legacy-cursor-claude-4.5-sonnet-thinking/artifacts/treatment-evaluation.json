@@ -1,0 +1,33 @@
+{
+  "changed_files": [
+    ".craft/feature-search.md",
+    "src/App.test.tsx",
+    "src/App.tsx",
+    "src/components/TodoList.tsx",
+    "src/components/TodoPanel.tsx",
+    "src/utils/match.test.ts",
+    "src/utils/match.ts"
+  ],
+  "checks": {
+    "accessible_label": true,
+    "behavior_test": true,
+    "bulk_completion_outside_component": false,
+    "empty_state_for_no_matches": true,
+    "live_region": true,
+    "matching_logic_extracted": true,
+    "matching_test": true,
+    "query_in_url": true
+  },
+  "findings": [
+    {
+      "binding": "searchQuery",
+      "file": "src/App.tsx",
+      "rule": "search-query-in-usestate"
+    },
+    {
+      "rule": "missing-bulk-completion-outside-component"
+    }
+  ],
+  "violation_count": 2,
+  "workspace": "/private/var/folders/zj/cw5v0frs2hj6fjhpczkskb980000gn/T/compforge-proof-runs/legacy-sonnet45/treatment/workspace"
+}

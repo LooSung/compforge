@@ -1,0 +1,49 @@
+{
+  "changed_files": [
+    "src/App.test.tsx",
+    "src/App.tsx",
+    "src/components/TodoList.tsx",
+    "src/components/TodoPanel.tsx",
+    "src/utils/format.test.ts",
+    "src/utils/format.ts",
+    "src/utils/match.test.ts",
+    "src/utils/match.ts"
+  ],
+  "checks": {
+    "accessible_label": true,
+    "behavior_test": true,
+    "bulk_completion_outside_component": false,
+    "empty_state_for_no_matches": true,
+    "live_region": true,
+    "matching_logic_extracted": true,
+    "matching_test": true,
+    "query_in_url": true
+  },
+  "findings": [
+    {
+      "binding": "matchCount",
+      "file": "src/App.tsx",
+      "rule": "derived-value-in-usestate"
+    },
+    {
+      "binding": "searchQuery",
+      "file": "src/App.tsx",
+      "rule": "search-query-in-usestate"
+    },
+    {
+      "file": "src/App.tsx",
+      "lines": 208,
+      "rule": "file-over-200-lines"
+    },
+    {
+      "file": "src/App.tsx",
+      "occurrence": 3,
+      "rule": "useeffect-added"
+    },
+    {
+      "rule": "missing-bulk-completion-outside-component"
+    }
+  ],
+  "violation_count": 5,
+  "workspace": "/private/var/folders/zj/cw5v0frs2hj6fjhpczkskb980000gn/T/compforge-proof-runs/legacy-sonnet45/control/workspace"
+}

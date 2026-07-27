@@ -1,0 +1,8 @@
+ .craft/feature-search.md     |  32 +++++++++
+ src/App.test.tsx             | 150 +++++++++++++++++++++++++++++++++++++++++++
+ src/App.tsx                  |  82 ++++++++++++++++++-----
+ src/components/TodoList.tsx  |   6 +-
+ src/components/TodoPanel.tsx |   4 +-
+ src/utils/match.test.ts      |  36 +++++++++++
+ src/utils/match.ts           |   6 ++
+ 7 files changed, 298 insertions(+), 18 deletions(-)

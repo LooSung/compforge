@@ -1,0 +1,39 @@
+{
+  "changed_files": [
+    "src/App.test.tsx",
+    "src/App.tsx",
+    "src/components/TodoList.tsx",
+    "src/components/TodoPanel.tsx",
+    "src/hooks/useUrlSearchQuery.ts",
+    "src/styles.css",
+    "src/utils/todoFilter.test.ts",
+    "src/utils/todoFilter.ts"
+  ],
+  "checks": {
+    "accessible_label": true,
+    "behavior_test": true,
+    "bulk_completion_outside_component": false,
+    "empty_state_for_no_matches": true,
+    "live_region": true,
+    "matching_logic_extracted": true,
+    "matching_test": true,
+    "query_in_url": true
+  },
+  "findings": [
+    {
+      "binding": "query",
+      "file": "src/hooks/useUrlSearchQuery.ts",
+      "rule": "search-query-in-usestate"
+    },
+    {
+      "file": "src/hooks/useUrlSearchQuery.ts",
+      "occurrence": 0,
+      "rule": "useeffect-added"
+    },
+    {
+      "rule": "missing-bulk-completion-outside-component"
+    }
+  ],
+  "violation_count": 3,
+  "workspace": "/private/var/folders/zj/cw5v0frs2hj6fjhpczkskb980000gn/T/compforge-proof-runs/legacy-r3/control/workspace"
+}

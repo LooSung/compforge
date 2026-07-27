@@ -1,0 +1,9 @@
+run_id=legacy-r2
+model=claude-opus-5-thinking-high-fast
+cursor_agent_version=2026.07.23-e383d2b
+source_commit=6b8f4ce4cacc0b0c8e3b5bf8a5aa789e9f2be68b
+starter=docs/proof/starters/todo-react-legacy
+starter_neutralized=README.md removed; methodology comments and page title scrubbed
+treatment_delivery=project-local .cursor/skills/compforge
+checks_run=npm ci && npm run check
+task=Add search to the todo list. Match on the title, case-insensitive, and combine with the existing status filter. Keep the query in the URL so a filtered view survives reload and can be shared. Show how many todos match, and show a distinct empty state when the query matches nothing. Add a "complete all matches" action that marks every currently matching todo completed; a todo that is already completed must stay completed. The search input needs an accessible label, and the match count must be announced to assistive technology. Add tests for the matching logic and for the new behavior. Do not change unrelated behavior.
