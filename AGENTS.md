@@ -80,7 +80,7 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | useEffect abuse (derived state, fetch chains) | `skills/antipatterns/useeffect-abuse.md` |
 | Prop drilling | `skills/antipatterns/prop-drilling.md` |
 
-## Hard Rules (v0.2 — validated against `examples/` at todo scale; larger examples may re-baseline. Decisions: `docs/research/competitor-skills.md`)
+## Hard Rules (v0.3 — validated against `examples/` at todo scale and two published proof runs; surgical scope narrowed from run evidence. Larger examples may re-baseline. Decisions: `docs/research/competitor-skills.md`, runs: `docs/proof/`)
 
 These limits are intentionally measurable. They come from review focus and agent context size, not arbitrary style:
 
@@ -112,6 +112,7 @@ These limits are intentionally measurable. They come from review focus and agent
 - Update `CHANGELOG.md` for user-visible changes.
 - When changing install behavior, verify with a clean temporary `HOME`.
 - Do not claim a harness integration works until documented setup steps and a clean-session smoke test prove it.
+- **Effect claims need runs.** Any statement that Compforge improves an outcome must cite a published pair in `docs/proof/results/`. Unfavorable runs get published too; a measure changed after seeing the data must say so in the result.
 
 ## What Not To Do
 

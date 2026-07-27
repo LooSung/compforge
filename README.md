@@ -18,7 +18,7 @@ Sister project: [OOPforge](https://github.com/LooSung/oopforge) — the same har
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-> **Status: v0.3 — the install → use → self-verify loop is complete.** Install, skills, the Craft entry point, two runnable reference examples (tests + per-stack architecture lint), and repo CI that verifies all of it on every push. The proof protocol, target-project CI templates, and antipattern detectors are next, in that order; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
+> **Status: v0.4 — the pack now measures itself.** On top of the install → use → self-verify loop (install, skills, the Craft entry point, two runnable reference examples, repo CI), there is a reproducible control-versus-Compforge harness and [two published runs](docs/proof/) — one favourable, one not. What they support is narrow: *Compforge stops an agent from copying a codebase's bad patterns; it adds nothing to a codebase that already has good ones.* Repeat runs, target-project CI templates, and antipattern detectors are next; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
 
 ---
 
@@ -120,7 +120,7 @@ Most teams already know *what* a clean React codebase looks like. The hard part 
 | **Measurable** | 200 lines/component file, 1 export/file — reviewable units |
 | **Workflow-first** | Discovery → Test with human checkpoints |
 | **State-first** | Every piece of state has exactly one named home |
-| **Proof over philosophy** | Runnable examples ship first; effect claims wait for proof runs |
+| **Proof over philosophy** | Effect claims cite [published runs](docs/proof/), unfavourable ones included |
 
 ### Before (typical agent output)
 
@@ -156,7 +156,7 @@ function CartPage() {
 | `react-vite-fsd` | Feature-Sliced Design layers | Complex apps, larger teams |
 | `react-next-app` | Next.js App Router + feature folders | SSR/SEO, server components |
 
-Runnable proof: [examples/README.md](examples/README.md) — the same todo app across both shipped stacks, each with tests and its own architecture lint.
+Reference implementations: [examples/README.md](examples/README.md) — the same todo app across both shipped stacks, each with tests and its own architecture lint.
 
 Vue (Nuxt) is planned — gated behind the React vertical being proven and enforced first. See [docs/roadmap.md](docs/roadmap.md).
 
@@ -182,9 +182,12 @@ compforge/
 ├── commands/            Claude Code slash command: /compforge:craft
 ├── AGENTS.md            cross-agent repository instructions (Hard Rules)
 ├── CLAUDE.md            Claude Code bootstrap instructions
-├── docs/roadmap.md      direction, phases, Vue expansion gates
+├── docs/
+│   ├── roadmap.md       direction, phases, Vue expansion gates
+│   └── proof/           experiment protocol, starters, published run results
 └── scripts/
     ├── setup/           bootstrap, install, uninstall, doctor
+    ├── proof/           control-versus-Compforge runner + evaluator
     └── ci/              lint-skills.sh
 ```
 
@@ -195,7 +198,7 @@ compforge/
 
 ## **Hard Rules**
 
-The enforceable, measurable rules live in [`AGENTS.md`](./AGENTS.md) (v0.2 — validated against `examples/` at todo scale; larger examples may re-baseline). Highlights: 200 lines/component file, 1 export/file, TS strict + no `any`, no direct mutation, server state in the query layer, useEffect as last resort, no prop drilling past 2 levels, feature imports through public APIs only.
+The enforceable, measurable rules live in [`AGENTS.md`](./AGENTS.md) (v0.3 — validated against `examples/` at todo scale and two published proof runs; larger examples may re-baseline). Highlights: 200 lines/component file, 1 export/file, TS strict + no `any`, no direct mutation, server state in the query layer, useEffect as last resort, no prop drilling past 2 levels, feature imports through public APIs only.
 
 ---
 

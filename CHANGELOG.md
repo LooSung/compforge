@@ -3,6 +3,17 @@
 All notable changes to Compforge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
+## [0.4.1] — 2026-07-27
+
+Documentation catch-up after the proof work. No behavior change to install, skills, or the harness.
+
+### Changed
+
+- **Hard Rules promoted to v0.3** in `AGENTS.md`, `README.md`, and `README.ko.md`: the ruleset changed in 0.4.0 when surgical scope was narrowed, and its evidence base is now the examples *and* two published runs. The label was left at v0.2 by mistake.
+- **READMEs state v0.4 status**, carry the narrow claim the runs support, and link `docs/proof/`. The old status line still advertised the proof protocol as upcoming work. "Proof over philosophy" now means published pairs including unfavourable ones, and `examples/` is described as reference implementations so "proof" refers to one thing only.
+- **Roadmap drops the completed surgical-scope item** and leads with repeating the runs — one pair per starter is an anecdote, and the claim comes down if the gap does not survive repetition. The Vue gate now requires runs to be repeated, not merely public. Antipattern detectors point at `scripts/proof/evaluate-run.py` as their starting point.
+- **`AGENTS.md` gains an evidence rule** under Repository Discipline: effect claims must cite a published pair in `docs/proof/results/`, unfavourable runs get published too, and a measure changed after seeing the data must say so in the result.
+
 ## [0.4.0] — 2026-07-27
 
 Compforge starts measuring itself. The proof harness is live with two published runs. Together they support one narrow claim: **Compforge stops an agent from copying a codebase's bad patterns, and adds nothing to a codebase that already has good ones.** No broader claim is made from two runs.

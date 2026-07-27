@@ -1,6 +1,6 @@
 {
     "name": "compforge",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "절제된 컴포넌트 아키텍처를 신봉하는 프론트엔드 개발 방법론 팩. TypeScript + React 우선, Vue는 확장 예정.",
     "author": {
         "name": "Mr.Louis",

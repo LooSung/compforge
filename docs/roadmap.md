@@ -1,6 +1,6 @@
 # Compforge Roadmap
 
-Future-facing only; history lives in [`CHANGELOG.md`](../CHANGELOG.md). This file holds what we **must** do to grow without losing the identity below — not what we would like to do. v0.3.0 closed the install → use → self-verify loop.
+Future-facing only; history lives in [`CHANGELOG.md`](../CHANGELOG.md). This file holds what we **must** do to grow without losing the identity below — not what we would like to do. v0.3.0 closed the install → use → self-verify loop; v0.4.0 made the pack measurable and produced the first evidence.
 
 ## Promise
 
@@ -34,10 +34,11 @@ Both halves are the same move: **don't create it; if it must exist, it has exact
 
 ## Now, in order
 
-1. **Proof** — harness live, two runs published ([`proof/README.md`](proof/README.md)). On a [clean starter](proof/results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/result.md): **no difference** — the starter carried the control. On an [antipattern starter](proof/results/2026-07-27-legacy-cursor-claude-opus-5-thinking-high-fast/result.md): **4 violations versus 1**, with both arms passing their checks. The claim these support is narrow and specific — *Compforge stops an agent from copying a codebase's bad patterns; it adds nothing to a codebase that already has good ones.* Next: repeat runs for stochasticity, then a weaker model.
-2. **Surgical scope versus exposed defects** — the same run showed the rule making the treatment *defer* a real UX bug (one history entry per keystroke) that the control simply fixed. The rule is right about drive-by edits and wrong when the requested feature is what exposes the defect. Narrow it, with the run as the evidence.
-3. **Enforcement distribution** — per-stack lint templates extracted from the examples: ESLint `import/no-restricted-paths` zones for `react-vite-feature` (must include the `.ts` resolver-extensions fix, or the rule is silently a no-op); steiger for `react-vite-fsd`. Plus a GitHub Actions template that blocks violating PRs.
-4. **Antipattern detectors** — mechanical checks where possible (derived-state-in-effect, query-data-in-`useState` heuristics). Migrate Hard Rules to MUST/SHOULD/NEVER phrasing here, once, when detectors need machine-checkable wording.
+1. **Repeat the proof runs** — the harness and two runs are done ([`proof/README.md`](proof/README.md)); what is missing is stochasticity. One pair per starter is an anecdote. Re-run the [antipattern pair](proof/results/2026-07-27-legacy-cursor-claude-opus-5-thinking-high-fast/result.md) twice more on the same model, then once on a weaker model. If the gap does not survive repetition, the claim below comes down.
+2. **Enforcement distribution** — per-stack lint templates extracted from the examples: ESLint `import/no-restricted-paths` zones for `react-vite-feature` (must include the `.ts` resolver-extensions fix, or the rule is silently a no-op); steiger for `react-vite-fsd`. Plus a GitHub Actions template that blocks violating PRs.
+3. **Antipattern detectors** — mechanical checks where possible (derived-state-in-effect, query-data-in-`useState` heuristics). Start from `scripts/proof/evaluate-run.py`, which already detects several of them and has documented false-positive modes. Migrate Hard Rules to MUST/SHOULD/NEVER phrasing here, once, when detectors need machine-checkable wording.
+
+**What the evidence currently supports**, and nothing wider: *Compforge stops an agent from copying a codebase's bad patterns; it adds nothing to a codebase that already has good ones.* On a [clean starter](proof/results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/result.md) the two arms were indistinguishable; on an [antipattern starter](proof/results/2026-07-27-legacy-cursor-claude-opus-5-thinking-high-fast/result.md) it was 4 violations versus 1, with both arms passing lint, types, and tests.
 
 ## Not doing
 
@@ -52,7 +53,7 @@ Both halves are the same move: **don't create it; if it must exist, it has exact
 
 Expanding means replicating a **proven, enforced** vertical. Expanding earlier multiplies unverified methodology. In order:
 
-1. Proof runs public on React.
+1. Proof runs public **and repeated** on React — two runs exist; a single pair per starter is not a result to expand on.
 2. Repo hygiene + docs link-integrity CI — N× docs and examples is N× drift surface.
 3. Lint enforcement live in CI for both React stacks, so Vue arrives with enforcement rather than examples alone.
 4. `SKILL.md` frontmatter standardized for portability across harnesses.
