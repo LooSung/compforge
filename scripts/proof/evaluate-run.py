@@ -30,8 +30,12 @@ NARROWING = re.compile(r"\.filter\(|\.includes\(")
 IMPORT_SOURCE = re.compile(r"""(?:from|import)\s*\(?\s*['"]([^'"]+)['"]""")
 FEATURE_SEGMENT = re.compile(r"features/(\w+)")
 API_MODULE = re.compile(r"(?:^|/)api(?:/|$)")
-EMPTY_BRANCH = re.compile(r"(?:\.length|[Cc]ount)\s*(?:===\s*0|<\s*1|>\s*0)|!\w+\.length")
 SEARCH_TERM = re.compile(r"match|search|quer", re.I)
+INPUT_TAG = re.compile(r"<input\b[^>]*>", re.S)
+INPUT_ID = re.compile(r'id="([^"]+)"')
+# The rendered sentence, not a zero-check: a god component is full of unrelated
+# `length === 0` guards, and any of them would pass a structural test.
+NO_MATCH_COPY = re.compile(r"no(?:thing)?\s+[\w\s\u2019'\"]{0,30}?(match|result)", re.I)
 
 ALLOWED_OUTSIDE_SRC = {".gitignore", "package.json", "package-lock.json"}
 
@@ -142,6 +146,21 @@ def architecture_findings(sources: dict[str, str], root: Path) -> list[dict[str,
     return findings
 
 
+def search_input_is_labelled(production: dict[str, str]) -> bool:
+    """True only when the *search* input carries a name, not merely when the
+    file happens to contain some other label."""
+    for body in production.values():
+        for tag in INPUT_TAG.findall(body):
+            if not SEARCH_TERM.search(tag):
+                continue
+            if "aria-label" in tag:
+                return True
+            identifier = INPUT_ID.search(tag)
+            if identifier and f'htmlFor="{identifier.group(1)}"' in body:
+                return True
+    return False
+
+
 def coverage_checks(sources: dict[str, str]) -> dict[str, bool]:
     production = {rel: body for rel, body in sources.items() if not is_test(rel)}
     tests = {rel: body for rel, body in sources.items() if is_test(rel)}
@@ -159,15 +178,9 @@ def coverage_checks(sources: dict[str, str]) -> dict[str, bool]:
             for rel, body in production.items()
             if not is_component(rel)
         ),
-        "accessible_label": any(
-            "<input" in body and ("aria-label" in body or "<label" in body)
-            for body in production.values()
-        ),
+        "accessible_label": search_input_is_labelled(production),
         "live_region": "aria-live" in joined or 'role="status"' in joined,
-        "empty_state_for_no_matches": any(
-            EMPTY_BRANCH.search(body) and SEARCH_TERM.search(body)
-            for body in production.values()
-        ),
+        "empty_state_for_no_matches": bool(NO_MATCH_COPY.search(joined)),
         "matching_test": any(SEARCH_TERM.search(body) for rel, body in tests.items()),
         "behavior_test": any(
             SEARCH_TERM.search(body) for rel, body in tests.items() if rel.endswith(".test.tsx")
