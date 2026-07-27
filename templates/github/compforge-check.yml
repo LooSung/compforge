@@ -1,0 +1,21 @@
+# Compforge architecture check — blocks PRs that violate the import rules.
+# Installed by `compforge init`, which replaces __COMPFORGE_CHECK_CMD__ with
+# the stack's command (eslint zones or steiger).
+name: compforge-check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  architecture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: __COMPFORGE_CHECK_CMD__

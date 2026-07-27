@@ -18,7 +18,7 @@ Sister project: [OOPforge](https://github.com/LooSung/oopforge) — the same har
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-> **Status: v0.4 — the pack now measures itself, repeatedly.** On top of the install → use → self-verify loop (install, skills, the Craft entry point, two runnable reference examples, repo CI), there is a reproducible control-versus-Compforge harness and [five published runs](docs/proof/) — favourable and not. What they support is narrow: *Compforge stops an agent from copying a codebase's bad patterns; it adds nothing to a codebase that already has good ones, and on a weaker model it reduces violations without preventing the core one.* The antipattern-starter gap repeated across three same-model pairs (4v1, 3v1, 3v1) and narrowed on Sonnet 4.5 (5v4). Target-project CI templates and antipattern detectors are next; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
+> **Status: v0.5 — measured, repeated, and now delivered.** On top of the install → use → self-verify loop, there is a reproducible control-versus-Compforge harness with [five published runs](docs/proof/) — favourable and not — and `compforge init`, which puts the pack's enforcement (import zones, steiger, a PR-blocking CI check) into the target project and proves it live with a negative self-test. What the runs support is narrow: *Compforge stops an agent from copying a codebase's bad patterns; it adds nothing to a codebase that already has good ones, and on a weaker model it reduces violations without preventing the core one.* The antipattern-starter gap repeated across three same-model pairs (4v1, 3v1, 3v1) and narrowed on Sonnet 4.5 (5v4). Antipattern detectors are next; see [docs/roadmap.md](docs/roadmap.md). Claims here are limited to what exists.
 
 ---
 
@@ -44,7 +44,22 @@ Compforge lives in `~/.compforge`. Your app code lives in **your frontend repo**
 cd /path/to/your-frontend-project
 ```
 
-### **3. Restart / load your agent**
+### **3. Put the guardrails in the project (`compforge init`)**
+
+Optional but recommended: deliver the pack's enforcement into the project —
+ESLint import zones (feature folders) or steiger (FSD), plus a GitHub Actions
+check that blocks violating PRs.
+
+```bash
+~/.compforge/scripts/setup/init.sh
+```
+
+It detects the stack from `src/`, never overwrites files it did not generate,
+and finishes with a **negative self-test**: a deliberate cross-feature import
+must fail, or init refuses to report success. Re-run it after adding a feature
+to regenerate the per-feature zones. Details: [`templates/`](./templates/README.md).
+
+### **4. Restart / load your agent**
 
 Restart Claude Code or Codex CLI so it picks up the new skills and commands.
 
@@ -56,7 +71,7 @@ ln -s ~/.compforge/skills .cursor/skills/compforge
 printf '%s\n' '.cursor/skills/compforge' >> .git/info/exclude
 ```
 
-### **4. Run Craft**
+### **5. Run Craft**
 
 Entry point is **Craft** on every harness; only **how you invoke it** differs:
 
@@ -72,7 +87,7 @@ Entry point is **Craft** on every harness; only **how you invoke it** differs:
 /compforge:craft Add a quantity stepper to the cart item
 ```
 
-### **5. Update (manual — Releases do not auto-install)**
+### **6. Update (manual — Releases do not auto-install)**
 
 ```bash
 cd ~/.compforge && git pull && ./scripts/setup/install.sh update

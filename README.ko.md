@@ -18,7 +18,7 @@ Claude Code, Codex CLI, Cursor 등 호환 에이전트가 코드를 쓰기 전�
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-> **상태: v0.4 — 팩이 스스로를 반복 측정합니다.** 설치 → 사용 → 자가검증 루프(설치, 스킬, Craft 진입점, 레퍼런스 예제 2종, 리포 CI) 위에, 재현 가능한 control 대 Compforge 하네스와 [발행된 실행 5건](docs/proof/)이 있습니다 — 유리한 것과 불리한 것 모두. 뒷받침되는 주장은 좁습니다. *Compforge는 에이전트가 코드베이스의 나쁜 패턴을 복사하는 것을 막고, 이미 좋은 패턴이 있는 코드베이스에는 더할 것이 없으며, 약한 모델에서는 위반을 줄이되 핵심 위반까지 막지는 못한다.* 안티패턴 스타터의 격차는 같은 모델 3쌍에서 반복됐고(4대1, 3대1, 3대1) Sonnet 4.5에서는 좁아졌습니다(5대4). 대상 프로젝트용 CI 템플릿과 안티패턴 탐지기가 다음입니다. [docs/roadmap.md](docs/roadmap.md) 참고. 이 문서는 존재하는 것만 주장합니다.
+> **상태: v0.5 — 측정하고, 반복하고, 이제 배달합니다.** 설치 → 사용 → 자가검증 루프 위에, 재현 가능한 control 대 Compforge 하네스와 [발행된 실행 5건](docs/proof/)(유리한 것과 불리한 것 모두), 그리고 팩의 강제 장치(import 존, steiger, PR 차단 CI 체크)를 대상 프로젝트에 심고 negative self-test로 살아있음을 증명하는 `compforge init`이 있습니다. 실행이 뒷받침하는 주장은 좁습니다. *Compforge는 에이전트가 코드베이스의 나쁜 패턴을 복사하는 것을 막고, 이미 좋은 패턴이 있는 코드베이스에는 더할 것이 없으며, 약한 모델에서는 위반을 줄이되 핵심 위반까지 막지는 못한다.* 안티패턴 스타터의 격차는 같은 모델 3쌍에서 반복됐고(4대1, 3대1, 3대1) Sonnet 4.5에서는 좁아졌습니다(5대4). 다음은 안티패턴 탐지기입니다. [docs/roadmap.md](docs/roadmap.md) 참고. 이 문서는 존재하는 것만 주장합니다.
 
 ---
 
@@ -44,7 +44,17 @@ Compforge는 `~/.compforge`에 삽니다. 앱 코드는 **여러분의 프론트
 cd /path/to/your-frontend-project
 ```
 
-### **3. 에이전트 재시작 / 로드**
+### **3. 프로젝트에 가드레일 심기 (`compforge init`)**
+
+선택이지만 권장: 팩의 강제 장치를 프로젝트에 배달합니다 — ESLint import 존(feature 폴더) 또는 steiger(FSD), 그리고 위반 PR을 막는 GitHub Actions 체크.
+
+```bash
+~/.compforge/scripts/setup/init.sh
+```
+
+`src/` 구조에서 스택을 감지하고, 자기가 만들지 않은 파일은 절대 덮어쓰지 않으며, **negative self-test**로 끝납니다: 의도적 cross-feature import가 실패하지 않으면 init은 성공을 보고하지 않습니다. feature를 추가한 뒤에는 재실행해서 존을 재생성하세요. 상세: [`templates/`](./templates/README.md).
+
+### **4. 에이전트 재시작 / 로드**
 
 Claude Code나 Codex CLI를 재시작해 새 스킬과 커맨드를 인식시키세요.
 
@@ -56,7 +66,7 @@ ln -s ~/.compforge/skills .cursor/skills/compforge
 printf '%s\n' '.cursor/skills/compforge' >> .git/info/exclude
 ```
 
-### **4. Craft 실행**
+### **5. Craft 실행**
 
 모든 하니스의 진입점은 **Craft**이고, **호출 방법**만 다릅니다:
 
@@ -72,7 +82,7 @@ printf '%s\n' '.cursor/skills/compforge' >> .git/info/exclude
 /compforge:craft 장바구니 아이템에 수량 조절 스테퍼 추가해줘
 ```
 
-### **5. 업데이트 (수동 — Release가 자동 설치되지 않음)**
+### **6. 업데이트 (수동 — Release가 자동 설치되지 않음)**
 
 ```bash
 cd ~/.compforge && git pull && ./scripts/setup/install.sh update
