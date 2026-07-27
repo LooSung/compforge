@@ -1,0 +1,11 @@
+ .gitignore                                   |  1 +
+ src/app/App.test.tsx                         | 86 +++++++++++++++++++++++++++-
+ src/app/App.tsx                              | 27 ++++++++-
+ src/features/todos/components/TodoList.tsx   | 16 +++++-
+ src/features/todos/components/TodoSearch.tsx | 16 ++++++
+ src/features/todos/hooks/useTodoSearch.ts    | 10 ++++
+ src/features/todos/hooks/useTodos.test.tsx   | 60 +++++++++++++++++++
+ src/features/todos/hooks/useTodos.ts         | 13 ++++-
+ src/features/todos/lib/filterTodos.test.ts   | 43 +++++++++++++-
+ src/features/todos/lib/filterTodos.ts        |  7 +++
+ 10 files changed, 271 insertions(+), 8 deletions(-)

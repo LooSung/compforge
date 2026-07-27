@@ -5,7 +5,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
-The proof harness exists and is dry-run verified; no proof runs are published, and no effectiveness claim is made.
+The proof harness is live and its first run is published. That run found **no measurable difference**, so no effectiveness claim is made.
 
 ### Added
 
@@ -13,6 +13,8 @@ The proof harness exists and is dry-run verified; no proof runs are published, a
 - `scripts/proof/run-comparison.sh` builds both workspaces from the source commit (`git archive`, so the working tree and `node_modules` cannot leak in), runs both arms, and refuses to continue when the control discovers Compforge (`.craft/` created) or the treatment does not (`.craft/` missing).
 - `scripts/proof/evaluate-run.py` scores eleven React-specific violations against each file's pre-change baseline, so only findings the run introduced are counted.
 - **Starter neutralization**: the example teaches Compforge in its comments, README, and page title. The harness strips those from **both** workspaces and fails if any reference survives — otherwise the control reads the methodology off the starter and the comparison measures nothing.
+- **First proof result** (`docs/proof/results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/`), published with its patches and evaluations: zero violations on both arms, checks passing on both. The starter already models the target architecture, so a top-tier model reproduces it unaided and the task cannot discriminate. Two quality differences went in opposite directions, one against Compforge — the surgical-scope rule made the treatment defer a history-pollution bug that the control fixed.
+- Confirmed that Cursor Agent loads user-level skills from `~/.claude/skills/compforge` regardless of `--workspace`: the first attempted run was aborted by the contamination gate. The gate is load bearing, and isolation is a manual prerequisite for a valid run.
 
 ### Changed
 

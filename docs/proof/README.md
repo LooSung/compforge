@@ -146,23 +146,34 @@ must say so.
 
 Cursor Agent also discovers user-level skills such as
 `~/.claude/skills/compforge` and `~/.codex/skills/compforge`; `--workspace` does
-not disable them. There is no documented `--no-skills` isolation flag. If the
-control creates `.craft/`, run the control from a clean OS profile/VM or
-temporarily remove the user-level Compforge installations and restore them
-before normal work. The script stops immediately when it detects this
-contamination.
+not disable them. This is confirmed, not hypothetical: the first attempted run
+on 2026-07-27 was aborted because the control loaded Craft from the user-level
+Claude install and wrote a `.craft/` work doc. There is no documented
+`--no-skills` isolation flag, so move those installs aside for the run and
+restore them afterwards, or use a clean OS profile/VM. The script stops
+immediately when it detects the contamination.
 
 ## Publish
 
 After inspecting the raw artifacts:
 
 1. Copy [`result-template.md`](./result-template.md) to
-   `docs/proof/results/<date>-cursor-<model>.md`.
+   `docs/proof/results/<date>-cursor-<model>/result.md`, and put the small raw
+   artifacts beside it in `artifacts/` — metadata, both evaluations, both
+   patches, the treatment work doc. The temp directory is cleaned eventually;
+   an unverifiable result is not a result.
 2. Record the exact model, agent version, source commit, commands, violations,
    check results, and rework.
 3. Link the result from `README.md` and `docs/roadmap.md`.
 4. Keep both successful and unfavorable results.
 5. Do not convert a single run into a universal percentage claim.
+
+## Results
+
+- [2026-07-27 — Opus 5 Thinking High Fast](./results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/result.md):
+  no measurable difference. Both arms scored zero violations and passed the
+  checks; the starter's architecture carried the control. The task as written
+  cannot discriminate on a clean starter.
 
 ## Validity threats
 

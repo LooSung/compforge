@@ -34,9 +34,10 @@ Both halves are the same move: **don't create it; if it must exist, it has exact
 
 ## Now, in order
 
-1. **Proof** — protocol ported and harness dry-run verified ([`proof/README.md`](proof/README.md)); **no runs published yet**. Publish reproducible before/after runs, favourable or not, before any improvement claim. Nothing below is worth shipping unproven.
-2. **Enforcement distribution** — per-stack lint templates extracted from the examples: ESLint `import/no-restricted-paths` zones for `react-vite-feature` (must include the `.ts` resolver-extensions fix, or the rule is silently a no-op); steiger for `react-vite-fsd`. Plus a GitHub Actions template that blocks violating PRs.
-3. **Antipattern detectors** — mechanical checks where possible (derived-state-in-effect, query-data-in-`useState` heuristics). Migrate Hard Rules to MUST/SHOULD/NEVER phrasing here, once, when detectors need machine-checkable wording.
+1. **Proof** — harness live ([`proof/README.md`](proof/README.md)). The [first published run](proof/results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/result.md) found **no measurable difference**: on a starter that already models the target architecture, a top-tier model reproduces it unaided. Next is a task that can discriminate — greenfield, or a starter seeded with the antipatterns the skills name — and a weaker model. No improvement claim until then; nothing below is worth shipping unproven.
+2. **Surgical scope versus exposed defects** — the same run showed the rule making the treatment *defer* a real UX bug (one history entry per keystroke) that the control simply fixed. The rule is right about drive-by edits and wrong when the requested feature is what exposes the defect. Narrow it, with the run as the evidence.
+3. **Enforcement distribution** — per-stack lint templates extracted from the examples: ESLint `import/no-restricted-paths` zones for `react-vite-feature` (must include the `.ts` resolver-extensions fix, or the rule is silently a no-op); steiger for `react-vite-fsd`. Plus a GitHub Actions template that blocks violating PRs.
+4. **Antipattern detectors** — mechanical checks where possible (derived-state-in-effect, query-data-in-`useState` heuristics). Migrate Hard Rules to MUST/SHOULD/NEVER phrasing here, once, when detectors need machine-checkable wording.
 
 ## Not doing
 

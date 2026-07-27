@@ -1,0 +1,14 @@
+ src/app/App.test.tsx                              | 112 +++++++++++++++++++++-
+ src/app/App.tsx                                   |  20 +++-
+ src/features/todos/api/todosApi.ts                |  11 +++
+ src/features/todos/components/TodoBulkActions.tsx |  12 +++
+ src/features/todos/components/TodoList.tsx        |  14 ++-
+ src/features/todos/components/TodoSearch.tsx      |  27 ++++++
+ src/features/todos/hooks/useTodoSearch.ts         |   8 ++
+ src/features/todos/hooks/useTodos.test.tsx        |  30 ++++++
+ src/features/todos/hooks/useTodos.ts              |  10 +-
+ src/features/todos/lib/filterTodos.test.ts        |  85 +++++++++++++++-
+ src/features/todos/lib/filterTodos.ts             |  21 ++++
+ src/shared/lib/useSearchParamState.ts             |  21 +++-
+ src/styles.css                                    |   7 ++
+ 13 files changed, 367 insertions(+), 11 deletions(-)

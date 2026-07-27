@@ -1,0 +1,27 @@
+{
+  "changed_files": [
+    ".gitignore",
+    "src/app/App.test.tsx",
+    "src/app/App.tsx",
+    "src/features/todos/components/TodoList.tsx",
+    "src/features/todos/components/TodoSearch.tsx",
+    "src/features/todos/hooks/useTodoSearch.ts",
+    "src/features/todos/hooks/useTodos.test.tsx",
+    "src/features/todos/hooks/useTodos.ts",
+    "src/features/todos/lib/filterTodos.test.ts",
+    "src/features/todos/lib/filterTodos.ts"
+  ],
+  "checks": {
+    "accessible_label": true,
+    "behavior_test": true,
+    "bulk_completion_in_query_layer": true,
+    "empty_state_for_no_matches": true,
+    "live_region": true,
+    "matching_logic_extracted": true,
+    "matching_test": true,
+    "query_in_url": true
+  },
+  "findings": [],
+  "violation_count": 0,
+  "workspace": "/private/var/folders/zj/cw5v0frs2hj6fjhpczkskb980000gn/T/compforge-proof-runs/first/treatment/workspace"
+}

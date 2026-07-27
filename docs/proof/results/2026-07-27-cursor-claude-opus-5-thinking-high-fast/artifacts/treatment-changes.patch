@@ -1,0 +1,425 @@
+diff --git a/.gitignore b/.gitignore
+index b947077..319cfa0 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,2 +1,3 @@
+ node_modules/
+ dist/
++.craft/
+diff --git a/src/app/App.test.tsx b/src/app/App.test.tsx
+index b56255e..5f03963 100644
+--- a/src/app/App.test.tsx
++++ b/src/app/App.test.tsx
+@@ -1,4 +1,4 @@
+-import { render, screen } from '@testing-library/react';
++import { render, screen, waitFor } from '@testing-library/react';
+ import userEvent from '@testing-library/user-event';
+ import { beforeEach, describe, expect, it } from 'vitest';
+ import { resetTodosDb } from '../features/todos/api/todosApi';
+@@ -54,3 +54,87 @@ describe('App', () => {
+     expect(window.location.search).toContain('filter=active');
+   });
+ });
++
++describe('App search', () => {
++  const seeded = [
++    { id: '1', title: 'Alpha task', completed: false },
++    { id: '2', title: 'alpha done', completed: true },
++    { id: '3', title: 'beta task', completed: false },
++  ];
++
++  beforeEach(() => {
++    resetTodosDb(seeded);
++  });
++
++  function searchBox() {
++    return screen.getByRole('searchbox', { name: /search todos by title/i });
++  }
++
++  it('narrows the list by title, ignoring case, and keeps the query in the URL', async () => {
++    const user = userEvent.setup();
++    renderApp();
++    await screen.findByText('beta task');
++
++    await user.type(searchBox(), 'ALPHA');
++
++    expect(screen.getByText('Alpha task')).toBeInTheDocument();
++    expect(screen.getByText('alpha done')).toBeInTheDocument();
++    expect(screen.queryByText('beta task')).not.toBeInTheDocument();
++    expect(window.location.search).toContain('q=ALPHA');
++  });
++
++  it('restores a shared URL of query plus status filter on load', async () => {
++    window.history.replaceState(null, '', '?q=alpha&filter=active');
++    renderApp();
++
++    expect(await screen.findByText('Alpha task')).toBeInTheDocument();
++    expect(screen.queryByText('alpha done')).not.toBeInTheDocument();
++    expect(screen.queryByText('beta task')).not.toBeInTheDocument();
++    expect(searchBox()).toHaveValue('alpha');
++  });
++
++  it('announces how many todos match', async () => {
++    const user = userEvent.setup();
++    renderApp();
++    await screen.findByText('3 matching');
++
++    await user.type(searchBox(), 'alpha');
++
++    const count = await screen.findByText('2 matching');
++    expect(count).toHaveAttribute('role', 'status');
++  });
++
++  it('shows a distinct empty state when the query matches nothing', async () => {
++    const user = userEvent.setup();
++    renderApp();
++    await screen.findByText('beta task');
++
++    await user.type(searchBox(), 'gamma');
++
++    expect(await screen.findByText(/no todos match “gamma”/i)).toBeInTheDocument();
++    expect(screen.queryByText(/no todos yet/i)).not.toBeInTheDocument();
++    expect(screen.getByText('0 matching')).toBeInTheDocument();
++    expect(
++      screen.getByRole('button', { name: /complete all matches/i }),
++    ).toBeDisabled();
++  });
++
++  it('completes every match and leaves non-matching todos alone', async () => {
++    const user = userEvent.setup();
++    renderApp();
++    await screen.findByText('beta task');
++
++    await user.type(searchBox(), 'alpha');
++    await user.click(screen.getByRole('button', { name: /complete all matches/i }));
++
++    await waitFor(() =>
++      expect(screen.getByRole('checkbox', { name: 'Alpha task' })).toBeChecked(),
++    );
++    expect(screen.getByRole('checkbox', { name: 'alpha done' })).toBeChecked();
++
++    await user.clear(searchBox());
++
++    expect(await screen.findByText('beta task')).toBeInTheDocument();
++    expect(screen.getByRole('checkbox', { name: 'beta task' })).not.toBeChecked();
++  });
++});
+diff --git a/src/app/App.tsx b/src/app/App.tsx
+index 6ce1f7a..9a010a3 100644
+--- a/src/app/App.tsx
++++ b/src/app/App.tsx
+@@ -1,29 +1,50 @@
+ import { AddTodoForm } from '../features/todos/components/AddTodoForm';
+ import { TodoFilter } from '../features/todos/components/TodoFilter';
+ import { TodoList } from '../features/todos/components/TodoList';
++import { TodoSearch } from '../features/todos/components/TodoSearch';
+ import { useTodoFilter } from '../features/todos/hooks/useTodoFilter';
++import { useTodoSearch } from '../features/todos/hooks/useTodoSearch';
+ import { useTodos } from '../features/todos/hooks/useTodos';
+-import { countActive, filterTodos } from '../features/todos/lib/filterTodos';
++import { countActive, filterTodos, searchTodos } from '../features/todos/lib/filterTodos';
+ 
+ // The app layer composes the feature; features never import each other.
+ export function App() {
+-  const { todos, isLoading, isError, add, toggle, remove } = useTodos();
++  const { todos, isLoading, isError, add, toggle, remove, completeAll } = useTodos();
+   const { filter, setFilter, filters } = useTodoFilter();
++  const { query, setQuery } = useTodoSearch();
+ 
+-  const visible = filterTodos(todos, filter);
++  const visible = searchTodos(filterTodos(todos, filter), query);
+   const activeCount = countActive(todos);
++  const openMatchCount = countActive(visible);
++  // The live region stays mounted so later counts are announced, but it only
++  // claims a number once there is data to count.
++  const matchSummary = isLoading || isError ? '' : `${visible.length} matching`;
+ 
+   return (
+     <main>
+       <h1>Todos</h1>
+       <AddTodoForm onAdd={add} />
++      <TodoSearch value={query} onChange={setQuery} />
+       <TodoFilter value={filter} options={filters} onChange={setFilter} />
++      <p role="status">{matchSummary}</p>
++      <button
++        type="button"
++        disabled={openMatchCount === 0}
++        onClick={() => completeAll(visible.map((todo) => todo.id))}
++      >
++        Complete all matches
++      </button>
+       <TodoList
+         todos={visible}
+         isLoading={isLoading}
+         isError={isError}
+         onToggle={toggle}
+         onRemove={remove}
++        emptyState={
++          query.trim() ? (
++            <p role="status">No todos match “{query.trim()}”.</p>
++          ) : undefined
++        }
+       />
+       <p>{activeCount} active</p>
+     </main>
+diff --git a/src/features/todos/components/TodoList.tsx b/src/features/todos/components/TodoList.tsx
+index 2af0f5c..4b7ab37 100644
+--- a/src/features/todos/components/TodoList.tsx
++++ b/src/features/todos/components/TodoList.tsx
+@@ -1,3 +1,4 @@
++import type { ReactNode } from 'react';
+ import type { Todo } from '../types';
+ import { TodoItem } from './TodoItem';
+ 
+@@ -7,10 +8,19 @@ interface TodoListProps {
+   isError: boolean;
+   onToggle: (id: Todo['id']) => void;
+   onRemove: (id: Todo['id']) => void;
++  // Callers that narrowed the list themselves supply their own empty state.
++  emptyState?: ReactNode;
+ }
+ 
+ // Loading, error, and empty are named states, not afterthoughts
+-export function TodoList({ todos, isLoading, isError, onToggle, onRemove }: TodoListProps) {
++export function TodoList({
++  todos,
++  isLoading,
++  isError,
++  onToggle,
++  onRemove,
++  emptyState,
++}: TodoListProps) {
+   if (isLoading) {
+     return <p role="status">Loading todos…</p>;
+   }
+@@ -20,7 +30,9 @@ export function TodoList({ todos, isLoading, isError, onToggle, onRemove }: Todo
+   }
+ 
+   if (todos.length === 0) {
+-    return <p role="status">No todos yet. Add your first one above.</p>;
++    return (
++      emptyState ?? <p role="status">No todos yet. Add your first one above.</p>
++    );
+   }
+ 
+   return (
+diff --git a/src/features/todos/components/TodoSearch.tsx b/src/features/todos/components/TodoSearch.tsx
+new file mode 100644
+index 0000000..c9a225e
+--- /dev/null
++++ b/src/features/todos/components/TodoSearch.tsx
+@@ -0,0 +1,16 @@
++interface TodoSearchProps {
++  value: string;
++  onChange: (next: string) => void;
++}
++
++export function TodoSearch({ value, onChange }: TodoSearchProps) {
++  return (
++    <input
++      type="search"
++      aria-label="Search todos by title"
++      value={value}
++      onChange={(event) => onChange(event.target.value)}
++      placeholder="Search todos"
++    />
++  );
++}
+diff --git a/src/features/todos/hooks/useTodoSearch.ts b/src/features/todos/hooks/useTodoSearch.ts
+new file mode 100644
+index 0000000..1e78603
+--- /dev/null
++++ b/src/features/todos/hooks/useTodoSearch.ts
+@@ -0,0 +1,10 @@
++import { useSearchParamState } from '../../../shared/lib/useSearchParamState';
++
++// A search query is shareable and must survive reload, so its home is the URL.
++// Deferred: useSearchParamState pushes a history entry per change, so typing
++// leaves one entry per keystroke. Upgrade path is a replace option on that hook.
++export function useTodoSearch() {
++  const [query, setQuery] = useSearchParamState('q', '');
++
++  return { query, setQuery };
++}
+diff --git a/src/features/todos/hooks/useTodos.test.tsx b/src/features/todos/hooks/useTodos.test.tsx
+index 766389a..0f48e69 100644
+--- a/src/features/todos/hooks/useTodos.test.tsx
++++ b/src/features/todos/hooks/useTodos.test.tsx
+@@ -50,6 +50,66 @@ describe('useTodos', () => {
+     await waitFor(() => expect(result.current.todos[0]?.completed).toBe(true));
+   });
+ 
++  it('completes every id it is given', async () => {
++    resetTodosDb([
++      { id: 't1', title: 'open one', completed: false },
++      { id: 't2', title: 'open two', completed: false },
++    ]);
++    const { result } = renderHook(() => useTodos(), { wrapper: createWrapper() });
++    await waitFor(() => expect(result.current.todos).toHaveLength(2));
++
++    result.current.completeAll(['t1', 't2']);
++
++    await waitFor(() =>
++      expect(result.current.todos.every((todo) => todo.completed)).toBe(true),
++    );
++  });
++
++  it('leaves an already completed todo completed', async () => {
++    resetTodosDb([
++      { id: 't1', title: 'open one', completed: false },
++      { id: 't2', title: 'done two', completed: true },
++    ]);
++    const { result } = renderHook(() => useTodos(), { wrapper: createWrapper() });
++    await waitFor(() => expect(result.current.todos).toHaveLength(2));
++
++    result.current.completeAll(['t1', 't2']);
++
++    await waitFor(() =>
++      expect(result.current.todos.find((todo) => todo.id === 't1')?.completed).toBe(true),
++    );
++    expect(result.current.todos.find((todo) => todo.id === 't2')?.completed).toBe(true);
++  });
++
++  it('is a no-op when run twice on the same ids', async () => {
++    resetTodosDb([{ id: 't1', title: 'open one', completed: false }]);
++    const { result } = renderHook(() => useTodos(), { wrapper: createWrapper() });
++    await waitFor(() => expect(result.current.todos).toHaveLength(1));
++
++    result.current.completeAll(['t1']);
++    await waitFor(() => expect(result.current.todos[0]?.completed).toBe(true));
++
++    result.current.completeAll(['t1']);
++    await new Promise((resolve) => setTimeout(resolve, 60));
++    expect(result.current.todos[0]?.completed).toBe(true);
++  });
++
++  it('does not touch todos outside the given ids', async () => {
++    resetTodosDb([
++      { id: 't1', title: 'open one', completed: false },
++      { id: 't2', title: 'open two', completed: false },
++    ]);
++    const { result } = renderHook(() => useTodos(), { wrapper: createWrapper() });
++    await waitFor(() => expect(result.current.todos).toHaveLength(2));
++
++    result.current.completeAll(['t1']);
++
++    await waitFor(() =>
++      expect(result.current.todos.find((todo) => todo.id === 't1')?.completed).toBe(true),
++    );
++    expect(result.current.todos.find((todo) => todo.id === 't2')?.completed).toBe(false);
++  });
++
+   it('removes a todo', async () => {
+     resetTodosDb([{ id: 't1', title: 'open thing', completed: false }]);
+     const { result } = renderHook(() => useTodos(), { wrapper: createWrapper() });
+diff --git a/src/features/todos/hooks/useTodos.ts b/src/features/todos/hooks/useTodos.ts
+index e1bb51d..752845e 100644
+--- a/src/features/todos/hooks/useTodos.ts
++++ b/src/features/todos/hooks/useTodos.ts
+@@ -12,16 +12,27 @@ export function useTodos() {
+     queryClient.invalidateQueries({ queryKey: TODOS_KEY });
+ 
+   const todosQuery = useQuery({ queryKey: TODOS_KEY, queryFn: fetchTodos });
++  const todos = todosQuery.data ?? [];
+   const addMutation = useMutation({ mutationFn: createTodo, onSuccess: invalidate });
+   const toggleMutation = useMutation({ mutationFn: toggleTodo, onSuccess: invalidate });
+   const removeMutation = useMutation({ mutationFn: deleteTodo, onSuccess: invalidate });
+ 
++  // Completion is a set operation here, not a toggle: todos already completed are
++  // skipped so that completing a selection twice is a no-op.
++  const completeAll = (ids: Todo['id'][]) => {
++    const wanted = new Set(ids);
++    todos
++      .filter((todo) => wanted.has(todo.id) && !todo.completed)
++      .forEach((todo) => toggleMutation.mutate(todo.id));
++  };
++
+   return {
+-    todos: todosQuery.data ?? [],
++    todos,
+     isLoading: todosQuery.isPending,
+     isError: todosQuery.isError,
+     add: (title: string) => addMutation.mutate(title),
+     toggle: (id: Todo['id']) => toggleMutation.mutate(id),
+     remove: (id: Todo['id']) => removeMutation.mutate(id),
++    completeAll,
+   };
+ }
+diff --git a/src/features/todos/lib/filterTodos.test.ts b/src/features/todos/lib/filterTodos.test.ts
+index b503f18..0d4bd58 100644
+--- a/src/features/todos/lib/filterTodos.test.ts
++++ b/src/features/todos/lib/filterTodos.test.ts
+@@ -1,6 +1,6 @@
+ import { describe, expect, it } from 'vitest';
+ import type { Todo } from '../types';
+-import { countActive, filterTodos } from './filterTodos';
++import { countActive, filterTodos, searchTodos } from './filterTodos';
+ 
+ const todos: Todo[] = [
+   { id: '1', title: 'open thing', completed: false },
+@@ -21,6 +21,47 @@ describe('filterTodos', () => {
+   });
+ });
+ 
++describe('searchTodos', () => {
++  it('matches part of the title, ignoring case', () => {
++    expect(searchTodos(todos, 'OPEN').map((todo) => todo.id)).toEqual(['1']);
++  });
++
++  it('matches in the middle of the title', () => {
++    expect(searchTodos(todos, 'thing')).toHaveLength(2);
++  });
++
++  it('returns everything for an empty or blank query', () => {
++    expect(searchTodos(todos, '')).toHaveLength(2);
++    expect(searchTodos(todos, '   ')).toHaveLength(2);
++  });
++
++  it('trims the query before matching', () => {
++    expect(searchTodos(todos, '  done  ').map((todo) => todo.id)).toEqual(['2']);
++  });
++
++  it('returns nothing when the query matches no title', () => {
++    expect(searchTodos(todos, 'nope')).toEqual([]);
++  });
++
++  it('does not match on completion state or id', () => {
++    expect(searchTodos(todos, 'completed')).toEqual([]);
++    expect(searchTodos(todos, '1')).toEqual([]);
++  });
++
++  it('combines with the status filter', () => {
++    expect(
++      searchTodos(filterTodos(todos, 'active'), 'thing').map((todo) => todo.id),
++    ).toEqual(['1']);
++    expect(searchTodos(filterTodos(todos, 'completed'), 'open')).toEqual([]);
++  });
++
++  it('leaves the input array untouched', () => {
++    const input = [...todos];
++    searchTodos(input, 'open');
++    expect(input).toEqual(todos);
++  });
++});
++
+ describe('countActive', () => {
+   it('counts unfinished todos', () => {
+     expect(countActive(todos)).toBe(1);
+diff --git a/src/features/todos/lib/filterTodos.ts b/src/features/todos/lib/filterTodos.ts
+index e72735e..f2dddc1 100644
+--- a/src/features/todos/lib/filterTodos.ts
++++ b/src/features/todos/lib/filterTodos.ts
+@@ -11,6 +11,13 @@ export function filterTodos(todos: Todo[], filter: TodoFilter): Todo[] {
+   }
+ }
+ 
++// Title search is its own rule, composed with the status filter at the call site.
++export function searchTodos(todos: Todo[], query: string): Todo[] {
++  const needle = query.trim().toLowerCase();
++  if (!needle) return todos;
++  return todos.filter((todo) => todo.title.toLowerCase().includes(needle));
++}
++
+ export function countActive(todos: Todo[]): number {
+   return todos.filter((todo) => !todo.completed).length;
+ }
