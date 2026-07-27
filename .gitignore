@@ -18,6 +18,10 @@ node_modules/
 *.tsbuildinfo
 coverage/
 
+# Python
+__pycache__/
+*.pyc
+
 # Build artifacts
 dist/
 build/

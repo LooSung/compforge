@@ -34,7 +34,7 @@ Both halves are the same move: **don't create it; if it must exist, it has exact
 
 ## Now, in order
 
-1. **Proof** — port OOPforge's control/treatment protocol to a frontend task. Publish reproducible before/after runs, favourable or not, before any improvement claim. Nothing below is worth shipping unproven.
+1. **Proof** — protocol ported and harness dry-run verified ([`proof/README.md`](proof/README.md)); **no runs published yet**. Publish reproducible before/after runs, favourable or not, before any improvement claim. Nothing below is worth shipping unproven.
 2. **Enforcement distribution** — per-stack lint templates extracted from the examples: ESLint `import/no-restricted-paths` zones for `react-vite-feature` (must include the `.ts` resolver-extensions fix, or the rule is silently a no-op); steiger for `react-vite-fsd`. Plus a GitHub Actions template that blocks violating PRs.
 3. **Antipattern detectors** — mechanical checks where possible (derived-state-in-effect, query-data-in-`useState` heuristics). Migrate Hard Rules to MUST/SHOULD/NEVER phrasing here, once, when detectors need machine-checkable wording.
 

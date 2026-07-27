@@ -3,6 +3,24 @@
 All notable changes to Compforge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+The proof harness exists and is dry-run verified; no proof runs are published, and no effectiveness claim is made.
+
+### Added
+
+- **Proof protocol** (`docs/proof/`, `scripts/proof/`): a reproducible control-versus-Compforge comparison on one fixed task — add search to `examples/todo-react-feature`, chosen because it forces URL state, derived values, a query-layer mutation, a component split, a second empty state, and accessibility in a single request.
+- `scripts/proof/run-comparison.sh` builds both workspaces from the source commit (`git archive`, so the working tree and `node_modules` cannot leak in), runs both arms, and refuses to continue when the control discovers Compforge (`.craft/` created) or the treatment does not (`.craft/` missing).
+- `scripts/proof/evaluate-run.py` scores eleven React-specific violations against each file's pre-change baseline, so only findings the run introduced are counted.
+- **Starter neutralization**: the example teaches Compforge in its comments, README, and page title. The harness strips those from **both** workspaces and fails if any reference survives — otherwise the control reads the methodology off the starter and the comparison measures nothing.
+
+### Changed
+
+- **The ladder is the first thing an agent reads.** The pre-write and state-home ladders are merged into one eight-rung ladder at the top of `skills/principles/component-discipline.md`; principles #3 and #7 now point at it instead of restating it. `skills/SKILL.md` carries a one-line summary and a pointer rather than a copy, so there is exactly one canonical text to keep correct.
+- **"Never on the chopping block" guard** ships next to the ladder: loading, error, and empty states, accessible names and roles, focus management, and input validation are exempt from subtraction. Small code is a consequence of building only what the screen needs, never a target.
+- **Roadmap restructured** as promise → ladder → now → not doing → gates, with chapter numbering dropped. Proof moves ahead of enforcement distribution, and the success metric is stated outright: architecture-violation and rework rates plus state and accessibility coverage, never lines of code. Orchestration, long-term agent memory, and wrapping the git/PR cycle are recorded as non-goals.
+- **README / README.ko** describe `examples/` as the reference implementations rather than planned work, and Hard Rules as v0.2.
+
 ## [0.3.0] — 2026-07-23
 
 Chapter 1 close: the install → use → self-verify loop is complete.
