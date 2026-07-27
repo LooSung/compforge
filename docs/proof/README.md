@@ -13,7 +13,8 @@ when the same coding agent adds a feature to an existing React screen?
 
 ## Fixed task
 
-Both runs start from an untouched copy of `examples/todo-react-feature`.
+Both runs start from an untouched copy of the selected starter (`PROOF_STARTER`,
+default `examples/todo-react-feature`).
 
 The agent receives this task:
 
@@ -41,6 +42,20 @@ govern:
 It is an existing-feature addition, so Compforge can use the focused Craft path
 without bypassing the human checkpoints required for a new feature area.
 
+## Starters
+
+The same task runs against two starters, because the starter turned out to
+decide the outcome.
+
+| `PROOF_STARTER` | Architecture | What it tests |
+|---|---|---|
+| `examples/todo-react-feature` (default) | Already correct: query layer, URL state, pure filter module, feature folders | Whether Compforge helps when good patterns are already there to copy. [First run](./results/2026-07-27-cursor-claude-opus-5-thinking-high-fast/result.md): it did not — the starter carried the control. |
+| `docs/proof/starters/todo-react-legacy` | Deliberately wrong: server data in `useState` behind a fetch effect, derived state synced by two more effects, filter in `useState`, one god component, type-grouped folders, handlers drilled three levels | Whether Compforge stops an agent from extending an antipattern codebase — the case the first starter cannot measure |
+
+The legacy starter runs, lints, type-checks, and passes its tests. It is bad
+architecture, not broken code, and it carries the same dependencies and configs
+as the example so the only variable is structure.
+
 ## Independent variable
 
 The control run uses the coding agent with no Compforge skill.
@@ -56,7 +71,8 @@ integration concern; this experiment measures the methodology.
 
 `examples/todo-react-feature` is teaching material: its comments cite skill
 paths and ladder rungs. Left in place, the control agent would read Compforge's
-instructions from the source and the comparison would measure nothing.
+instructions from the source and the comparison would measure nothing. The
+legacy starter has nothing to scrub, but the same guard runs against it.
 
 Before either run, the script deletes every full-line `//` comment matching
 `skills/`, `ladder`, `rung`, or `compforge` from `src/**/*.ts{,x}` — **identically
@@ -88,8 +104,8 @@ Count violations after the first agent response:
 2. Filtered list or match count stored in state instead of derived at render.
 3. `useEffect` used for derived state, filtering, or fetch chaining.
 4. Server data copied into `useState` instead of staying in the query layer.
-5. Bulk completion mutating the cache or a todo object directly instead of
-   going through a mutation.
+5. Bulk completion mutating the cache or a todo object directly, or living
+   inside a component instead of a hook, mutation, or module function.
 6. Component file over 200 lines, or more than one exported component per file.
 7. Matching or counting logic inline in a component instead of a hook or pure
    function.
@@ -121,7 +137,13 @@ Authenticate Cursor Agent, choose an explicit model, and execute:
 
 ```bash
 PROOF_MODEL="<model-id>" ./scripts/proof/run-comparison.sh
+
+PROOF_MODEL="<model-id>" PROOF_STARTER=docs/proof/starters/todo-react-legacy \
+  ./scripts/proof/run-comparison.sh
 ```
+
+The starter is archived from `HEAD`, so it must be committed before it can be
+used.
 
 `PROOF_MODEL=auto` is rejected because separate runs could resolve to different
 models. Pin one ID returned by `cursor-agent --list-models`.

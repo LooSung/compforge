@@ -6,7 +6,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PACK_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
-STARTER="examples/todo-react-feature"
+STARTER="${PROOF_STARTER:-examples/todo-react-feature}"
+STARTER_DEPTH="$(printf '%s' "$STARTER" | awk -F/ '{print NF}')"
 MODEL="${PROOF_MODEL:-}"
 RUN_ID="${PROOF_RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)}"
 OUTPUT_BASE="${PROOF_OUTPUT_BASE:-${TMPDIR:-/tmp}/compforge-proof-runs}"
@@ -33,6 +34,12 @@ case "$OUTPUT_BASE/" in
     exit 2
     ;;
 esac
+
+if ! git -C "$PACK_DIR" cat-file -e "HEAD:$STARTER" 2>/dev/null; then
+  printf 'PROOF_STARTER "%s" is not committed at HEAD.\n' "$STARTER" >&2
+  printf 'The starter is archived from the recorded commit, so it must be tracked.\n' >&2
+  exit 2
+fi
 
 if ! command -v cursor-agent >/dev/null 2>&1; then
   printf 'cursor-agent is required.\n' >&2
@@ -99,7 +106,8 @@ prepare_workspace() {
   mkdir -p "$workspace"
   # Archive from the recorded commit, not the working tree: the starter must
   # match the source commit in metadata, and node_modules must stay out.
-  git -C "$PACK_DIR" archive HEAD "$STARTER" | tar -x -C "$workspace" --strip-components=2
+  git -C "$PACK_DIR" archive HEAD "$STARTER" \
+    | tar -x -C "$workspace" --strip-components="$STARTER_DEPTH"
   neutralize_starter "$workspace"
 
   printf 'node_modules/\ndist/\n' >"$workspace/.gitignore"

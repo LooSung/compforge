@@ -29,6 +29,7 @@ CASE_FOLD = re.compile(r"\.toLowerCase\(\)|\.toLocaleLowerCase\(\)")
 NARROWING = re.compile(r"\.filter\(|\.includes\(")
 IMPORT_SOURCE = re.compile(r"""(?:from|import)\s*\(?\s*['"]([^'"]+)['"]""")
 FEATURE_SEGMENT = re.compile(r"features/(\w+)")
+API_MODULE = re.compile(r"(?:^|/)api(?:/|$)")
 EMPTY_BRANCH = re.compile(r"(?:\.length|[Cc]ount)\s*(?:===\s*0|<\s*1|>\s*0)|!\w+\.length")
 SEARCH_TERM = re.compile(r"match|search|quer", re.I)
 
@@ -85,7 +86,7 @@ def import_findings(content: str, rel: str) -> list[dict[str, object]]:
         target = FEATURE_SEGMENT.search(source)
         if own and target and target.group(1) != own.group(1):
             findings.append({"rule": "cross-feature-import", "file": rel, "import": source})
-        if "components/" in rel and "/api/" in source:
+        if is_component(rel) and API_MODULE.search(source):
             findings.append({"rule": "component-imports-api", "file": rel, "import": source})
     return findings
 
@@ -99,8 +100,10 @@ def content_findings(content: str, rel: str) -> list[dict[str, object]]:
 
     if line_count > 200:
         findings.append({"rule": "file-over-200-lines", "file": rel, "lines": line_count})
-    if USE_EFFECT.search(content):
-        findings.append({"rule": "useeffect-introduced", "file": rel})
+    # One finding per effect, so baseline subtraction reports effects the run
+    # added rather than going quiet on a file that already had one.
+    for occurrence in range(len(USE_EFFECT.findall(content))):
+        findings.append({"rule": "useeffect-added", "file": rel, "occurrence": occurrence})
     if CACHE_WRITE.search(content) or DIRECT_MUTATION.search(content):
         findings.append({"rule": "direct-mutation-or-cache-write", "file": rel})
     if ANY_TYPE.search(content):
@@ -117,7 +120,12 @@ def content_findings(content: str, rel: str) -> list[dict[str, object]]:
 
 
 def finding_key(finding: dict[str, object]) -> tuple[object, ...]:
-    return finding.get("rule"), finding.get("file"), finding.get("binding")
+    return (
+        finding.get("rule"),
+        finding.get("file"),
+        finding.get("binding"),
+        finding.get("occurrence"),
+    )
 
 
 def architecture_findings(sources: dict[str, str], root: Path) -> list[dict[str, object]]:
@@ -138,16 +146,18 @@ def coverage_checks(sources: dict[str, str]) -> dict[str, bool]:
     production = {rel: body for rel, body in sources.items() if not is_test(rel)}
     tests = {rel: body for rel, body in sources.items() if is_test(rel)}
     joined = "\n".join(production.values())
+    # Layout-agnostic: "not a component" is the rule both stacks share, whether
+    # the destination is features/todos/lib or a flat utils folder.
     logic = "\n".join(
-        body for rel, body in production.items() if "/lib/" in rel or "/hooks/" in rel
+        body for rel, body in production.items() if not is_component(rel)
     )
     return {
         "query_in_url": "useSearchParamState" in joined or "URLSearchParams" in joined,
         "matching_logic_extracted": bool(CASE_FOLD.search(logic) and NARROWING.search(logic)),
-        "bulk_completion_in_query_layer": any(
-            SEARCH_TERM.search(body) and ("useMutation" in body or "/api/" in rel)
+        "bulk_completion_outside_component": any(
+            SEARCH_TERM.search(body) and ("useMutation" in body or "complete" in body.lower())
             for rel, body in production.items()
-            if "/hooks/" in rel or "/api/" in rel
+            if not is_component(rel)
         ),
         "accessible_label": any(
             "<input" in body and ("aria-label" in body or "<label" in body)
