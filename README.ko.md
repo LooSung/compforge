@@ -130,9 +130,9 @@ Discovery → Design → Delivery Plan → Skeleton → Implement → Test
 단계부터 시작하라고 요청하세요. 리팩토링은 동작을 보존해야 하므로 기능
 워크플로 밖에서 진행합니다.
 
-출하된 스택 식별자는 `react-vite-feature`, `react-vite-fsd`입니다.
-`react-next-app`은 문서화되어 있고 실행 예제는 아직 없습니다. Vue는 React
-수직이 게이트입니다. [docs/roadmap.md](docs/roadmap.md)를 보세요.
+출하된 스택 식별자는 `react-vite-feature`, `react-vite-fsd`,
+`react-next-app`입니다. Vue는 React 수직이 게이트입니다.
+[docs/roadmap.md](docs/roadmap.md)를 보세요.
 
 ### 세션 사이 작업 이어가기
 
@@ -144,7 +144,8 @@ Craft가 편집 전에 Resume 블록을 제시합니다. 세션이 끝났는데 
 
 | 자료 | 용도 |
 |---|---|
-| [Examples index](examples/README.md) | 같은 Todo 앱, 출하된 두 스택 |
+| [Examples index](examples/README.md) | 같은 Todo 앱, 출하된 세 스택 |
+| [장바구니 워크스루](docs/guides/cart/README.ko.md) | 한 화면을 Discovery → Test까지 |
 | [Reviewer checklist](docs/reviewer-checklist.md) | 구현 후 규칙 점검 |
 | [Templates](templates/README.md) | `init`이 프로젝트에 복사하는 강제 설정 |
 
@@ -204,7 +205,7 @@ function CartPage() {
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v0.7.0
+git checkout v0.8.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
@@ -266,7 +267,7 @@ Cursor의 수동 프로젝트 로컬 스킬은 `install.sh`가 관리하지 않�
 
 - `skills/` — 워크플로, React, 스택, 스켈레톤, 플레이북, 리뷰 지침
 - `commands/` — Claude Code 커맨드 진입점
-- `examples/` — 실행 가능한 TypeScript + React Todo 예제 2종
+- `examples/` — 실행 가능한 TypeScript + React Todo 예제 3종
 - `docs/` — 하네스 가이드, Proof, 로드맵
 - `scripts/` — 설치, init, lint, proof, smoke test
 - `templates/` — ESLint 존, steiger, 차단 CI, 비차단 아키텍처 리뷰

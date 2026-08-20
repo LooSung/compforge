@@ -42,6 +42,7 @@ Discovery → Design → Delivery Plan → Skeleton → Implement → Test
 | Test | 훅 / 컴포넌트 / E2E | 테스트 없는 로직 훅 |
 
 작은 작업은 전체 파이프라인을 강제하지 않고 **Craft**가 가장 작은 경로를 고른다.
+한 화면을 끝까지 걷는 예시는 [장바구니 워크스루](guides/cart/README.ko.md)다.
 
 ---
 

@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        example: [todo-react-feature, todo-react-fsd]
+        example: [todo-react-feature, todo-react-fsd, todo-react-next]
     defaults:
       run:
         working-directory: examples/${{ matrix.example }}

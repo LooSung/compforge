@@ -3,6 +3,7 @@
 The Compforge reference todo app on the **`react-vite-fsd`** stack: Feature-Sliced Design layers, slice public APIs (`index.ts`), architecture enforced by [steiger](https://github.com/feature-sliced/steiger).
 
 Same app, different architecture: [`todo-react-feature`](../todo-react-feature/).
+Same app on Next: [`todo-react-next`](../todo-react-next/).
 
 ## Run
 

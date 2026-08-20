@@ -94,7 +94,7 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | Claude Code | `docs/claude-code.md` |
 | Cursor | `docs/cursor.md` |
 
-Reference implementations: [examples/README.md](examples/README.md) — the same todo app on both shipped stacks.
+Reference implementations: [examples/README.md](examples/README.md) — the same todo app on the three shipped stacks.
 
 ## Hard Rules (v0.4)
 

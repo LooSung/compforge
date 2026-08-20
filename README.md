@@ -131,9 +131,9 @@ Each stage ends with a human checkpoint. Ask Craft to start at a named stage
 only when earlier decisions already exist. Refactoring stays outside the feature
 flow because it must preserve behavior.
 
-Shipped stack identifiers are `react-vite-feature` and `react-vite-fsd`.
-`react-next-app` is documented; a runnable example is not shipped yet. Vue is
-gated behind the React vertical. See [docs/roadmap.md](docs/roadmap.md).
+Shipped stack identifiers are `react-vite-feature`, `react-vite-fsd`, and
+`react-next-app`. Vue is gated behind the React vertical. See
+[docs/roadmap.md](docs/roadmap.md).
 
 ### Resume work across sessions
 
@@ -145,7 +145,8 @@ work remaining, `.craft/next-session-prompt.md` records the next decision.
 
 | Resource | Purpose |
 |---|---|
-| [Examples index](examples/README.md) | Same todo app on both shipped stacks |
+| [Examples index](examples/README.md) | Same todo app on the three shipped stacks |
+| [Cart walkthrough](docs/guides/cart/README.md) | Discovery → Test on one real screen |
 | [Reviewer checklist](docs/reviewer-checklist.md) | Post-implementation rule check |
 | [Templates](templates/README.md) | Enforcement `init` copies into a project |
 
@@ -207,7 +208,7 @@ release instead:
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v0.7.0
+git checkout v0.8.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
@@ -271,7 +272,7 @@ else. Remove those paths manually if you want a complete uninstall.
 
 - `skills/` — workflow, React, stack, skeleton, playbooks, and review instructions
 - `commands/` — Claude Code command entry point
-- `examples/` — two runnable TypeScript + React todo references
+- `examples/` — three runnable TypeScript + React todo references
 - `docs/` — harness guides, proof protocol, roadmap
 - `scripts/` — setup, init, lint, proof runner, and smoke tests
 - `templates/` — ESLint zones, steiger, blocking CI, non-blocking architecture review

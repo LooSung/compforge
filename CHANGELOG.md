@@ -3,6 +3,24 @@
 All notable changes to Compforge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+## [0.8.0] — 2026-08-20
+
+Education release: walk Discovery → Test on one real screen, and stop claiming
+Next without a runnable example.
+
+### Added
+
+- **Cart walkthrough** (`docs/guides/cart/`): Discovery → Test on a cart screen.
+  Not a third todo app. Checkout is out of scope.
+- **`react-next-app` example** (`examples/todo-react-next/`): the same todo app
+  on Next.js App Router. Server Components compose; interactive UI is a
+  `'use client'` island; `src/server/` is `server-only`. ESLint zones block
+  features/shared from importing server or app. The page passes the serializable
+  `filter` search param so `useSyncExternalStore` can supply `getServerSnapshot`.
+  CI runs `npm run check`, including `next build`.
+
 ## [0.7.0] — 2026-08-20
 
 Reference examples, the proof evaluator, and `compforge init` now look at the

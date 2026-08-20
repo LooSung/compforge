@@ -3,6 +3,7 @@
 The Compforge reference todo app on the **`react-vite-feature`** stack: feature folders, composed at the app level, no cross-feature imports, no barrel files.
 
 Same app, different architecture: [`todo-react-fsd`](../todo-react-fsd/).
+Same app on Next: [`todo-react-next`](../todo-react-next/).
 
 ## Run
 

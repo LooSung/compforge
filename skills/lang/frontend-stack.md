@@ -52,3 +52,4 @@ Lower layers never import from higher layers. Cross-feature imports:
 
 - `react-vite-feature`: **forbidden** — compose features at the app level; no barrel `index.ts` (Vite tree-shaking). Enforce with ESLint `import/no-restricted-paths`.
 - `react-vite-fsd`: through each slice's public API (`index.ts`) only. Enforce with steiger.
+- `react-next-app`: same as feature folders, plus features/shared never import `src/server` or `src/app`. Pass serializable props from a Server Component. Reference: `examples/todo-react-next/`.

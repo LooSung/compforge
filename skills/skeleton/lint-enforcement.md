@@ -56,8 +56,8 @@ npx steiger ./src
 ## CI wiring
 
 - Target projects: `templates/github/compforge-check.yml` (filled in by init).
-- This pack: `.github/workflows/examples.yml` runs `npm run check` on both
-  examples (lint/arch + `tsc --noEmit` + vitest).
+- This pack: `.github/workflows/examples.yml` runs `npm run check` on the three
+  examples (lint/arch + `tsc --noEmit` + vitest; Next also runs `next build`).
 
 ## Blocking policy
 

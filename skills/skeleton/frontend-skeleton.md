@@ -51,6 +51,31 @@ src/
 Every slice (`features/add-to-cart/`, `entities/product/`) exposes `index.ts` —
 this is FSD's public-api rule, enforceable with steiger (`@feature-sliced/steiger-plugin`).
 
+## `react-next-app`
+
+```text
+src/
+├── app/                 # Server Components compose; providers.tsx is client
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── providers.tsx
+├── server/              # import 'server-only' — request/auth/fs
+├── features/
+│   └── cart/
+│       ├── components/
+│       ├── hooks/
+│       ├── api/         # isomorphic — no next/headers or fs
+│       └── types.ts
+└── shared/
+    └── lib/
+```
+
+Same as `react-vite-feature` (no cross-feature imports, no barrels), plus
+**features and shared must not import `src/server` or `src/app`**. Pass
+serializable props from a Server Component. Interactive files use `'use client'`.
+URL subscriptions must supply `getServerSnapshot`. Enforce with ESLint
+`import/no-restricted-paths`. Reference: `examples/todo-react-next/`.
+
 ## Empty-file conventions
 
 - Component: typed props, body returns a placeholder (`<div>CartList</div>`).
@@ -62,5 +87,6 @@ this is FSD's public-api rule, enforceable with steiger (`@feature-sliced/steige
 
 - [ ] Print the tree; every Design tree node has exactly one file.
 - [ ] No app-wide `components/`, `hooks/`, `utils/` dumping grounds (shared primitives live under `shared/`).
-- [ ] No cross-feature imports (`react-vite-feature`); cross-slice via `index.ts` only (`react-vite-fsd`).
+- [ ] No cross-feature imports (`react-vite-feature`, `react-next-app`); cross-slice via `index.ts` only (`react-vite-fsd`).
+- [ ] `react-next-app`: features/shared do not import `src/server` or `src/app`.
 - [ ] `tsc --noEmit` passes.

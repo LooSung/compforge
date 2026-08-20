@@ -64,5 +64,5 @@ What we read, what we adopted, what we rejected. Feeds Hard Rules v0.2 and the s
 
 1. **Prop drilling limit: keep 2 levels.** Neither example ever needed more than 1 level of pass-through; agent-skills' 3-level allowance gains nothing at todo scale. Re-open only if a larger example forces it.
 2. **MUST/SHOULD/NEVER phrasing migration: deferred.** Cosmetic at this stage; revisit in chapter 2 when antipattern detectors need machine-checkable phrasing — migrate then, once, instead of twice.
-3. **`react-next-app` boundary recipe: deferred** until that stack ships an example (no rules without a runnable reference).
+3. **`react-next-app` boundary recipe: closed in v0.8.** Encoded in `examples/todo-react-next/` (Server Component compose, `'use client'` island, `server-only` + ESLint zones, serializable `getServerSnapshot`).
 4. **Numbers kept as-is** (200 lines/file, ~15-line logic threshold, ~7 props). Both examples satisfied every limit without exceptions. Largest file: `TodosPage.tsx` at ~45 lines. Larger examples may still re-baseline.

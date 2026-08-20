@@ -54,7 +54,7 @@ When the intent is execution but a decisive input is empty (stack, folder archit
 2. **Stack and architecture must pass the `skills/lang/frontend-stack.md` scope gate.** If unspecified, steer to TypeScript + React (Vite); for an unsupported stack (Vue for now, Angular, Svelte) state that Compforge does not apply yet (plain build only if insisted).
 3. For items you can set safely, **state the default** and proceed (e.g., Vite, feature folders, CSS Modules, no router).
 4. Ask only the 1–2 questions that actually change the result (architecture/scope) (e.g., "Multiple pages? -> add routing and URL state").
-5. You may offer the `examples/` todo family (feature / FSD) as a reference menu.
+5. You may offer the `examples/` todo family (feature / FSD / Next) as a reference menu.
 6. On resume, the Resume block's `Continue this, or a new request instead?` is that question. Do not invent a default that drops unfinished previous work.
 
 ## Assumptions (before Contract)

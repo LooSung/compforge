@@ -1,0 +1,30 @@
+/* Styling is intentionally minimal — this example demonstrates architecture,
+   not visual design. */
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 32rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.todo-list {
+  list-style: none;
+  padding: 0;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.todo-done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+[aria-pressed='true'] {
+  font-weight: bold;
+  text-decoration: underline;
+}
