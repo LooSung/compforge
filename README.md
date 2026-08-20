@@ -95,19 +95,30 @@ requests recommend a path without implementing. Exact setup:
 [Claude Code](docs/claude-code.md) · [Codex](docs/codex.md) ·
 [Cursor](docs/cursor.md).
 
-### 5. Optional: put guardrails in the project
+### 5. Optional: leave the pack in the project
 
-`compforge init` copies ESLint import zones (feature folders) or steiger (FSD)
-and a PR-blocking GitHub Actions check. It is not required to try Craft.
+`compforge init` writes an `AGENTS.md` pointer and `compforge-lock.json` so an
+agent that clones only your repository knows to read Compforge, and copies the
+stack's ESLint import zones (feature folders / Next App Router) or steiger (FSD)
+with a PR-blocking GitHub Actions check. It is not required to try Craft.
 
 ```bash
 ~/.compforge/scripts/setup/init.sh
 ```
 
-It detects the stack from `src/`, never overwrites files it did not generate,
-and finishes with a **negative self-test**: a deliberate cross-feature import
-must fail, or init refuses to report success. Re-run after adding a feature.
-Details: [`templates/`](./templates/README.md).
+It detects the stack from `package.json` and `src/`, never overwrites files it
+did not generate — a hand-written `AGENTS.md` keeps everything outside the
+Compforge markers — and finishes with a **negative self-test**: a deliberate
+violation must fail, or init refuses to report success. Re-run after adding a
+feature. To prove later that the guard is still alive:
+
+```bash
+~/.compforge/scripts/setup/init.sh --verify
+```
+
+The pointer names the pack and the pinned version; it does not copy the Hard
+Rules, which would go stale on the next release. Details:
+[`templates/`](./templates/README.md).
 
 ## The Basic Workflow
 
@@ -208,7 +219,7 @@ release instead:
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v0.8.0
+git checkout v0.9.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh

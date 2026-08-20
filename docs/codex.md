@@ -55,7 +55,9 @@ Use Compforge craft: Add a quantity stepper to the cart item
 Use Compforge Discovery for the checkout flow. No code yet.
 ```
 
-Optional: `~/.compforge/scripts/setup/init.sh` delivers ESLint zones or steiger.
+Optional: `~/.compforge/scripts/setup/init.sh` leaves an `AGENTS.md` pointer and
+`compforge-lock.json` in the project and delivers ESLint zones or steiger.
+`--verify` re-runs the negative self-test later.
 
 ## Update after pull
 

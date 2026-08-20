@@ -96,17 +96,28 @@ Assumptions와 Component Contract를 제시합니다. 자문 요청은 구현하
 [Claude Code](docs/claude-code.md) · [Codex](docs/codex.md) ·
 [Cursor](docs/cursor.md).
 
-### 5. 선택: 프로젝트에 가드레일 심기
+### 5. 선택: 프로젝트에 팩을 남기기
 
-`compforge init`은 ESLint import 존(기능 폴더) 또는 steiger(FSD)와 PR을 막는
+`compforge init`은 `AGENTS.md` 포인터와 `compforge-lock.json`을 남겨서, 여러분의
+레포만 클론한 에이전트도 Compforge를 읽어야 한다는 걸 알게 합니다. 함께 스택별
+ESLint import 존(기능 폴더 / Next App Router) 또는 steiger(FSD)와 PR을 막는
 GitHub Actions 체크를 복사합니다. Craft를 시험하는 데는 필수가 아닙니다.
 
 ```bash
 ~/.compforge/scripts/setup/init.sh
 ```
 
-`src/`에서 스택을 감지하고, 자기가 만들지 않은 파일은 덮어쓰지 않으며,
-**negative self-test**로 끝냅니다. 상세: [`templates/`](./templates/README.md).
+`package.json`과 `src/`에서 스택을 감지하고, 자기가 만들지 않은 파일은 덮어쓰지
+않으며(손으로 쓴 `AGENTS.md`는 Compforge 마커 바깥이 그대로 보존됩니다),
+**negative self-test**로 끝냅니다. 일부러 깨뜨린 import가 실패하지 않으면 init은
+성공을 보고하지 않습니다. 나중에 가드가 살아 있는지 다시 증명하려면:
+
+```bash
+~/.compforge/scripts/setup/init.sh --verify
+```
+
+포인터는 팩 위치와 고정된 버전만 적습니다. 하드 룰을 복사하지 않는 이유는 다음
+릴리스에서 곧바로 낡기 때문입니다. 상세: [`templates/`](./templates/README.md).
 
 ## 기본 워크플로
 
@@ -205,7 +216,7 @@ function CartPage() {
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v0.8.0
+git checkout v0.9.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh

@@ -22,6 +22,7 @@ jobs:
           bash -n scripts/setup/lib/common.sh
           bash -n scripts/ci/lint-skills.sh
           bash -n scripts/ci/smoke-test.sh
+          bash -n scripts/ci/init-smoke.sh
       - name: Lint skills and repository
         run: |
           chmod +x scripts/ci/lint-skills.sh

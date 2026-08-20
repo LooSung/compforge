@@ -38,10 +38,13 @@ Start the agent from the target project so paths like `docs/foo.md` resolve in
 the app repository. For Compforge maintenance, the pack repository is the work
 target.
 
-Optional: `compforge init` delivers ESLint zones or steiger plus a PR check.
+Optional: `compforge init` leaves an `AGENTS.md` pointer and `compforge-lock.json`
+in the project, plus ESLint zones or steiger and a PR check. Unlike the symlink
+above, the pointer is committed, so it survives a clone on someone else's machine.
 
 ```bash
 ~/.compforge/scripts/setup/init.sh
+~/.compforge/scripts/setup/init.sh --verify   # later: is the guard still alive?
 ```
 
 ## 3. Run Craft

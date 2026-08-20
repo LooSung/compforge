@@ -109,7 +109,7 @@ Blocking versus review: import zones, FSD steiger, and `any` fail CI where `comp
 - **Each feature is its own folder** — grouping files only by type (`components/`, `hooks/`, `utils/` at the top level for the whole app) is a violation once the app has more than one feature.
 - **Pages/routes must not contain business logic** — they compose features.
 - After skeleton, list the directory tree and confirm the feature folders exist with the right file types. See `skills/skeleton/frontend-skeleton.md` self-check.
-- Enforced in the target project by `compforge init` — ESLint `import/no-restricted-paths` zones for `react-vite-feature`; steiger (`@feature-sliced/steiger-plugin`) for `react-vite-fsd`. See `skills/skeleton/lint-enforcement.md`.
+- Enforced in the target project by `compforge init` — ESLint `import/no-restricted-paths` zones for `react-vite-feature` and `react-next-app` (the latter also blocks `src/server` imports from features/shared); steiger (`@feature-sliced/steiger-plugin`) for `react-vite-fsd`. Init also writes the `AGENTS.md` constitution pointer and `compforge-lock.json`; `--verify` re-runs the negative self-test. See `skills/skeleton/lint-enforcement.md`.
 
 ## Repository Discipline
 

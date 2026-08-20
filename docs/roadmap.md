@@ -1,6 +1,6 @@
 # Compforge — Roadmap
 
-**미래 지향** 문서다. 완료된 변경의 상세 이력은 [`CHANGELOG.md`](../CHANGELOG.md)에 있다. 여기에는 **"이건 반드시 한다"**만 남긴다 — 하고 싶은 것이 아니라 정체성을 지키며 성장하는 데 꼭 필요한 것.
+**미래 지향** 문서다. 완료된 변경의 상세 이력은 [`CHANGELOG.md`](../CHANGELOG.md)에 있다. 여기에는 **"이건 반드시 한다"**만 남긴다. 세션은 한 결정, 릴리스는 닫히는 테마다.
 
 ---
 
@@ -29,49 +29,69 @@
 
 ---
 
-## 다음 릴리스
+## 출하됨
 
-### v0.9.0 — 검증된 패키징
+상세는 [`CHANGELOG.md`](../CHANGELOG.md). 로드맵에 다시 열지 않는다.
 
-**목표:** symlink 팩을 플러그인·마켓플레이스 배포로 옮기되, 스모크가 증명한
-경로만 문서가 주장한다.
-
-- Cursor `--plugin-dir`은 Compforge 스모크가 통과한 뒤에만 문서가 주장한다.
-- 마켓플레이스 공개는 후보이지 자동 포함이 아니다.
-
-**범위 밖:** Vue, MCP를 default install에 넣기, 새 에이전트 proof 페어,
-장바구니를 `examples/`에 넣기.
+| 버전 | 닫은 결정 |
+|---|---|
+| [v0.5.0](https://github.com/LooSung/compforge/releases/tag/v0.5.0) | proof 반복 + `compforge init`(린트 강제 배달) |
+| [v0.6.0](https://github.com/LooSung/compforge/releases/tag/v0.6.0) | 하니스 철학(Resume, Delivery Plan, 온보딩) |
+| [v0.7.0](https://github.com/LooSung/compforge/releases/tag/v0.7.0) | fitness functions(evaluator, detector, 비차단 리뷰) |
+| [v0.8.0](https://github.com/LooSung/compforge/releases/tag/v0.8.0) | 교육(장바구니 워크스루 + `react-next-app` 예제) |
+| [v0.9.0](https://github.com/LooSung/compforge/releases/tag/v0.9.0) | 배달(`AGENTS.md` 포인터 + lock + `--verify`, `react-next-app` `init`, Next 오탐 수정) |
 
 ---
 
-## 장기 목표
+## 릴리즈 순서
 
-### 프론트 깊이
+1.0은 아직 찍지 않는다. Cursor 경로와 접근성 강제가 빠졌고, proof도 좁다.
+지금은 **0.x**로 테마만 닫는다. 지금 할 일은 **v0.10**뿐이다.
 
-- **접근성 게이트** — 사다리에서 빼면 안 되는 항목(이름·역할·포커스)을 detector가 잡을 수 있는 범위만.
+v0.9가 배달 조건(1.0 조건 1)을 닫았다. 남은 1.0 조건은 **하니스 스모크**와
+**접근성 최소 detector** 둘이다. 다음 릴리스는 그중 앞의 하나를 닫는다.
 
-### 강제와 배포
+### v0.10.0 — 문서가 주장하는 하니스 경로가 전부 스모크된다  ← 다음
 
-- **init 드리프트** — `compforge-lock.json` 또는 동등한 수단으로, 배달한 ESLint 존/steiger가
-  죽은 가드가 되지 않았는지 재실행 가능하게.
-- **MCP 서버 모드** — detector·아키텍처 리뷰를 실시간 자가교정 도구로 노출하는 **opt-in 실험**.
-- **패키징** — symlink 팩 → 플러그인 마켓플레이스 → Claude Agent SDK 위 독립 CLI.
-  Cursor `--plugin-dir`은 스모크가 증명한 뒤에만 문서가 주장한다.
+**목표:** 1.0 조건 2를 닫는다. 지금 Cursor는 `--plugin-dir`을 "미검증"으로 적어
+두고 프로젝트 로컬 스킬을 정본으로 쓴다. 이 상태로 1.0을 찍으면 문서가 스스로
+못 미더운 경로를 남긴 채 안정 버전이 된다.
 
-### 언어 확장
+- Cursor `--plugin-dir`을 깨끗한 세션에서 스모크한다. 통과하면 문서가 주장하고, 실패하면 프로젝트 로컬 스킬을 1.0 정본으로 **확정하고 어댑터의 위치를 정리한다**. 둘 중 하나로 끝내고 "미검증"을 남기지 않는다.
+- `/compforge:craft` 슬래시가 Cursor에서 되는지도 같은 기준으로 판정한다.
+- Claude Code와 Codex는 이미 격리 HOME 스모크가 있다. 빠진 주장이 있는지만 대조한다.
 
-0.8 교육(워크스루 + Next 예제)은 닫혔다. 0.9 검증된 패키징을 먼저 갖춘다.
-그 시점이 React 수직이 닫힌 **v1.0**이다. 그 뒤 각 스택에 feature + FSD + runnable 예제와
-강제를 함께 제공한다.
+**범위 밖:** Vue, MCP default, 새 proof 페어, 마켓플레이스 공개, 접근성 detector(그다음).
 
-Vue 3 + Nuxt (`vue-nuxt-feature`, `vue-nuxt-fsd`) — Composition API는 훅 규율에 가깝다.
-Vue 스킬은 그 삼체(예제·init·proof 짝) 없이 쓰지 않는다.
+---
+
+## 그다음 0.x (순서만, 지금 열지 않음)
+
+| 다음 | 한 일 |
+|---|---|
+| 접근성 게이트 | 사다리에서 빼면 안 되는 이름·역할·포커스를 detector가 잡을 수 있는 범위만. 1.0 조건 3 |
+| MCP 서버 모드 | detector·리뷰를 실시간 자가교정으로 노출하는 **opt-in**. default install 금지 |
+| 마켓플레이스 / 독립 CLI | symlink 팩 다음. 스모크 없는 경로는 문서가 주장하지 않는다 |
+| Vue | `vue-nuxt-feature`, `vue-nuxt-fsd`. 삼체(예제·init·proof) 없이 스킬을 쓰지 않는다 |
+
+v1.0은 이 표가 끝난 뒤가 아니다. Vue·MCP·마켓플레이스는 1.0을 막지 않는다.
+
+**v1.0.0을 찍는 때:** 낯선 팀이 TypeScript + React 팩을 `v1.0.0`에 고정해도 된다고 말할 수 있을 때.
+
+모두 참이어야 한다.
+
+1. ~~**대상 레포에 constitution이 남고, 세 스택 전부에 `init`이 배달됨**~~ — v0.9.0에서 닫힘. 조건은 결과지 태그 번호가 아니다.
+2. **문서가 가리키는 하니스 경로가 전부 스모크됨** — Cursor는 `--plugin-dir`을 주장하려면 스모크고, 아니면 프로젝트 로컬 스킬이 1.0 정본이다. → v0.10
+3. **접근성 게이트의 최소 detector** — 이름·역할·포커스 중 기계가 잡는 범위. 사다리에서 빼면 안 된다고 적어 놓고 1.0에 검사가 없으면 안 된다.
+4. **공개된 proof 주장을 철회할 이유가 없음** — 새 페어는 1.0의 전제가 아니다.
+
+찍지 않는 이유에 넣지 않는다: 완벽, Vue, MCP, 마켓플레이스.
 
 ---
 
 ## 비-목표 (가드레일)
 
-- **수평 인프라화** — 범용 에이전트·코드 인덱서·컨텍스트 압축기와 경쟁하지 않음
+- **수평 인프라화** — 범용 코딩 에이전트·코드 인덱서·컨텍스트 압축기와 경쟁하지 않음
 - **멀티에이전트 오케스트레이션** — Chaebi·서브에이전트 팀·세션 관리·에이전트 간 통신은 우리 몫이 아니다. 우리는 **각 에이전트가 따르는 설계 규율**이지 오케스트레이터가 아니다
 - **앱이 되기** — 제품 `src/`, 사내 UI 키트, Figma/px 데모 플로우, 회사 레지스트리. 그건 보일러플레이트다
 - **토큰/비용 벤치마크 경쟁** — 지표는 위반율·재작업률

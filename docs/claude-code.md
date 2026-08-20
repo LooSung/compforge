@@ -26,10 +26,12 @@ Start Claude Code from the frontend project you want to change. If you are
 maintaining Compforge itself, start from the Compforge repository and treat that
 repository as the work target.
 
-Optional: put enforcement into the project.
+Optional: leave the pack pointer and enforcement in the project. The `AGENTS.md`
+block is committed, so a teammate who clones only that repository gets it too.
 
 ```bash
 ~/.compforge/scripts/setup/init.sh
+~/.compforge/scripts/setup/init.sh --verify   # later: is the guard still alive?
 ```
 
 ## Slash commands
