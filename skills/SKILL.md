@@ -60,6 +60,7 @@ Stack and skeleton:
 - Stack selection (Vite or Next.js; feature vs feature-sliced): `lang/frontend-stack.md`
 - Folder structure / skeleton: `skeleton/frontend-skeleton.md`
 - Lint enforcement (ESLint zones / steiger): `skeleton/lint-enforcement.md`
+- Hard Rules (MUST / SHOULD / NEVER): `principles/hard-rules.md`
 
 Playbooks:
 - Feature: `playbooks/feature.md`

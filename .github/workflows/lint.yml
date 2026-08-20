@@ -28,6 +28,10 @@ jobs:
           ./scripts/ci/lint-skills.sh
       - name: Self-test documentation links
         run: python3 scripts/ci/test-doc-links.py
+      - name: Self-test proof evaluator
+        run: python3 scripts/proof/test-evaluate-run.py
+      - name: Self-test architecture review
+        run: python3 scripts/ci/test-review.py
 
   doctor:
     name: Pack structure (doctor)

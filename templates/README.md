@@ -9,7 +9,8 @@ extracted from the runnable examples, where each one is exercised by CI.
 |---|---|---|
 | [`react-vite-feature/eslint.compforge.config.js`](./react-vite-feature/eslint.compforge.config.js) | feature folders | unidirectional imports (shared ← features ← app), no cross-feature imports, no `any` |
 | [`react-vite-fsd/steiger.config.ts`](./react-vite-fsd/steiger.config.ts) | Feature-Sliced Design | FSD layer rules via `@feature-sliced/steiger-plugin` |
-| [`github/compforge-check.yml`](./github/compforge-check.yml) | both | runs the stack's check on every PR (`__COMPFORGE_CHECK_CMD__` is filled in by init) |
+| [`github/compforge-check.yml`](./github/compforge-check.yml) | both | **blocking** — runs the stack's check on every PR (`__COMPFORGE_CHECK_CMD__` is filled in by init) |
+| [`github/compforge-architecture-review.yml`](./github/compforge-architecture-review.yml) | both | **non-blocking** — new-only detector findings + correction prompt |
 
 Two rules carried over from the examples, learned the hard way:
 

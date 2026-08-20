@@ -1,6 +1,8 @@
 # Compforge Reviewer Checklist
 
 Use this checklist after an agent generates or refactors code with Compforge.
+Mechanical MUST / SHOULD / NEVER: [`skills/principles/hard-rules.md`](../skills/principles/hard-rules.md).
+The architecture review comments only **new** findings on the diff.
 
 ## Components
 

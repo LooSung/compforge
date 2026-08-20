@@ -1,0 +1,44 @@
+{
+  "changed_files": [
+    ".craft/feature-search.md",
+    "src/App.test.tsx",
+    "src/App.tsx",
+    "src/components/TodoList.tsx",
+    "src/components/TodoPanel.tsx",
+    "src/utils/match.test.ts",
+    "src/utils/match.ts"
+  ],
+  "checks": {
+    "accessible_label": true,
+    "behavior_test": true,
+    "bulk_completion_outside_component": false,
+    "empty_state_for_no_matches": true,
+    "live_region": true,
+    "matching_logic_extracted": true,
+    "matching_test": true,
+    "query_in_url": true
+  },
+  "findings": [
+    {
+      "binding": "searchQuery",
+      "file": "src/App.tsx",
+      "rule": "search-query-in-usestate"
+    },
+    {
+      "effect": "useEffect(() => { const params = new URLSearchParams(window.location.search); const q = params.get('q') ?? ''; setSearchQuery(q); }, [])",
+      "file": "src/App.tsx",
+      "occurrence": 0,
+      "rule": "useeffect-added"
+    },
+    {
+      "effect": "useEffect(() => { const params = new URLSearchParams(window.location.search); if (searchQuery) { params.set('q', searchQuery); } else { params.delete('q'); } const newSearch = params.toString(); const newUrl = newSearch ? `?${newSearch}` : window.location.pathname; window.history.replaceState(null, '', newUrl); }, [searchQuery])",
+      "file": "src/App.tsx",
+      "occurrence": 1,
+      "rule": "useeffect-added"
+    },
+    {
+      "rule": "missing-bulk-completion-outside-component"
+    }
+  ],
+  "violation_count": 4
+}

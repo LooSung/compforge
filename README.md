@@ -207,7 +207,7 @@ release instead:
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v0.6.0
+git checkout v0.7.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
@@ -274,7 +274,7 @@ else. Remove those paths manually if you want a complete uninstall.
 - `examples/` — two runnable TypeScript + React todo references
 - `docs/` — harness guides, proof protocol, roadmap
 - `scripts/` — setup, init, lint, proof runner, and smoke tests
-- `templates/` — ESLint zones, steiger, and the target-project CI check
+- `templates/` — ESLint zones, steiger, blocking CI, non-blocking architecture review
 
 Agents use [`AGENTS.md`](./AGENTS.md) as the shared rule source;
 [`CLAUDE.md`](./CLAUDE.md) is the Claude Code adapter.

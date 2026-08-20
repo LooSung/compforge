@@ -90,7 +90,7 @@ the residue — otherwise the next session inherits a half-real repository.
 
 ## Verification
 - Tests green before and after; no assertions weakened.
-- Hard Rules in `AGENTS.md` improved or unchanged — never regressed.
+- Hard Rules in `skills/principles/hard-rules.md` improved or unchanged — never regressed.
 
 ## Next step
 After verification -> review, commit, push. If a functional change is needed, split it into `workflow-delivery-plan`.

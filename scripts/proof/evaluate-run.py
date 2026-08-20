@@ -12,6 +12,7 @@ import json
 import re
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 
 
@@ -109,10 +110,6 @@ def content_findings(content: str, rel: str) -> list[dict[str, object]]:
 
     if line_count > 200:
         findings.append({"rule": "file-over-200-lines", "file": rel, "lines": line_count})
-    # One finding per effect, so baseline subtraction reports effects the run
-    # added rather than going quiet on a file that already had one.
-    for occurrence in range(len(USE_EFFECT.findall(content))):
-        findings.append({"rule": "useeffect-added", "file": rel, "occurrence": occurrence})
     if CACHE_WRITE.search(content) or DIRECT_MUTATION.search(content):
         findings.append({"rule": "direct-mutation-or-cache-write", "file": rel})
     if ANY_TYPE.search(content):
@@ -137,15 +134,68 @@ def finding_key(finding: dict[str, object]) -> tuple[object, ...]:
     )
 
 
+def matching_paren(content: str, open_index: int) -> int | None:
+    depth = 0
+    quote = ""
+    escape = False
+    for index in range(open_index, len(content)):
+        char = content[index]
+        if quote:
+            if escape:
+                escape = False
+            elif char == "\\":
+                escape = True
+            elif char == quote:
+                quote = ""
+            continue
+        if char in {'"', "'", "`"}:
+            quote = char
+        elif char == "(":
+            depth += 1
+        elif char == ")":
+            depth -= 1
+            if depth == 0:
+                return index
+    return None
+
+
+def effect_calls(content: str) -> list[str]:
+    calls: list[str] = []
+    for match in USE_EFFECT.finditer(content):
+        open_index = match.end() - 1
+        close_index = matching_paren(content, open_index)
+        if close_index is None:
+            continue
+        calls.append(re.sub(r"\s+", " ", content[match.start() : close_index + 1]).strip())
+    return calls
+
+
+def added_effect_bodies(previous: str, current: str) -> list[str]:
+    """Count replacements, not net file totals.
+
+    Occurrence indexes treated N removed + N added as zero. Identity
+    subtraction reports the new calls.
+    """
+    return list((Counter(effect_calls(current)) - Counter(effect_calls(previous))).elements())
+
+
 def architecture_findings(sources: dict[str, str], root: Path) -> list[dict[str, object]]:
     findings: list[dict[str, object]] = []
     for rel, content in sources.items():
+        previous_source = git(root, "show", f"HEAD:{rel}")
         current = content_findings(content, rel)
-        previous = {
-            finding_key(item)
-            for item in content_findings(git(root, "show", f"HEAD:{rel}"), rel)
-        }
+        previous = {finding_key(item) for item in content_findings(previous_source, rel)}
         findings.extend(item for item in current if finding_key(item) not in previous)
+        if not is_test(rel) and rel.startswith("src/"):
+            for occurrence, body in enumerate(added_effect_bodies(previous_source, content)):
+                findings.append(
+                    {
+                        "rule": "useeffect-added",
+                        "file": rel,
+                        "occurrence": occurrence,
+                        "effect": body,
+                    }
+                )
         if not rel.startswith(("src/", ".craft/")) and rel not in ALLOWED_OUTSIDE_SRC:
             findings.append({"rule": "possible-unrelated-change", "file": rel})
     return findings

@@ -1,0 +1,19 @@
+# Copy this file to your frontend as
+# .github/workflows/compforge-architecture-review.yml
+# Pin compforge_ref to a released tag once you depend on a stable pack.
+# Non-blocking: never fails the PR check.
+
+name: Compforge architecture review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  architecture-review:
+    uses: LooSung/compforge/.github/workflows/reusable-architecture-review.yml@main
+    with:
+      compforge_ref: main

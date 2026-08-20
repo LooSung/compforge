@@ -204,7 +204,7 @@ function CartPage() {
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v0.6.0
+git checkout v0.7.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
@@ -269,7 +269,7 @@ Cursor의 수동 프로젝트 로컬 스킬은 `install.sh`가 관리하지 않�
 - `examples/` — 실행 가능한 TypeScript + React Todo 예제 2종
 - `docs/` — 하네스 가이드, Proof, 로드맵
 - `scripts/` — 설치, init, lint, proof, smoke test
-- `templates/` — ESLint 존, steiger, 대상 프로젝트 CI 체크
+- `templates/` — ESLint 존, steiger, 차단 CI, 비차단 아키텍처 리뷰
 
 에이전트 규칙의 정본은 [`AGENTS.md`](./AGENTS.md)이며
 [`CLAUDE.md`](./CLAUDE.md)는 Claude Code 어댑터입니다.

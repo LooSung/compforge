@@ -31,24 +31,17 @@
 
 ## 다음 릴리스
 
-### v0.7.0 — fitness function 정합
+### v0.8.0 — 교육 (워크스루 + Next 예제)
 
-**목표:** reference 예제, 평가기, `compforge init` CI gate가 같은 Compforge 규칙을 보고
-“아키텍처를 지킨다”는 약속을 실행 가능한 강제로 닫는다.
+**목표:** Discovery → Test를 현실 화면 하나로 끝까지 걷고, Next 스킬이
+실행 예제 없이 주장하지 않게 한다.
 
-- **Evaluator 수리** — `scripts/proof/evaluate-run.py`의 두 실패 모드를 고친다.
-  일괄 완료 false negative, net-versus-added `useEffect` 카운트(N개 제거 + N개 추가를 0으로 보는 것).
-- **Detector** — derived-state-in-effect, query-data-in-`useState`, 파일당 export 초과,
-  200줄 초과, `any`. Hard Rules를 detector가 읽을 수 있게 MUST / SHOULD / NEVER로 **한 번만** 옮긴다.
-- **PR 아키텍처 리뷰** — new-only 파인딩 + 교정 프롬프트. 이 레포에서 dogfood한 뒤
-  대상 프로젝트 템플릿으로 배달한다. C2 도메인 리뷰의 프론트 대응이다.
-- **차단 정책** — 저장소 CI와 `compforge init` 템플릿에서 무엇을 필수 차단하고
-  무엇을 non-blocking 피드백으로 남길지 명시하고 검증한다.
-- **증거 갱신** — 고친 평가기로 고정 비교를 다시 실행하고, 일반 효과로 확대하지 않은
-  결과와 재현 artifact를 공개한다.
+- **워크스루** — 장바구니 또는 설정. todo 복제가 아니고, PRD 오케스트레이션
+  체인도 아니다.
+- **`react-next-app`** — 실행 예제 + server/client import 레시피.
 
-**범위 밖:** 워크스루 튜토리얼, `react-next-app` 예제, Cursor `--plugin-dir` 효과 주장,
-Vue, marketplace 공개, Chaebi식 오케스트레이션.
+**범위 밖:** Vue, marketplace 공개, Cursor `--plugin-dir` 효과 주장,
+Chaebi식 오케스트레이션, MCP.
 
 ---
 

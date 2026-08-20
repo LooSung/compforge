@@ -26,7 +26,7 @@ requires it. Components render; hooks decide; every piece of state has one home.
 8. If you skip any step, leave a one-line reason.
 9. Write the **Assumptions** block (below), then the Component Contract, before implementing UI logic.
 10. Implement and test along the chosen path. Keep changes surgical (`component-discipline` #11).
-11. Verify the project's stated rules (`AGENTS.md` or equivalent), naming them in the report, and the results of the tests you ran.
+11. Verify the project's stated rules (`AGENTS.md` / `skills/principles/hard-rules.md`), naming them in the report, and the results of the tests you ran.
 12. Record design decisions, verification results, **Scope drift**, and remaining risks in the completion report format. **Completion gate**: if a continuity work doc exists, do not report done before updating that doc (Status/Progress/Decisions). If the unit is done but work remains, write `.craft/next-session-prompt.md` before reporting done — do not wait to be asked (`continuity` Session cut).
 
 ## Execution-path selection
@@ -92,7 +92,7 @@ Test Targets (hooks/components):
 ## Verification
 
 - Complete the checklist of the chosen playbook or workflow (each step should have a `verify:`).
-- Verify the project's stated rules (`AGENTS.md` or equivalent) against the changed files, and identify them by name in the report.
+- Verify the project's stated rules (`AGENTS.md` / `skills/principles/hard-rules.md`) against the changed files, and identify them by name in the report.
 - Confirm **Scope drift** is `none`, or list every out-of-request change with a reason.
 - Spot-check relevant `skills/antipatterns/` symptoms on the diff (god component, useEffect abuse, prop drilling).
 - For each structure you added (feature folder, hook, query, context), name the invariant it protects and the user's word for it, or put it back on the ladder (`component-discipline` #7).

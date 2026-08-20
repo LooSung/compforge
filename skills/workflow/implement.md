@@ -28,7 +28,7 @@ After Skeleton is approved. One feature (or one screen slice) at a time.
 ## Verification
 
 - Run the test suite and record commands + results.
-- Verify the Hard Rules in `AGENTS.md` against changed files (file length, one export, no `any`, effects discipline).
+- Verify the Hard Rules in `skills/principles/hard-rules.md` against changed files (file length, one export, no `any`, effects discipline).
 - Spot-check `skills/antipatterns/` symptoms on the diff.
 
 ## Next step

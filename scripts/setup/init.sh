@@ -216,6 +216,15 @@ install_workflow() {
   fi
 }
 
+install_review_workflow() {
+  local wf="$TARGET/.github/workflows/compforge-architecture-review.yml"
+  if [ -f "$wf" ]; then
+    yellow "$wf already exists — not touched."
+  else
+    write_file "$wf" <"$TEMPLATES/github/compforge-architecture-review.yml"
+  fi
+}
+
 # --- negative self-test ------------------------------------------------------
 # The point: prove the installed mechanism can fail. A violation must exit
 # non-zero naming the rule, and a compliant file must pass — otherwise the
@@ -309,6 +318,7 @@ case "$STACK" in
 esac
 
 install_workflow
+install_review_workflow
 
 if [ "${#MISSING_DEPS[@]}" -gt 0 ]; then
   yellow "missing devDependencies: ${MISSING_DEPS[*]}"
@@ -328,4 +338,4 @@ case "$STACK" in
   react-vite-fsd) selftest_fsd ;;
 esac
 
-green "compforge init complete: zones installed, CI workflow ready, self-test green."
+green "compforge init complete: zones installed, blocking CI + non-blocking review workflow ready, self-test green."

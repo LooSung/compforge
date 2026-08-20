@@ -3,6 +3,25 @@
 All notable changes to Compforge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
+## [0.7.0] — 2026-08-20
+
+Reference examples, the proof evaluator, and `compforge init` now look at the
+same Hard Rules. Architecture review comments on new findings; import zones and
+`any` still block the build.
+
+### Added
+
+- **Hard Rules v0.4** as MUST / SHOULD / NEVER in `skills/principles/hard-rules.md`. Detector IDs live in that file once; `AGENTS.md` points at it.
+- **Architecture review** (`scripts/ci/review/`): new-only findings for 200-line component files, extra exports, `any`, server data in `useState`, and derived state in `useEffect`, plus a correction prompt. Dogfood workflow on this repo; `compforge init` copies the non-blocking target template.
+- **Blocking policy** in `skills/skeleton/lint-enforcement.md`: ESLint zones / steiger / `any` / pack CI fail the build; detector review never does.
+- Evaluator and architecture-review self-tests in CI.
+- **Evaluator rescore** of the published patches (`docs/proof/results/2026-08-20-evaluator-rescore.md`). Agents were not re-run.
+
+### Fixed
+
+- **Evaluator net-versus-added `useEffect` count**: replacing N effects with N different ones no longer reports zero `useeffect-added`. Bodies are compared, not occurrence indexes.
+- **Bulk-completion extraction locked**: the named-definition check has a regression test in `scripts/proof/test-evaluate-run.py`.
+
 ## [0.6.0] — 2026-08-20
 
 The sister pack's harness matured. This release brings that *philosophy* into Compforge — translated into React language, not copied as backend domain skills.

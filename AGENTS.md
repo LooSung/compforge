@@ -29,7 +29,7 @@ Ask for human approval before moving from one stage to the next.
 
 Use `/compforge:craft` (`commands/craft.md`) as the single Compforge user entry point.
 
-`/compforge:craft` delegates orchestration to `skills/workflow/craft.md`, reads `skills/principles/component-discipline.md`, requires Assumptions then a Component Contract before UI implementation, and verifies Hard Rules (including surgical scope) before completion.
+`/compforge:craft` delegates orchestration to `skills/workflow/craft.md`, reads `skills/principles/component-discipline.md` and `skills/principles/hard-rules.md`, requires Assumptions then a Component Contract before UI implementation, and verifies Hard Rules (including surgical scope) before completion.
 
 - Use `/compforge:craft` for single components, existing-feature additions, UI bug fixes, and behavior-preserving refactors.
 - For ambiguous or advisory requests, Craft recommends the smallest path without implementing.
@@ -67,7 +67,7 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | Test | Unit / component / E2E | `skills/workflow/test.md` |
 | Refactor | Behavior-preserving cleanup | `skills/workflow/refactor.md` |
 | Continuity | Resume work across sessions | `skills/workflow/continuity.md` |
-| Code review | Detect rule violations | Hard Rules below + `skills/antipatterns/` + `docs/reviewer-checklist.md` |
+| Code review | Detect rule violations | `skills/principles/hard-rules.md` + `skills/antipatterns/` + `docs/reviewer-checklist.md` |
 
 ### Task → skill (within a stage)
 
@@ -79,6 +79,7 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | Frontend stack selection | `skills/lang/frontend-stack.md` |
 | Folder structure / skeleton | `skills/skeleton/frontend-skeleton.md` |
 | Lint enforcement (ESLint zones / steiger) | `skills/skeleton/lint-enforcement.md` |
+| Hard Rules (MUST / SHOULD / NEVER) | `skills/principles/hard-rules.md` |
 | Add one behavior to an existing feature | `skills/playbooks/feature.md` |
 | Reproduce a UI bug with a failing test | `skills/playbooks/bug-fix.md` |
 | God component | `skills/antipatterns/god-component.md` |
@@ -95,27 +96,13 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 
 Reference implementations: [examples/README.md](examples/README.md) — the same todo app on both shipped stacks.
 
-## Hard Rules (v0.3 — validated against `examples/` at todo scale and published proof runs; surgical scope narrowed from run evidence. Larger examples may re-baseline. Decisions: `docs/research/competitor-skills.md`, runs: `docs/proof/`)
+## Hard Rules (v0.4)
 
-These limits are intentionally measurable. They come from review focus and agent context size, not arbitrary style:
+Canonical detector-readable list: [`skills/principles/hard-rules.md`](skills/principles/hard-rules.md) (MUST / SHOULD / NEVER). Do not keep a second prose copy here.
 
-- **200 lines/component file** — a unit a reviewer can hold in working memory
-- **1 exported component per file** — one responsibility per file
-- **200 lines/skill file** — one concept per agent context load; split when a skill teaches two ideas
+Validated against `examples/` at todo scale and published proof runs; surgical scope narrowed from run evidence. Larger examples may re-baseline. Decisions: `docs/research/competitor-skills.md`, runs: `docs/proof/`.
 
-- TypeScript `strict: true`; **no `any`** in committed code (use `unknown` + narrowing).
-- **No direct state mutation** — immutable updates only; state changes go through the state API (`setX`, store actions).
-- **Components render; hooks decide** — business logic lives in custom hooks or pure functions, not in JSX bodies.
-- **Server state is not client state** — data fetched from an API lives in a query layer (TanStack Query or equivalent), never in `useState` + `useEffect` fetch chains.
-- **useEffect is a last resort** — effects synchronize with external systems only; no derived state, no data transformation, no event handling in effects.
-- **No prop drilling beyond 2 levels** — use composition (`children`) first, context second.
-- **No cross-feature imports** — features are composed at the app/pages level. In `react-vite-feature`, a feature never imports from a sibling feature (barrel `index.ts` files are also avoided — they hurt Vite tree-shaking; import directly). In `react-vite-fsd`, every slice exposes a public API and cross-slice imports go through it only. Import direction: `shared ← entities ← features ← pages/app`.
-- Do not commit logic hooks or pure domain functions without tests.
-- Comments explain "why"; names explain "what".
-- No narration comments — delete comments that restate nearby code, or rename/extract until the comment is unnecessary.
-- **Surgical changes only** — touch what the request requires; no drive-by edits to adjacent code, comments, or formatting. Clean orphans your change created; mention pre-existing dead code instead of deleting it in the same change. A defect your feature makes newly reachable or materially worse is *inside* the request: fix it minimally and say so, rather than deferring a bug you amplified.
-- **Structure earns its exemption** — a structure escapes the YAGNI ladder only when you can name the invariant it protects *and* the user's own word for it. Calling it a feature boundary is not evidence.
-- **Product language at the human boundary** — Feature, hook, slice, query key, and invented names stay in the Component Contract and the code; ask for approval in the user's words.
+Blocking versus review: import zones, FSD steiger, and `any` fail CI where `compforge init` installed them. Detector findings are non-blocking PR comments. See `skills/skeleton/lint-enforcement.md`.
 
 ### Layer layout
 

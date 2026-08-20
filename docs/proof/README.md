@@ -210,10 +210,12 @@ After inspecting the raw artifacts:
   inside it. Surface structure converged; the state model did not.
 - [2026-07-27 — legacy starter, Sonnet 4.5 Thinking](./results/2026-07-27-legacy-cursor-claude-4.5-sonnet-thinking/result.md):
   5 versus 4 after hand correction. The direction held on a weaker model, but
-  the treatment itself mirrored the URL into state, and the machine evaluator
-  missed two of its effects because the run removed two old effects and added
-  two new ones — baseline subtraction counts net, not added. Least favourable
-  valid pair; documents a second evaluator failure mode.
+  the treatment itself mirrored the URL into state. Least favourable valid
+  pair.
+- [2026-08-20 — evaluator rescore of published patches](./results/2026-08-20-evaluator-rescore.md):
+  same diffs, fixed `useEffect` identity count. Sonnet treatment 2→4 (the
+  missed URL-sync effects). Clean starter stays 0. Treatment remains below
+  control on every legacy pair. Not a new agent run.
 
 Read them together: on the antipattern starter the asymmetry repeated across
 three same-model pairs (4v1, 3v1, 3v1) — the pre-declared repetition criterion
@@ -230,10 +232,13 @@ the wrong patterns.
   greenfield task would show. This protocol covers one existing-feature task
   only.
 - The heuristic evaluator cannot replace human review; regex cannot tell a
-  derived value from a cached one in every case. Two failure modes are already
-  documented: a false negative on bulk-completion extraction (first legacy
-  pair) and net-versus-added effect counting — a run that removes N effects and
-  adds N new ones reports zero `useeffect-added` (Sonnet 4.5 pair).
+  derived value from a cached one in every case. Two failure modes — bulk
+  completion accepted because a util file contained the word "completed", and
+  net-versus-added effect counting — are covered by
+  `scripts/proof/test-evaluate-run.py`. Published pairs keep their original
+  machine output in `artifacts/`. Frozen diffs were re-scored with the fixed
+  evaluator in [2026-08-20 evaluator rescore](./results/2026-08-20-evaluator-rescore.md);
+  agents were not re-run.
 - Missing `.craft/` creation invalidates the treatment skill load.
 - A control workspace that can discover Compforge instructions invalidates the
   control run.

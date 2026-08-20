@@ -59,8 +59,28 @@ npx steiger ./src
 - This pack: `.github/workflows/examples.yml` runs `npm run check` on both
   examples (lint/arch + `tsc --noEmit` + vitest).
 
+## Blocking policy
+
+Say which gate fails the build. Do not leave it implied.
+
+| Gate | Blocking? | What it checks |
+|---|---|---|
+| `compforge init` ESLint zones / `no-explicit-any` | **yes** | import direction, no `any` |
+| `compforge init` steiger | **yes** | FSD public API and forbidden imports |
+| Target `compforge-check.yml` | **yes** | the stack command above |
+| Pack skill lint, doctor, smoke, examples `npm run check` | **yes** | pack integrity and reference apps |
+| Architecture review (detector) | **no** | new-only 200-line files, extra exports, `any`, server data in `useState`, derived state in `useEffect` |
+
+`compforge init` also copies `templates/github/compforge-architecture-review.yml`.
+That workflow comments on the PR and always exits 0. Do not turn those
+heuristic findings into a required check without a published proof that the
+false-positive rate is acceptable.
+
+Canonical MUST / SHOULD / NEVER: `skills/principles/hard-rules.md`.
+
 ## Prohibited
 
 - Do not leave a boundary rule as a README sentence only and drop build enforcement.
 - Do not ship zones without the `.ts` resolver — a delivered-but-dead guard is worse than none.
 - Do not overwrite an `eslint.config.js` init did not generate; print a merge snippet instead.
+- Do not silently promote detector findings to a blocking required check.
