@@ -16,9 +16,10 @@ For new features or large screens, do not jump straight to code.
 
 1. **Discovery** — read `skills/workflow/discovery.md`; produce user flows, screen inventory, domain terms, open questions.
 2. **Design** — read `skills/workflow/design.md`; produce component tree, state placement plan, API contracts.
-3. **Skeleton** — read `skills/workflow/skeleton.md`; create folder structure and empty components/hooks only.
-4. **Implement** — read `skills/workflow/implement.md`; implement one feature with tests.
-5. **Test** — read `skills/workflow/test.md`; run unit, component, and E2E checks as needed.
+3. **Delivery Plan** — read `skills/workflow/delivery-plan.md`; align requirements, scope, implementation order, tests, and release risks.
+4. **Skeleton** — read `skills/workflow/skeleton.md`; create folder structure and empty components/hooks only.
+5. **Implement** — read `skills/workflow/implement.md`; implement one feature with tests.
+6. **Test** — read `skills/workflow/test.md`; run unit, component, and E2E checks as needed.
 
 Ask for human approval before moving from one stage to the next.
 
@@ -49,7 +50,7 @@ Optional single-line directives the target project can set to control Compforge 
 | `Compforge work dir: <path>` | Override the continuity work dir (default `.craft/`). |
 | `Compforge continuity: off` | Disable automatic `.craft/` work-doc creation. |
 
-By default, continuity work docs are **auto-created (opt-out)** for execution tasks (feature/refactor/bugfix); advisory and tiny tasks never create one. See `skills/workflow/continuity.md`.
+By default, continuity work docs are **auto-created (opt-out)** for execution tasks (feature/refactor/bugfix); advisory and tiny tasks never create one. If previous work exists, Craft emits a **Resume block** (previous work / last verified / proposed job / parked) **before any code** and re-scopes an inherited prompt to one decision — the user does not have to mention it. When a session unit ends with work remaining, Craft writes `.craft/next-session-prompt.md` without being asked. See `skills/workflow/continuity.md`.
 
 ## Skill Routing
 
@@ -60,12 +61,13 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | Craft (entrypoint) | Select and execute the smallest frontend path, or recommend only for advisory requests | `skills/workflow/craft.md` + `skills/principles/component-discipline.md` |
 | Discovery | User flows, screens, domain terms | `skills/workflow/discovery.md` |
 | Design | Component tree, state placement, API contracts | `skills/workflow/design.md` + `skills/react/component-boundary.md` |
+| Delivery Plan | Scope, order, tests, risks | `skills/workflow/delivery-plan.md` |
 | Skeleton | Folders, empty components/hooks | `skills/workflow/skeleton.md` + `skills/skeleton/frontend-skeleton.md` (stack via `skills/lang/frontend-stack.md`) |
 | Implement | One feature + tests | `skills/workflow/implement.md` + `skills/react/state-placement.md` |
 | Test | Unit / component / E2E | `skills/workflow/test.md` |
 | Refactor | Behavior-preserving cleanup | `skills/workflow/refactor.md` |
 | Continuity | Resume work across sessions | `skills/workflow/continuity.md` |
-| Code review | Detect rule violations | Hard Rules below + `skills/antipatterns/` |
+| Code review | Detect rule violations | Hard Rules below + `skills/antipatterns/` + `docs/reviewer-checklist.md` |
 
 ### Task → skill (within a stage)
 
@@ -76,11 +78,24 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | Custom hook extraction, effect discipline | `skills/react/hooks-discipline.md` |
 | Frontend stack selection | `skills/lang/frontend-stack.md` |
 | Folder structure / skeleton | `skills/skeleton/frontend-skeleton.md` |
+| Lint enforcement (ESLint zones / steiger) | `skills/skeleton/lint-enforcement.md` |
+| Add one behavior to an existing feature | `skills/playbooks/feature.md` |
+| Reproduce a UI bug with a failing test | `skills/playbooks/bug-fix.md` |
 | God component | `skills/antipatterns/god-component.md` |
 | useEffect abuse (derived state, fetch chains) | `skills/antipatterns/useeffect-abuse.md` |
 | Prop drilling | `skills/antipatterns/prop-drilling.md` |
 
-## Hard Rules (v0.3 — validated against `examples/` at todo scale and two published proof runs; surgical scope narrowed from run evidence. Larger examples may re-baseline. Decisions: `docs/research/competitor-skills.md`, runs: `docs/proof/`)
+### Harness setup
+
+| Harness | Guide |
+|---|---|
+| Codex | `docs/codex.md` |
+| Claude Code | `docs/claude-code.md` |
+| Cursor | `docs/cursor.md` |
+
+Reference implementations: [examples/README.md](examples/README.md) — the same todo app on both shipped stacks.
+
+## Hard Rules (v0.3 — validated against `examples/` at todo scale and published proof runs; surgical scope narrowed from run evidence. Larger examples may re-baseline. Decisions: `docs/research/competitor-skills.md`, runs: `docs/proof/`)
 
 These limits are intentionally measurable. They come from review focus and agent context size, not arbitrary style:
 
@@ -97,21 +112,24 @@ These limits are intentionally measurable. They come from review focus and agent
 - **No cross-feature imports** — features are composed at the app/pages level. In `react-vite-feature`, a feature never imports from a sibling feature (barrel `index.ts` files are also avoided — they hurt Vite tree-shaking; import directly). In `react-vite-fsd`, every slice exposes a public API and cross-slice imports go through it only. Import direction: `shared ← entities ← features ← pages/app`.
 - Do not commit logic hooks or pure domain functions without tests.
 - Comments explain "why"; names explain "what".
+- No narration comments — delete comments that restate nearby code, or rename/extract until the comment is unnecessary.
 - **Surgical changes only** — touch what the request requires; no drive-by edits to adjacent code, comments, or formatting. Clean orphans your change created; mention pre-existing dead code instead of deleting it in the same change. A defect your feature makes newly reachable or materially worse is *inside* the request: fix it minimally and say so, rather than deferring a bug you amplified.
+- **Structure earns its exemption** — a structure escapes the YAGNI ladder only when you can name the invariant it protects *and* the user's own word for it. Calling it a feature boundary is not evidence.
+- **Product language at the human boundary** — Feature, hook, slice, query key, and invented names stay in the Component Contract and the code; ask for approval in the user's words.
 
 ### Layer layout
 
 - **Each feature is its own folder** — grouping files only by type (`components/`, `hooks/`, `utils/` at the top level for the whole app) is a violation once the app has more than one feature.
 - **Pages/routes must not contain business logic** — they compose features.
 - After skeleton, list the directory tree and confirm the feature folders exist with the right file types. See `skills/skeleton/frontend-skeleton.md` self-check.
-- CI enforcement planned per stack: ESLint `import/no-restricted-paths` zones for `react-vite-feature`; steiger (`@feature-sliced/steiger-plugin`) for `react-vite-fsd`. See `docs/roadmap.md` and `docs/research/competitor-skills.md`.
+- Enforced in the target project by `compforge init` — ESLint `import/no-restricted-paths` zones for `react-vite-feature`; steiger (`@feature-sliced/steiger-plugin`) for `react-vite-fsd`. See `skills/skeleton/lint-enforcement.md`.
 
 ## Repository Discipline
 
 - Do not add runtime dependencies for installer scripts unless there is no simpler shell-based alternative.
 - Update `CHANGELOG.md` for user-visible changes.
 - When changing install behavior, verify with a clean temporary `HOME`.
-- Do not claim a harness integration works until documented setup steps and a clean-session smoke test prove it.
+- Do not claim a harness integration works until documented setup steps and a clean-session smoke test prove it. Cursor's documented path is the project-local skill; `--plugin-dir` remains unverified for this pack.
 - **Effect claims need runs.** Any statement that Compforge improves an outcome must cite a published pair in `docs/proof/results/`. Unfavorable runs get published too; a measure changed after seeing the data must say so in the result.
 
 ## What Not To Do

@@ -3,6 +3,45 @@
 All notable changes to Compforge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
+## [0.6.0] — 2026-08-20
+
+The sister pack's harness matured. This release brings that *philosophy* into Compforge — translated into React language, not copied as backend domain skills.
+
+### Added
+
+- **Delivery Plan** (`skills/workflow/delivery-plan.md`): after Design, one execution plan for scope, contracts, implementation order, tests, and release risks. New feature areas now run Discovery → Design → Delivery Plan → Skeleton → Implement → Test.
+- **Craft playbooks**: `skills/playbooks/feature.md` (one behavior on an existing feature) and `skills/playbooks/bug-fix.md` (failing hook/component test first).
+- **Session cut + next-session prompt**: one session ships one decision. When the unit ends with work remaining, Craft writes `.craft/next-session-prompt.md` without being asked (`skills/workflow/continuity.md`).
+- **Resume block**: if `.craft/` holds unfinished work, Craft emits Previous work / Last verified / Proposed job / Parked **before any code**, even when the user did not mention it. Inherited prompts are re-scoped to one decision.
+- **Product language at the human boundary** (`component-discipline` #14): Feature, hook, slice, and invented names stay in the Component Contract and the code; approval is asked in the user's words.
+- **Evidence before cause** (`component-discipline` #12) and **comment discipline** (`#13`): a cause needs one falsifiable observation; narration comments are deleted or replaced by names.
+- **Structure earns its exemption** (`component-discipline` #7): a feature boundary / query layer / URL home is essential only when you can name the invariant *and* the user's own word for it.
+- **Brownfield refactor order**: surface (pages) → feature/hooks → shared/query; one branch one decision; abandon-branch residue (`skills/workflow/refactor.md`).
+- **Lint-enforcement skill** pointing at `templates/` and `compforge init` (ESLint zones / steiger / negative self-test).
+- **Positioning** (`docs/positioning.md`), **reviewer checklist**, harness guides (`docs/claude-code.md`, `docs/codex.md`, `docs/cursor.md`), and a Korean concept guide (`docs/methodology.ko.md`) that is not a per-skill mirror.
+- **Docs link-integrity CI** (`scripts/ci/check-doc-links.py`) with a self-test, **isolated-HOME smoke test**, and a Cursor packaging adapter (`.cursor-plugin/skills/compforge/SKILL.md`). `--plugin-dir` is **not** claimed until a Compforge smoke test proves it.
+
+### Changed
+
+- Craft skips Assumptions/Component Contract for non-frontend work (docs, tooling, ops) but keeps Verification and Scope drift. Pack-repository maintenance is a valid work target.
+- `commands/craft.md` carries the official `name: craft` frontmatter; plugin manifests are `0.6.0`; Cursor plugin skills path is `./.cursor-plugin/skills/`.
+- README / AGENTS.md / SKILL.md describe Resume, Delivery Plan, and the language policy. Vue gates for docs-link CI and Skill frontmatter are closed.
+- **Roadmap restated in the OOPforge shape** (`docs/roadmap.md`): vision, immutable principles, **one** next release (v0.7 fitness functions), long-term, non-goals. History stays in the changelog.
+- **First-user onboarding (OOPforge 0.12.1 analogue):** English and Korean READMEs are a ≤300-line user path — Quickstart, Craft success criteria, core workflow, evidence, then install lifecycle. `doctor.sh` is documented as pack/link check, not Craft activation. Cursor stays on the project-local skill; `--plugin-dir` is still not claimed. `compforge init` is optional step 5, after Craft works.
+
+### Fixed
+
+- **Codex/Cursor invoke mix-up:** Korean README and `docs/methodology.ko.md` no longer treat `/compforge:craft` as the universal prompt. Codex and Cursor use `Use Compforge craft: …`.
+- **Uninstall safety:** `uninstall.sh` leaves same-name symlinks that point elsewhere, and does not touch Cursor's project-local skill. Smoke test locks the preserve path.
+
+### Not copied from OOPforge (on purpose)
+
+- Outbox, CQRS, Aggregates, transaction boundaries — backend domain, not frontend.
+- Library-loan walkthrough — still a Compforge-original tutorial, still a long-term item on the roadmap.
+- C2 PR domain-review engine — next after antipattern detectors; this pack already has `scripts/proof/evaluate-run.py`.
+- 20-lines/method as a Hard Rule — Compforge keeps 200 lines/component, evidenced at todo scale.
+- Cursor `--plugin-dir` as the documented first path, and a Craft asciinema — neither is proven in this pack.
+
 ## [0.5.0] — 2026-07-27
 
 The claim survived repetition, and the pack now delivers its enforcement into target projects. This closes the chapter that began with the proof harness: measure first, then distribute what the measurement justified.

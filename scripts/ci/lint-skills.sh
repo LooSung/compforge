@@ -1,49 +1,185 @@
 #!/usr/bin/env bash
 #
-# Compforge skill lint
-# Enforces the pack's own Hard Rules on skill files:
-#   - every skills/**/*.md has YAML frontmatter with name + description
-#   - every skill file is 200 lines or less
-#   - no legacy skills/compforge/... self-nesting paths are referenced
+# Compforge repository lint
+# Validates skill frontmatter, line limits, plugin JSON, and AGENTS.md references.
 
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-SKILLS_DIR="$ROOT_DIR/skills"
+PACK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 FAILED=0
+SKILL_LINE_LIMIT="${SKILL_LINE_LIMIT:-200}"
 
-red() { printf "\033[31m%s\033[0m\n" "$*"; }
+cyan() { printf "\033[36m%s\033[0m\n" "$*"; }
 green() { printf "\033[32m%s\033[0m\n" "$*"; }
+red() { printf "\033[31m%s\033[0m\n" "$*"; }
 
 fail() { red "FAIL $*"; FAILED=1; }
+ok() { green "OK $*"; }
 
-while IFS= read -r -d '' file; do
-  rel="${file#"$ROOT_DIR"/}"
+check_skill_file() {
+  local file="$1"
+  local rel="${file#"$PACK_DIR"/}"
+  local lines
+  local name_line
+  local desc_line
 
-  lines="$(wc -l < "$file" | tr -d ' ')"
-  if [ "$lines" -gt 200 ]; then
-    fail "$rel: $lines lines (limit 200)"
+  if [ ! -f "$file" ]; then
+    fail "missing skill file: $rel"
+    return
   fi
 
-  if [ "$(head -n 1 "$file")" != "---" ]; then
-    fail "$rel: missing YAML frontmatter"
-  else
-    if ! sed -n '2,10p' "$file" | grep -q '^name:'; then
-      fail "$rel: frontmatter missing 'name:'"
-    fi
-    if ! sed -n '2,10p' "$file" | grep -q '^description:'; then
-      fail "$rel: frontmatter missing 'description:'"
-    fi
+  if ! head -n 1 "$file" | grep -q '^---$'; then
+    fail "$rel: frontmatter must start with ---"
+    return
+  fi
+
+  if ! awk 'NR > 1 && /^---$/ { found=1 } END { exit found ? 0 : 1 }' "$file"; then
+    fail "$rel: frontmatter closing --- missing"
+    return
+  fi
+
+  name_line="$(awk 'NR > 1 && /^---$/ { exit } /^name: / { print; exit }' "$file")"
+  desc_line="$(awk 'NR > 1 && /^---$/ { exit } /^description: / { print; exit }' "$file")"
+
+  if [ -z "$name_line" ]; then
+    fail "$rel: frontmatter missing name:"
+  fi
+
+  if [ -z "$desc_line" ]; then
+    fail "$rel: frontmatter missing description:"
   fi
 
   if grep -q 'skills/compforge/' "$file"; then
     fail "$rel: references legacy skills/compforge/... path"
   fi
-done < <(find "$SKILLS_DIR" -name '*.md' -print0)
+
+  lines="$(wc -l < "$file" | tr -d ' ')"
+  if [ "$lines" -gt "$SKILL_LINE_LIMIT" ]; then
+    fail "$rel: $lines lines (limit: $SKILL_LINE_LIMIT)"
+  else
+    ok "$rel ($lines lines)"
+  fi
+}
+
+check_json_file() {
+  local file="$1"
+  local rel="${file#"$PACK_DIR"/}"
+
+  if ! python3 -m json.tool "$file" >/dev/null 2>&1; then
+    fail "invalid JSON: $rel"
+  else
+    ok "$rel"
+  fi
+}
+
+frontmatter_value() {
+  local file="$1"
+  local key="$2"
+  awk -v key="$key" 'NR > 1 && /^---$/ { exit } index($0, key ": ") == 1 {
+    sub("^[^:]+: ", "")
+    print
+    exit
+  }' "$file"
+}
+
+check_craft_command() {
+  local file="$PACK_DIR/commands/craft.md"
+  [ -f "$file" ] || { fail "missing command file: commands/craft.md"; return; }
+  if [ "$(frontmatter_value "$file" name)" != "craft" ]; then
+    fail "commands/craft.md: name must be craft"
+  elif [ -z "$(frontmatter_value "$file" description)" ]; then
+    fail "commands/craft.md: frontmatter missing description"
+  else
+    ok "commands/craft.md frontmatter"
+  fi
+}
+
+check_cursor_skill() {
+  local file="$PACK_DIR/.cursor-plugin/skills/compforge/SKILL.md"
+  check_skill_file "$file"
+  [ "$(frontmatter_value "$file" name)" = "compforge" ] ||
+    fail ".cursor-plugin skill name must match directory: compforge"
+}
+
+check_cursor_manifest_paths() {
+  local file="$PACK_DIR/.cursor-plugin/plugin.json"
+  local skills commands
+  skills="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["skills"])' "$file")"
+  commands="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["commands"])' "$file")"
+  if [ "$skills" != "./.cursor-plugin/skills/" ]; then
+    fail ".cursor-plugin/plugin.json: unexpected skills path: $skills"
+  elif [ "$commands" != "./commands/" ]; then
+    fail ".cursor-plugin/plugin.json: unexpected commands path: $commands"
+  else
+    ok ".cursor-plugin component paths"
+  fi
+}
+
+check_manifest_versions() {
+  local versions
+  versions="$(for file in .claude-plugin/plugin.json .codex-plugin/plugin.json .cursor-plugin/plugin.json; do
+    python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$PACK_DIR/$file"
+  done)"
+  if [ "$(printf '%s\n' "$versions" | sort -u | wc -l | tr -d ' ')" = "1" ]; then
+    ok "plugin manifest versions match"
+  else
+    fail "plugin manifest versions do not match"
+  fi
+}
+
+check_doc_links() {
+  if python3 "$PACK_DIR/scripts/ci/check-doc-links.py"; then
+    ok "documentation link integrity"
+  else
+    fail "documentation link integrity"
+  fi
+}
+
+check_agents_skill_refs() {
+  local agents_file="$PACK_DIR/AGENTS.md"
+  local path
+
+  if [ ! -f "$agents_file" ]; then
+    fail "missing AGENTS.md"
+    return
+  fi
+
+  while IFS= read -r path; do
+    if [ ! -f "$PACK_DIR/$path" ]; then
+      fail "AGENTS.md references missing file: $path"
+    else
+      ok "AGENTS.md reference: $path"
+    fi
+  done < <(grep -oE 'skills/[^`[:space:]]+\.md' "$agents_file" | sort -u || true)
+}
+
+cyan "==> Compforge lint"
+
+cyan "--- Skill files"
+while IFS= read -r -d '' file; do
+  check_skill_file "$file"
+done < <(find "$PACK_DIR/skills" -name '*.md' -print0)
+
+cyan "--- Plugin manifests"
+check_json_file "$PACK_DIR/.claude-plugin/plugin.json"
+check_json_file "$PACK_DIR/.codex-plugin/plugin.json"
+check_json_file "$PACK_DIR/.cursor-plugin/plugin.json"
+check_manifest_versions
+
+cyan "--- Harness packaging"
+check_craft_command
+check_cursor_skill
+check_cursor_manifest_paths
+
+cyan "--- Documentation links"
+check_doc_links
+
+cyan "--- AGENTS.md skill references"
+check_agents_skill_refs
 
 if [ "$FAILED" -eq 0 ]; then
-  green "==> lint-skills: all skill files pass"
+  green "==> lint complete: no issues"
 else
-  red "==> lint-skills failed"
+  red "==> lint failed: review FAIL items above"
   exit 1
 fi

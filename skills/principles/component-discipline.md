@@ -80,6 +80,15 @@ Writing code is the last resort — walk rungs 1–3 of the ladder before adding
 complexity* (feature boundaries, state placement, typed contracts) is
 deliberate structure and is not subject to the ladder.
 
+**Earn the exemption; do not claim it.** Anything can be called a feature
+boundary. A structure is essential only when you can name both:
+
+1. the invariant it protects, in one sentence;
+2. the **user's own word** for the thing it protects.
+
+If the name is one the user never used, the structure goes back on rung 1.
+Calling it "the query layer" is not evidence.
+
 **Leave a marker for what you defer.** If you intentionally do the minimum,
 mark the spot with what you deferred and the upgrade path.
 
@@ -118,6 +127,29 @@ adjacent code, comments, formatting, or naming while delivering the task.
   the request.** That is not adjacent code you would like to improve — it is
   your feature's behavior. Make the smallest fix that serves the feature and
   name it in the summary. Do not ship a comment deferring a bug you amplified.
+
+## 12. Evidence before cause
+
+Before recording a cause, secure one observation that would differ if that
+cause were false. Prefer mechanism over correlation; if two environments behave
+differently, compare the thing you believe differs before documenting it.
+
+## 13. Comment discipline
+
+Do not narrate code. If a comment explains what adjacent code does, delete it
+or rename/extract until the comment is unnecessary. Keep comments only for
+why, external constraints, hidden invariants, or tracked temporary decisions.
+
+## 14. Product language at the human boundary
+
+The Component Contract is a contract with the agent, not a screen for a person.
+Feature, hook, slice, query key, and any name you invented stay in the
+Contract and the code — not in what you ask someone to approve.
+
+- Ask for approval in the user's words: what changes, for whom, what breaks.
+- Introduce a new name only once the thing exists and the user needs to say
+  it. Then define it in one line, and keep using their word for the rest.
+- An approval of a name the person cannot check is not an approval.
 
 ## Rationalizations (do not accept these from yourself)
 

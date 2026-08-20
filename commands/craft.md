@@ -1,4 +1,5 @@
 ---
+name: craft
 description: Execute frontend component work with the smallest appropriate path.
 ---
 

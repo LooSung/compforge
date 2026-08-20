@@ -6,4 +6,4 @@ When working on this repository:
 
 - Use `/compforge:craft` as the canonical user entry point.
 - Keep Claude-specific packaging in `.claude-plugin/` and `commands/`.
-- Do not bypass the Discovery → Design → Skeleton → Implement workflow for new features or large screens.
+- Do not bypass the Discovery → Design → Delivery Plan → Skeleton → Implement workflow for new features or large screens.

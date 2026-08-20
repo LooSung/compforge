@@ -55,4 +55,5 @@ Save to `docs/design.md` in this format:
 - **No state without a home** — every piece of state appears in the placement table.
 
 ## Next step
-After user approval -> `workflow-skeleton`
+After user approval -> `workflow-delivery-plan`. Small Craft paths may skip
+Delivery Plan and go to `workflow-skeleton` when scope is already one behavior.

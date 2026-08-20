@@ -1,6 +1,8 @@
 ---
 name: compforge
 description: Use Compforge when building or changing a frontend app, screen, component, or UI feature in TypeScript + React — including vague build prompts like "make a todo app" or "add a settings page" — and for component architecture, state placement (server/client/URL), custom hooks, feature-sliced structure, or the /compforge:craft workflow prompt.
+license: MIT
+compatibility: Claude Code, Codex CLI, Cursor Agent, and Agent Skills-compatible clients with access to the complete Compforge pack.
 ---
 
 # Compforge
@@ -19,13 +21,16 @@ Treat **`/compforge:craft`** as the Compforge user entry point on **Claude Code*
 
 On **Codex CLI**, do not type `/compforge:craft` at the composer — Codex reserves `/` for built-in commands. Use `/skills` → **compforge**, then `craft: …` (no leading `/`).
 
-On **Cursor Agent CLI**, use a project-local skill link, then prompt `Use Compforge craft: …`.
+On **Cursor Agent CLI**, use the project-local skill or local-plugin setup in
+`docs/cursor.md`, then prompt `Use Compforge craft: …`. Do not claim
+`--plugin-dir` auto-loads until a clean Compforge smoke test proves it.
 
 ## Project vs pack (paths)
 
 - **Pack** — `~/.compforge` or `$COMPFORGE_HOME`: skills, commands, examples. Not where user app code lives.
 - **Target project** — the repo the user is working on; start the agent **from this directory**.
-- User file paths (`docs/foo.md`, `@path`, absolute paths) resolve against the **target project**, never against the pack. If missing, ask for an absolute path — do not search only under `~/.compforge`.
+- **Compforge maintenance** — if the user asks to change Compforge itself, the pack repository is the work target; do not reject it as the wrong directory.
+- User file paths (`docs/foo.md`, `@path`, absolute paths) resolve against the confirmed work target. For app work this is the target project, never the pack. If missing, ask for an absolute path — do not search only under `~/.compforge`.
 
 | Prompt | Read first | Output |
 |---|---|---|
@@ -40,7 +45,7 @@ Natural language also works, for example: "Use Compforge Discovery for the check
 1. Read the routed workflow file before producing output.
 2. Read only the relevant React or stack skill files needed for the task.
 3. For `/compforge:craft`, follow `workflow/craft.md`; it owns classification, the Component Contract, execution path, and verification.
-4. Keep the normal order for new work: Discovery -> Design -> Skeleton -> Implement -> Test.
+4. Keep the normal order for new work: Discovery -> Design -> Delivery Plan -> Skeleton -> Implement -> Test.
 5. Ask for human approval before moving from one workflow stage to the next.
 6. Do not merge planning, implementation, and verification in a single step unless the user explicitly asks.
 
@@ -54,6 +59,11 @@ Core React:
 Stack and skeleton:
 - Stack selection (Vite or Next.js; feature vs feature-sliced): `lang/frontend-stack.md`
 - Folder structure / skeleton: `skeleton/frontend-skeleton.md`
+- Lint enforcement (ESLint zones / steiger): `skeleton/lint-enforcement.md`
+
+Playbooks:
+- Feature: `playbooks/feature.md`
+- Bug fix: `playbooks/bug-fix.md`
 
 Anti-patterns:
 - God component: `antipatterns/god-component.md`

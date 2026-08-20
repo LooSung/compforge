@@ -8,7 +8,8 @@ stability: experimental
 # Workflow — Skeleton
 
 ## When to use
-After Design is approved. Before implementing any behavior.
+After Design (and Delivery Plan, when the full pipeline is in use) is approved.
+Before implementing any behavior.
 
 ## Checklist
 - [ ] Choose/confirm the stack layout via `skills/lang/frontend-stack.md`
