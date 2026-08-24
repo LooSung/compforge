@@ -20,8 +20,8 @@ code generator.
 
 Sister pack for backends: [OOPforge](https://github.com/LooSung/oopforge).
 
-[Positioning and non-goals](docs/positioning.md) ·
-[Reproducible proof protocol](docs/proof/README.md)
+[Positioning](docs/positioning.md) · [Support scope](docs/support-scope.md) ·
+[Proof protocol](docs/proof/README.md) · [Docs index](docs/README.md)
 
 [English](./README.md) · [한국어](./README.ko.md)
 
@@ -158,10 +158,12 @@ work remaining, `.craft/next-session-prompt.md` records the next decision.
 |---|---|
 | [Examples index](examples/README.md) | Same todo app on the three shipped stacks |
 | [Cart walkthrough](docs/guides/cart/README.md) | Discovery → Test on one real screen |
-| [Reviewer checklist](docs/reviewer-checklist.md) | Post-implementation rule check |
-| [Templates](templates/README.md) | Enforcement `init` copies into a project |
+| [Docs index](docs/README.md) | Setup, reference, verification |
+| [Harness verification](docs/verification/README.md) | What was actually smoked for v1.0.0 |
 | [Support scope](docs/support-scope.md) | Tested scope, verified harness paths, 1.x compatibility contract |
 | [Skill stability](docs/skill-stability.md) | Which skills are stable and which are still experimental |
+| [Reviewer checklist](docs/reviewer-checklist.md) | Post-implementation rule check |
+| [Templates](templates/README.md) | Enforcement `init` copies into a project |
 
 ## Why Compforge
 
@@ -221,7 +223,7 @@ release instead:
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v1.0.0
+git checkout v1.0.1
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
@@ -263,6 +265,7 @@ Run these commands from `~/.compforge`:
 ./scripts/setup/install.sh --dry-run   # planned link changes
 ./scripts/setup/install.sh --force     # replace conflicting symlinks
 ./scripts/ci/smoke-test.sh             # isolated Claude/Codex install lifecycle
+./scripts/ci/harness-smoke.sh static   # manifests, skill stability, probe tokens
 ```
 
 These checks do not execute a live Craft response. Verify activation with the
@@ -287,7 +290,7 @@ complete uninstall.
 - `skills/` — workflow, React, stack, skeleton, playbooks, and review instructions
 - `commands/` — Claude Code command entry point
 - `examples/` — three runnable TypeScript + React todo references
-- `docs/` — harness guides, proof protocol, roadmap
+- `docs/` — harness guides, proof protocol, roadmap, support scope, verification
 - `scripts/` — setup, init, lint, proof runner, and smoke tests
 - `templates/` — ESLint zones, steiger, blocking CI, non-blocking architecture review
 
@@ -304,8 +307,9 @@ per-skill translations.
 
 Compforge remains a frontend component-architecture methodology layer, not a
 model wrapper or general orchestration framework. See the
-[roadmap](./docs/roadmap.md) for required future work and non-goals, and the
-[changelog](./CHANGELOG.md) for completed releases.
+[roadmap](./docs/roadmap.md) for 1.x maintenance and non-goals, the
+[support scope](./docs/support-scope.md) for what pinning `v1.0.0` promises,
+and the [changelog](./CHANGELOG.md) for completed releases.
 
 ## License
 

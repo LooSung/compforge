@@ -57,3 +57,4 @@ Use examples/todo-react-feature as the structural reference for the filter in th
 ```
 
 See [Codex](./codex.md) and [Cursor](./cursor.md) for the other harnesses.
+Release evidence: [harness verification](verification/harness-v1.0.0.md).

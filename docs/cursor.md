@@ -132,6 +132,7 @@ it routed to Craft when the plugin was loaded; it is not installed under
 `~/.cursor/commands` by `install.sh`.
 
 See [Claude Code](./claude-code.md) and [Codex](./codex.md) for the other harnesses.
+Release evidence: [harness verification](verification/harness-v1.0.0.md).
 
 ### Local plugin smoke evidence
 

@@ -13,7 +13,8 @@
 Compforge는 **TypeScript + React 프론트엔드에 수직 특화된 방법론 + 아키텍처 강제 팩**이다.
 범용 코딩 에이전트가 아니라, 그 위에 얹혀 **구조를 기본값으로 만드는 하네스**다.
 
-- 대상 스택: **TypeScript + React** (Vite 또는 Next.js). Vue는 로드맵.
+- 대상 스택: **TypeScript + React** (Vite 또는 Next.js). Vue는 1.x 장기 목표이며 1.0 범위 밖이다.
+- 고정 범위는 [`support-scope.md`](support-scope.md).
 - 푸는 문제: 제약이 없으면 에이전트가 600줄 페이지에 `useState`와 `useEffect` 체인을 쌓는다.
 - 핵심 지표는 토큰 절감이 아니라 **아키텍처 위반율**과 **재작업률**이다.
 

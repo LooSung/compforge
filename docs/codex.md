@@ -66,3 +66,4 @@ cd ~/.compforge && git pull && ./scripts/setup/install.sh update
 ```
 
 See [Claude Code](./claude-code.md) and [Cursor](./cursor.md) for the other harnesses.
+Release evidence: [harness verification](verification/harness-v1.0.0.md).

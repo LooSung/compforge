@@ -5,6 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-08-24
+
+Documentation patch. The 1.0 usage contract does not change.
+
+### Added
+
+- **Docs index** (`docs/README.md`) and **harness verification record**
+  (`docs/verification/harness-v1.0.0.md`): what v1.0.0 actually smoked,
+  separate from methodology proof runs.
+- `AGENTS.md` Support Scope pointer to `docs/support-scope.md` and
+  `skills/stability.json`.
+
+### Changed
+
+- Roadmap is now 1.x maintenance (OOPforge shape): harness drift, compatible
+  evolution, documentation ownership. Long-term Vue/MCP/marketplace stay
+  listed and do not block 1.x.
+- README / README.ko point at support scope, the docs index, and
+  `harness-smoke.sh static` as a maintainer check.
+
 ## [1.0.0] — 2026-08-24
 
 First pinnable release. Every path the documentation claims has been smoked,

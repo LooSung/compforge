@@ -2,6 +2,8 @@
 
 **미래 지향** 문서다. 완료된 변경의 상세 이력은 [`CHANGELOG.md`](../CHANGELOG.md)에 있다. 여기에는 **"이건 반드시 한다"**만 남긴다. 세션은 한 결정, 릴리스는 닫히는 테마다.
 
+핵심 사용 계약은 [`support-scope.md`](support-scope.md)다. 그 계약을 깨면 2.0이다.
+
 ---
 
 ## 0. 비전 (정체성 — 흔들지 않음)
@@ -39,53 +41,41 @@
 | [v0.6.0](https://github.com/LooSung/compforge/releases/tag/v0.6.0) | 하니스 철학(Resume, Delivery Plan, 온보딩) |
 | [v0.7.0](https://github.com/LooSung/compforge/releases/tag/v0.7.0) | fitness functions(evaluator, detector, 비차단 리뷰) |
 | [v0.8.0](https://github.com/LooSung/compforge/releases/tag/v0.8.0) | 교육(장바구니 워크스루 + `react-next-app` 예제) |
-| [v0.9.0](https://github.com/LooSung/compforge/releases/tag/v0.9.0) | 배달(`AGENTS.md` 포인터 + lock + `--verify`, `react-next-app` `init`, Next 오탐 수정) |
-| [v1.0.0](https://github.com/LooSung/compforge/releases/tag/v1.0.0) | 고정 가능(하니스 스모크 실측, 접근성 detector, 지원 범위·안정성·보안 정책) |
+| [v0.9.0](https://github.com/LooSung/compforge/releases/tag/v0.9.0) | 배달(`AGENTS.md` 포인터 + lock + `--verify`, Next `init`) |
+| [v1.0.0](https://github.com/LooSung/compforge/releases/tag/v1.0.0) | 고정 가능(하니스 스모크, 접근성 detector, 지원 범위·안정성·보안) |
+
+1.0 조건 네 개는 결과로 닫혔다. 하니스 실측 기록은 [`verification/harness-v1.0.0.md`](verification/harness-v1.0.0.md).
 
 ---
 
-## 1.0 조건 — 전부 닫힘
+## v1.x 유지보수
 
-**v1.0.0을 찍는 때:** 낯선 팀이 TypeScript + React 팩을 `v1.0.0`에 고정해도 된다고 말할 수 있을 때.
+**목표:** v1.0.0에서 고정한 TypeScript + React 핵심 방법론과
+Claude / Codex / Cursor 실행 경로를 1.x 호환성 계약 안에서 유지한다.
 
-모두 참이어야 했고, 모두 참이다.
+- **Harness drift** — vendor CLI가 바뀌면 문서가 주장하는 경로의
+  positive/negative 증거를 함께 갱신한다. Cursor는
+  `./scripts/ci/harness-smoke.sh live cursor`. Claude·Codex 라이브는
+  `live claude` / `live codex`.
+- **Compatible evolution** — stable 스킬, 검사, 예시를 코어 계약을 깨지 않는
+  minor/patch 범위에서 개선한다.
+- **Documentation ownership** — setup·reference·verification 링크가 살아 있게
+  유지한다.
 
-1. ~~**대상 레포에 constitution이 남고, 세 스택 전부에 `init`이 배달됨**~~ — v0.9.0에서 닫힘. 조건은 결과지 태그 번호가 아니다.
-2. ~~**문서가 가리키는 하니스 경로가 전부 스모크됨**~~ — Cursor `--plugin-dir`과 프로젝트 로컬 스킬을 2026-08-24에 실측. 디렉터리 자동 탐색은 주장하지 않음.
-3. ~~**접근성 게이트의 최소 detector**~~ — 이름·라벨·키보드 경로 세 규칙을 detector가 잡는다. 나머지 접근성은 사람이 본다고 [`support-scope.md`](support-scope.md)에 적었다.
-4. ~~**공개된 proof 주장을 철회할 이유가 없음**~~ — 철회할 결과가 없다. 새 페어는 1.0의 전제가 아니었다.
-
-**하니스 실측 (2026-08-24, Cursor Agent `2026.08.11-e8db854`):**
-
-- `--plugin-dir` + `Use Compforge craft:` → `COMPFORGE_LOADED`
-- 프로젝트 로컬 스킬 + `--add-dir` → `COMPFORGE_LOADED`
-- 스킬 없는 빈 워크스페이스 → `COMPFORGE_NOT_LOADED`
-- `/compforge:craft` + `--plugin-dir` → Craft 진입. 문서화된 Cursor 호출은
-  `Use Compforge craft: …`
-
-재현: `./scripts/ci/harness-smoke.sh live cursor`. 정적 포장은 CI.
-
-**접근성 detector가 잡는 범위:** `CONTROL_WITHOUT_ACCESSIBLE_NAME`,
-`FORM_CONTROL_WITHOUT_LABEL`, `INTERACTIVE_HANDLER_WITHOUT_KEYBOARD`.
-JSX 텍스트 스캔이므로 이 세 규칙의 증거일 뿐 접근성 감사가 아니다. 애매한
-마크업은 일부러 침묵한다. 예제 3스택이 이 규칙을 통과하는 상태는
-`scripts/ci/test-review.py`가 잡아 둔다.
+**범위 밖:** Vue, MCP 서버, 마켓플레이스, 독립 CLI.
 
 ---
 
-## 1.0 이후
-
-1.x는 [`support-scope.md`](support-scope.md)의 핵심 사용 계약을 깨지 않는다.
-계약을 깨야 하면 2.0이다.
+## 장기 목표 (지금 열지 않음)
 
 | 다음 | 한 일 |
 |---|---|
-| 접근성 범위 확대 | 포커스 이동·live region 등 지금 침묵하는 영역. detector가 오탐 없이 잡을 수 있다고 증명된 것만 |
+| 접근성 범위 확대 | 포커스 이동·live region. detector가 오탐 없이 잡을 수 있다고 증명된 것만 |
 | MCP 서버 모드 | detector·리뷰를 실시간 자가교정으로 노출하는 **opt-in**. default install 금지 |
 | 마켓플레이스 / 독립 CLI | symlink 팩 다음. 스모크 없는 경로는 문서가 주장하지 않는다 |
 | Vue | `vue-nuxt-feature`, `vue-nuxt-fsd`. 삼체(예제·init·proof) 없이 스킬을 쓰지 않는다 |
 
-Vue·MCP·마켓플레이스는 1.0을 막지 않았고, 1.1도 막지 않는다.
+이 표가 1.x를 막지 않는다. 계약을 깨는 변경만 2.0이다.
 
 ---
 

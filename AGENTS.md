@@ -96,6 +96,13 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 
 Reference implementations: [examples/README.md](examples/README.md) — the same todo app on the three shipped stacks.
 
+## Support Scope
+
+Canonical harness paths, supported stacks, compatibility, and exclusions are
+defined in `docs/support-scope.md`. Skill maturity is machine-readable in
+`skills/stability.json` and explained in `docs/skill-stability.md`. Harness
+smoke evidence lives in `docs/verification/`.
+
 ## Hard Rules (v1.0)
 
 Canonical detector-readable list: [`skills/principles/hard-rules.md`](skills/principles/hard-rules.md) (MUST / SHOULD / NEVER). Do not keep a second prose copy here.

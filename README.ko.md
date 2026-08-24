@@ -20,8 +20,8 @@
 
 백엔드 자매 팩: [OOPforge](https://github.com/LooSung/oopforge).
 
-[포지셔닝과 비-목표](docs/positioning.md) ·
-[재현 가능한 Proof 프로토콜](docs/proof/README.md)
+[포지셔닝](docs/positioning.md) · [지원 범위](docs/support-scope.md) ·
+[Proof 프로토콜](docs/proof/README.md) · [문서 인덱스](docs/README.md)
 
 [English](./README.md) · [한국어](./README.ko.md)
 
@@ -157,10 +157,12 @@ Craft가 편집 전에 Resume 블록을 제시합니다. 세션이 끝났는데 
 |---|---|
 | [Examples index](examples/README.md) | 같은 Todo 앱, 출하된 세 스택 |
 | [장바구니 워크스루](docs/guides/cart/README.ko.md) | 한 화면을 Discovery → Test까지 |
-| [Reviewer checklist](docs/reviewer-checklist.md) | 구현 후 규칙 점검 |
-| [Templates](templates/README.md) | `init`이 프로젝트에 복사하는 강제 설정 |
+| [문서 인덱스](docs/README.md) | 설치, 레퍼런스, 검증 기록 |
+| [하니스 검증](docs/verification/README.md) | v1.0.0에서 실제로 스모크한 것 |
 | [Support scope](docs/support-scope.md) | 검증된 범위, 하니스 경로, 1.x 호환 계약 |
 | [Skill stability](docs/skill-stability.md) | stable / experimental 스킬 구분 |
+| [Reviewer checklist](docs/reviewer-checklist.md) | 구현 후 규칙 점검 |
+| [Templates](templates/README.md) | `init`이 프로젝트에 복사하는 강제 설정 |
 
 ## 왜 Compforge인가
 
@@ -218,7 +220,7 @@ function CartPage() {
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v1.0.0
+git checkout v1.0.1
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
@@ -260,6 +262,7 @@ Cursor의 `--plugin-dir` 링크와 프로젝트 로컬 스킬은 `install.sh`가
 ./scripts/setup/install.sh --dry-run   # 예정된 링크 변경
 ./scripts/setup/install.sh --force     # 충돌 symlink 교체
 ./scripts/ci/smoke-test.sh             # 격리된 Claude/Codex 설치 수명주기
+./scripts/ci/harness-smoke.sh static   # 매니페스트, 스킬 안정성, 프로브 토큰
 ```
 
 이 검사는 실제 Craft 응답을 실행하지 않습니다. 활성화는 사용하는 하네스의
@@ -281,7 +284,7 @@ Cursor의 `--plugin-dir` 링크와 프로젝트 로컬 스킬은 `install.sh`가
 - `skills/` — 워크플로, React, 스택, 스켈레톤, 플레이북, 리뷰 지침
 - `commands/` — Claude Code 커맨드 진입점
 - `examples/` — 실행 가능한 TypeScript + React Todo 예제 3종
-- `docs/` — 하네스 가이드, Proof, 로드맵
+- `docs/` — 하네스 가이드, Proof, 로드맵, 지원 범위, 검증 기록
 - `scripts/` — 설치, init, lint, proof, smoke test
 - `templates/` — ESLint 존, steiger, 차단 CI, 비차단 아키텍처 리뷰
 
@@ -293,7 +296,8 @@ Cursor의 `--plugin-dir` 링크와 프로젝트 로컬 스킬은 `install.sh`가
 skill, script, CI, agent instruction은 영어를 정본으로 사용합니다. 한국어
 독자는 skill별 복제본 대신
 [`docs/methodology.ko.md`](./docs/methodology.ko.md)를 사용합니다.
-필수 미래 작업과 비-목표는 [로드맵](./docs/roadmap.md), 완료된 릴리스는
+1.x 유지보수와 비-목표는 [로드맵](./docs/roadmap.md), `v1.0.0`이 약속하는
+범위는 [지원 범위](./docs/support-scope.md), 완료된 릴리스는
 [변경 이력](./CHANGELOG.md)에서 확인합니다.
 
 ## 라이선스
