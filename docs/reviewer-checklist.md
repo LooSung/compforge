@@ -36,6 +36,10 @@ The architecture review comments only **new** findings on the diff.
 
 ## Accessibility
 
-- [ ] Interactive controls have accessible names.
-- [ ] Keyboard and focus paths exist for the new interaction.
+The detector covers the first three; the rest is yours.
+
+- [ ] Interactive controls have accessible names (`CONTROL_WITHOUT_ACCESSIBLE_NAME`).
+- [ ] Form controls are labelled, not just placeheld (`FORM_CONTROL_WITHOUT_LABEL`).
+- [ ] Click targets are reachable by keyboard (`INTERACTIVE_HANDLER_WITHOUT_KEYBOARD`).
+- [ ] Focus moves sensibly after the new interaction (dialogs, deletions, routing).
 - [ ] New empty/error states are distinguishable from "nothing loaded yet".

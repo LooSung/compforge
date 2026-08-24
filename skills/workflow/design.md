@@ -2,7 +2,7 @@
 name: workflow-design
 description: Turn Discovery output into a component tree, state placement plan, and API contracts. No implementation.
 tags: [workflow, react]
-stability: experimental
+stability: stable
 ---
 
 # Workflow — Design

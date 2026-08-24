@@ -2,7 +2,7 @@
 name: frontend-skeleton
 description: Folder structure and empty-file conventions per Compforge stack. Used by workflow-skeleton.
 tags: [react, skeleton, architecture]
-stability: experimental
+stability: stable
 ---
 
 # Frontend Skeleton

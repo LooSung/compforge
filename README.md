@@ -62,7 +62,7 @@ cd /path/to/your-frontend-project
 |---|---|
 | **Claude Code** | Restart Claude Code, then `/compforge:craft <request>` |
 | **Codex CLI** | Restart Codex, use `/skills` to select **compforge**, then prompt without a leading `/` |
-| **Cursor Agent CLI** | Link the project-local skill, then use `Use Compforge craft: …` |
+| **Cursor Agent CLI** | `cursor-agent --plugin-dir ~/.cursor/plugins/local/compforge`, then `Use Compforge craft: …` |
 
 Claude Code:
 
@@ -76,13 +76,13 @@ Codex CLI:
 Use Compforge craft: Add a quantity stepper to the cart item
 ```
 
-Cursor Agent CLI is not configured by `install.sh`. Link the skill into the
-target project (documented experimental path — `--plugin-dir` is not claimed):
+Cursor Agent CLI is not configured by `install.sh`. Register the pack as a
+local plugin and pass it explicitly:
 
 ```bash
-mkdir -p .cursor/skills
-ln -s ~/.compforge/skills .cursor/skills/compforge
-printf '%s\n' '.cursor/skills/compforge' >> .git/info/exclude
+mkdir -p ~/.cursor/plugins/local
+ln -s ~/.compforge ~/.cursor/plugins/local/compforge
+cursor-agent --plugin-dir ~/.cursor/plugins/local/compforge
 ```
 
 ```text
@@ -160,6 +160,8 @@ work remaining, `.craft/next-session-prompt.md` records the next decision.
 | [Cart walkthrough](docs/guides/cart/README.md) | Discovery → Test on one real screen |
 | [Reviewer checklist](docs/reviewer-checklist.md) | Post-implementation rule check |
 | [Templates](templates/README.md) | Enforcement `init` copies into a project |
+| [Support scope](docs/support-scope.md) | Tested scope, verified harness paths, 1.x compatibility contract |
+| [Skill stability](docs/skill-stability.md) | Which skills are stable and which are still experimental |
 
 ## Why Compforge
 
@@ -219,7 +221,7 @@ release instead:
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v0.9.0
+git checkout v1.0.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
@@ -231,7 +233,7 @@ chmod +x scripts/setup/*.sh
 |---|---|
 | **Claude Code** | `~/.claude/skills/compforge` and `~/.claude/commands/compforge` |
 | **Codex CLI** | `~/.codex/skills/compforge` |
-| **Cursor Agent CLI** | Manual project-local skill; `install.sh` does not configure it |
+| **Cursor Agent CLI** | `~/.cursor/plugins/local/compforge` via `--plugin-dir`; `install.sh` does not configure it |
 
 `install.sh` only creates Claude and Codex links when their config directories
 exist. Set `INSTALL_CLAUDE=1` or `INSTALL_CODEX=1` to create a missing target
@@ -249,8 +251,8 @@ That command is for a `main`-tracking clone. A release-pinned clone must
 `git fetch --tags`, check out the chosen newer tag, and then run
 `./scripts/setup/install.sh update`.
 
-Cursor's manually registered project-local skill is not managed by `install.sh`;
-after the pull, restart the agent.
+Cursor's `--plugin-dir` link and any project-local skill are not managed by
+`install.sh`; after the pull, restart the agent.
 
 ### Verify and troubleshoot
 
@@ -275,9 +277,10 @@ entry point in the relevant harness guide:
 ```
 
 This removes only Compforge-managed Claude and Codex links that still point at
-this pack. It keeps `~/.compforge`, any Cursor project-local
-`.cursor/skills/compforge` link, and any same-name symlink that points somewhere
-else. Remove those paths manually if you want a complete uninstall.
+this pack. It keeps `~/.compforge`, Cursor's `~/.cursor/plugins/local/compforge`
+link, any project-local `.cursor/skills/compforge` link, and any same-name
+symlink that points somewhere else. Remove those paths manually if you want a
+complete uninstall.
 
 ## What's included
 

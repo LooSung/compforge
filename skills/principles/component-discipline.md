@@ -2,7 +2,7 @@
 name: component-discipline
 description: Core Compforge principles to read before frontend work. Fixes component responsibility, state placement, boundaries, and tests.
 tags: [react, typescript, principles]
-stability: experimental
+stability: stable
 ---
 
 # Component Discipline

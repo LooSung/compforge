@@ -2,7 +2,7 @@
 name: component-boundary
 description: How to decide what one component owns - responsibility, split signals, and container/presentational wiring.
 tags: [react, components]
-stability: experimental
+stability: stable
 ---
 
 # Component Boundary

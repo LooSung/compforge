@@ -14,3 +14,10 @@
 *.png binary
 *.jpg binary
 *.gif binary
+
+# GitHub language statistics
+# Linguist drops examples/ as documentation and Markdown as prose. That hides
+# the skills and the React references and leaves only scripts/, which reports
+# this pack as a Python project. Count both; docs/ stays documentation.
+examples/** linguist-documentation=false
+*.md linguist-detectable=true

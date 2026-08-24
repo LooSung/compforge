@@ -2,7 +2,7 @@
 name: workflow-skeleton
 description: Create the folder structure and empty components, hooks, and types from the Design output. No business logic.
 tags: [workflow, react]
-stability: experimental
+stability: stable
 ---
 
 # Workflow — Skeleton

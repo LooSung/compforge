@@ -2,7 +2,7 @@
 name: workflow-test
 description: Verify frontend behavior at the right level - pure functions and hooks first, then components, then E2E flows.
 tags: [workflow, react, testing]
-stability: experimental
+stability: stable
 ---
 
 # Workflow — Test

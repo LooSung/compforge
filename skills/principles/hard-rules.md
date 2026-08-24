@@ -2,10 +2,10 @@
 name: hard-rules
 description: Detector-readable Compforge Hard Rules as MUST / SHOULD / NEVER. Canonical list; do not keep a second prose copy.
 tags: [rules, react, typescript, detector]
-stability: experimental
+stability: stable
 ---
 
-# Hard Rules (v0.4)
+# Hard Rules (v1.0)
 
 One list. Detector IDs in backticks. Limits come from review focus and agent
 context size. Validated at todo scale against `examples/` and published proof
@@ -28,6 +28,12 @@ is the mechanical subset a detector can read.
 - Logic hooks and pure domain functions MUST ship with tests.
 - Pages/routes MUST compose features and MUST NOT contain business logic.
 - Each feature MUST be its own folder once the app has more than one feature.
+- An interactive control MUST have an accessible name — text, `aria-label`, or
+  `aria-labelledby`. `CONTROL_WITHOUT_ACCESSIBLE_NAME`
+- A form control MUST be labelled by a wrapping `<label>`, `htmlFor`, or
+  `aria-label`. A placeholder is not a name. `FORM_CONTROL_WITHOUT_LABEL`
+- A click target MUST be reachable by keyboard — use a real control, or supply
+  role, `tabIndex`, and a key handler. `INTERACTIVE_HANDLER_WITHOUT_KEYBOARD`
 
 ## SHOULD
 

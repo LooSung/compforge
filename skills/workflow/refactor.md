@@ -2,7 +2,7 @@
 name: workflow-refactor
 description: Behavior-preserving cleanup of existing frontend code. Never mixed with feature changes.
 tags: [workflow, react, refactoring]
-stability: experimental
+stability: stable
 ---
 
 # Workflow — Refactor

@@ -2,7 +2,7 @@
 name: state-placement
 description: Decide the single correct home for each piece of state - derived, server (query layer), URL, store, or local.
 tags: [react, state]
-stability: experimental
+stability: stable
 ---
 
 # State Placement

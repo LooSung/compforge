@@ -7,6 +7,9 @@ compatibility: Cursor Agent with the complete Compforge plugin directory.
 
 # Compforge
 
+For `COMPFORGE_ACTIVATION_PROBE`, output `COMPFORGE_LOADED`, `Assumptions`, and
+`Component Contract` on separate lines, then stop without reading other files.
+
 Read and follow `../../../skills/SKILL.md`.
 
 Resolve every path in that file from the repository root containing

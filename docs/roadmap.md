@@ -40,52 +40,52 @@
 | [v0.7.0](https://github.com/LooSung/compforge/releases/tag/v0.7.0) | fitness functions(evaluator, detector, 비차단 리뷰) |
 | [v0.8.0](https://github.com/LooSung/compforge/releases/tag/v0.8.0) | 교육(장바구니 워크스루 + `react-next-app` 예제) |
 | [v0.9.0](https://github.com/LooSung/compforge/releases/tag/v0.9.0) | 배달(`AGENTS.md` 포인터 + lock + `--verify`, `react-next-app` `init`, Next 오탐 수정) |
+| [v1.0.0](https://github.com/LooSung/compforge/releases/tag/v1.0.0) | 고정 가능(하니스 스모크 실측, 접근성 detector, 지원 범위·안정성·보안 정책) |
 
 ---
 
-## 릴리즈 순서
+## 1.0 조건 — 전부 닫힘
 
-1.0은 아직 찍지 않는다. Cursor 경로와 접근성 강제가 빠졌고, proof도 좁다.
-지금은 **0.x**로 테마만 닫는다. 지금 할 일은 **v0.10**뿐이다.
+**v1.0.0을 찍는 때:** 낯선 팀이 TypeScript + React 팩을 `v1.0.0`에 고정해도 된다고 말할 수 있을 때.
 
-v0.9가 배달 조건(1.0 조건 1)을 닫았다. 남은 1.0 조건은 **하니스 스모크**와
-**접근성 최소 detector** 둘이다. 다음 릴리스는 그중 앞의 하나를 닫는다.
+모두 참이어야 했고, 모두 참이다.
 
-### v0.10.0 — 문서가 주장하는 하니스 경로가 전부 스모크된다  ← 다음
+1. ~~**대상 레포에 constitution이 남고, 세 스택 전부에 `init`이 배달됨**~~ — v0.9.0에서 닫힘. 조건은 결과지 태그 번호가 아니다.
+2. ~~**문서가 가리키는 하니스 경로가 전부 스모크됨**~~ — Cursor `--plugin-dir`과 프로젝트 로컬 스킬을 2026-08-24에 실측. 디렉터리 자동 탐색은 주장하지 않음.
+3. ~~**접근성 게이트의 최소 detector**~~ — 이름·라벨·키보드 경로 세 규칙을 detector가 잡는다. 나머지 접근성은 사람이 본다고 [`support-scope.md`](support-scope.md)에 적었다.
+4. ~~**공개된 proof 주장을 철회할 이유가 없음**~~ — 철회할 결과가 없다. 새 페어는 1.0의 전제가 아니었다.
 
-**목표:** 1.0 조건 2를 닫는다. 지금 Cursor는 `--plugin-dir`을 "미검증"으로 적어
-두고 프로젝트 로컬 스킬을 정본으로 쓴다. 이 상태로 1.0을 찍으면 문서가 스스로
-못 미더운 경로를 남긴 채 안정 버전이 된다.
+**하니스 실측 (2026-08-24, Cursor Agent `2026.08.11-e8db854`):**
 
-- Cursor `--plugin-dir`을 깨끗한 세션에서 스모크한다. 통과하면 문서가 주장하고, 실패하면 프로젝트 로컬 스킬을 1.0 정본으로 **확정하고 어댑터의 위치를 정리한다**. 둘 중 하나로 끝내고 "미검증"을 남기지 않는다.
-- `/compforge:craft` 슬래시가 Cursor에서 되는지도 같은 기준으로 판정한다.
-- Claude Code와 Codex는 이미 격리 HOME 스모크가 있다. 빠진 주장이 있는지만 대조한다.
+- `--plugin-dir` + `Use Compforge craft:` → `COMPFORGE_LOADED`
+- 프로젝트 로컬 스킬 + `--add-dir` → `COMPFORGE_LOADED`
+- 스킬 없는 빈 워크스페이스 → `COMPFORGE_NOT_LOADED`
+- `/compforge:craft` + `--plugin-dir` → Craft 진입. 문서화된 Cursor 호출은
+  `Use Compforge craft: …`
 
-**범위 밖:** Vue, MCP default, 새 proof 페어, 마켓플레이스 공개, 접근성 detector(그다음).
+재현: `./scripts/ci/harness-smoke.sh live cursor`. 정적 포장은 CI.
+
+**접근성 detector가 잡는 범위:** `CONTROL_WITHOUT_ACCESSIBLE_NAME`,
+`FORM_CONTROL_WITHOUT_LABEL`, `INTERACTIVE_HANDLER_WITHOUT_KEYBOARD`.
+JSX 텍스트 스캔이므로 이 세 규칙의 증거일 뿐 접근성 감사가 아니다. 애매한
+마크업은 일부러 침묵한다. 예제 3스택이 이 규칙을 통과하는 상태는
+`scripts/ci/test-review.py`가 잡아 둔다.
 
 ---
 
-## 그다음 0.x (순서만, 지금 열지 않음)
+## 1.0 이후
+
+1.x는 [`support-scope.md`](support-scope.md)의 핵심 사용 계약을 깨지 않는다.
+계약을 깨야 하면 2.0이다.
 
 | 다음 | 한 일 |
 |---|---|
-| 접근성 게이트 | 사다리에서 빼면 안 되는 이름·역할·포커스를 detector가 잡을 수 있는 범위만. 1.0 조건 3 |
+| 접근성 범위 확대 | 포커스 이동·live region 등 지금 침묵하는 영역. detector가 오탐 없이 잡을 수 있다고 증명된 것만 |
 | MCP 서버 모드 | detector·리뷰를 실시간 자가교정으로 노출하는 **opt-in**. default install 금지 |
 | 마켓플레이스 / 독립 CLI | symlink 팩 다음. 스모크 없는 경로는 문서가 주장하지 않는다 |
 | Vue | `vue-nuxt-feature`, `vue-nuxt-fsd`. 삼체(예제·init·proof) 없이 스킬을 쓰지 않는다 |
 
-v1.0은 이 표가 끝난 뒤가 아니다. Vue·MCP·마켓플레이스는 1.0을 막지 않는다.
-
-**v1.0.0을 찍는 때:** 낯선 팀이 TypeScript + React 팩을 `v1.0.0`에 고정해도 된다고 말할 수 있을 때.
-
-모두 참이어야 한다.
-
-1. ~~**대상 레포에 constitution이 남고, 세 스택 전부에 `init`이 배달됨**~~ — v0.9.0에서 닫힘. 조건은 결과지 태그 번호가 아니다.
-2. **문서가 가리키는 하니스 경로가 전부 스모크됨** — Cursor는 `--plugin-dir`을 주장하려면 스모크고, 아니면 프로젝트 로컬 스킬이 1.0 정본이다. → v0.10
-3. **접근성 게이트의 최소 detector** — 이름·역할·포커스 중 기계가 잡는 범위. 사다리에서 빼면 안 된다고 적어 놓고 1.0에 검사가 없으면 안 된다.
-4. **공개된 proof 주장을 철회할 이유가 없음** — 새 페어는 1.0의 전제가 아니다.
-
-찍지 않는 이유에 넣지 않는다: 완벽, Vue, MCP, 마켓플레이스.
+Vue·MCP·마켓플레이스는 1.0을 막지 않았고, 1.1도 막지 않는다.
 
 ---
 
@@ -100,4 +100,4 @@ v1.0은 이 표가 끝난 뒤가 아니다. Vue·MCP·마켓플레이스는 1.0�
 - **자동 코드 생성기** — 패턴은 가르치고, 코드는 에이전트가 작성
 - **백엔드·모바일·ML 진출** — 컴포넌트 아키텍처 + React 수직에 집중. 백엔드는 OOPforge
 - **불안정한 통합을 default install에 포함** — 실험(MCP 등)은 별도 opt-in
-- **검증되지 않은 하니스 주장** — Cursor 자동 탐색, Cursor의 `/compforge:craft` 슬래시는 스모크 전까지 문서에 성공으로 쓰지 않는다
+- **검증되지 않은 하니스 주장** — Cursor 디렉터리 자동 탐색은 스모크하지 않았으므로 문서가 주장하지 않는다

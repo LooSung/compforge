@@ -6,12 +6,15 @@ Rules (skills/principles/hard-rules.md):
   ANY_TYPE
   SERVER_DATA_IN_USESTATE
   DERIVED_STATE_IN_EFFECT
+
+Accessibility rules live in a11y.py and are aggregated here.
 """
 from __future__ import annotations
 
 import re
 from typing import Dict, List, Tuple
 
+from . import a11y
 from .model import (
     ANY_TYPE,
     CodeLocation,
@@ -204,4 +207,5 @@ def scan(files: Dict[str, str], catalog: RuleCatalog) -> List[Violation]:
             out.extend(_detect_server_state(path, content))
         if catalog.is_enabled(DERIVED_STATE_IN_EFFECT):
             out.extend(_detect_derived_in_effect(path, content))
+        out.extend(a11y.scan_file(path, content, catalog))
     return out

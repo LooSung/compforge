@@ -1,0 +1,30 @@
+{
+  "schema": "compforge.skill-stability.v1",
+  "stable": [
+    "skills/SKILL.md",
+    "skills/lang/frontend-stack.md",
+    "skills/playbooks/bug-fix.md",
+    "skills/playbooks/feature.md",
+    "skills/principles/component-discipline.md",
+    "skills/principles/hard-rules.md",
+    "skills/react/component-boundary.md",
+    "skills/react/hooks-discipline.md",
+    "skills/react/state-placement.md",
+    "skills/skeleton/frontend-skeleton.md",
+    "skills/skeleton/lint-enforcement.md",
+    "skills/workflow/continuity.md",
+    "skills/workflow/craft.md",
+    "skills/workflow/delivery-plan.md",
+    "skills/workflow/design.md",
+    "skills/workflow/discovery.md",
+    "skills/workflow/implement.md",
+    "skills/workflow/refactor.md",
+    "skills/workflow/skeleton.md",
+    "skills/workflow/test.md"
+  ],
+  "experimental": [
+    "skills/antipatterns/god-component.md",
+    "skills/antipatterns/prop-drilling.md",
+    "skills/antipatterns/useeffect-abuse.md"
+  ]
+}

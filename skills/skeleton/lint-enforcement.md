@@ -100,11 +100,18 @@ Say which gate fails the build. Do not leave it implied.
 | Target `compforge-check.yml` | **yes** | the stack command above |
 | Pack skill lint, doctor, smoke, init smoke, examples `npm run check` | **yes** | pack integrity, delivery, and reference apps |
 | Architecture review (detector) | **no** | new-only 200-line files, extra exports, `any`, server data in `useState`, derived state in `useEffect` |
+| Accessibility review (detector) | **no** | new-only unnamed controls, unlabelled form controls, click targets with no keyboard path |
 
 `compforge init` also copies `templates/github/compforge-architecture-review.yml`.
 That workflow comments on the PR and always exits 0. Do not turn those
 heuristic findings into a required check without a published proof that the
 false-positive rate is acceptable.
+
+The accessibility rules are a **text scan of JSX**, so they prove those three
+rules and nothing more. A clean run is not an accessibility audit, and ambiguous
+markup (a child expression, an id the scan cannot resolve) stays silent on
+purpose. Names, roles, focus, and keyboard paths remain Craft requirements
+beyond what this catches.
 
 Canonical MUST / SHOULD / NEVER: `skills/principles/hard-rules.md`.
 

@@ -2,7 +2,7 @@
 name: frontend-stack
 description: Compforge stack scope gate and architecture selection - TypeScript + React (Vite or Next.js), feature folders or feature-sliced design.
 tags: [react, typescript, architecture]
-stability: experimental
+stability: stable
 ---
 
 # Frontend Stack Selection

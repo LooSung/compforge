@@ -1,11 +1,8 @@
-# Cursor Setup (Experimental)
+# Cursor Setup
 
-Use Compforge with **Cursor Agent CLI** (`cursor-agent`) through a
-project-local skill. There is no `scripts/setup/install.sh` target for Cursor.
-
-Do not claim `--plugin-dir` auto-loads Craft until a clean Compforge smoke
-test proves it. The plugin adapter under `.cursor-plugin/skills/compforge/`
-exists for packaging; the verified path today is the project-local skill.
+Use Compforge with **Cursor Agent CLI** (`cursor-agent`) through an explicit
+local plugin directory or a project-local skill. There is no
+`scripts/setup/install.sh` target for Cursor.
 
 ## 1. Install Compforge
 
@@ -25,7 +22,20 @@ chmod +x scripts/setup/*.sh
 `doctor.sh` checks the pack and Claude/Codex links. It does not register Cursor
 or execute Craft.
 
-## 2. Link the skill into the target project
+## 2. Register the local plugin
+
+Link the installed pack into Cursor's local-plugin directory:
+
+```bash
+mkdir -p ~/.cursor/plugins/local
+ln -s ~/.compforge ~/.cursor/plugins/local/compforge
+```
+
+Pass this directory explicitly when starting Cursor Agent. A clean headless
+session did not load Craft from an empty workspace without `--plugin-dir`.
+
+Project-local skill links remain a supported alternative. Because the symlink
+target is outside the project, include the pack with `--add-dir`:
 
 ```bash
 cd /path/to/your-frontend-project
@@ -49,6 +59,13 @@ above, the pointer is committed, so it survives a clone on someone else's machin
 
 ## 3. Run Craft
 
+Start Cursor Agent and invoke Craft by name:
+
+```bash
+cd /path/to/your-frontend-project
+cursor-agent --plugin-dir ~/.cursor/plugins/local/compforge
+```
+
 ```text
 Use Compforge craft: Add a quantity stepper to the cart item
 Use Compforge craft: Read docs/screens/checkout.md and advise only.
@@ -57,8 +74,16 @@ Use Compforge craft: Read docs/screens/checkout.md and advise only.
 Planning-only sessions (Discovery, Design, Delivery Plan): ask for that stage
 explicitly and do not implement.
 
-If you start Cursor Agent with `--plugin-dir`, treat it as unverified for this
-pack. After `git pull` in `~/.compforge`, restart the agent to pick up changes.
+One-shot (non-interactive):
+
+```bash
+cursor-agent --plugin-dir ~/.cursor/plugins/local/compforge \
+  -p "Use Compforge craft: Add a quantity stepper to the cart item"
+```
+
+If you chose the project-local skill alternative, start with
+`cursor-agent --add-dir ~/.compforge` and omit `--plugin-dir`. After
+`git pull` in `~/.compforge`, restart the agent to pick up changes.
 
 ## 4. Update or remove
 
@@ -69,13 +94,14 @@ cd ~/.compforge && git pull
 ```
 
 Restart the agent after the pull. Cursor links are not managed by
-`scripts/setup/install.sh` or `uninstall.sh`. To unregister the documented
-project-local skill:
+`scripts/setup/install.sh` or `uninstall.sh`. To unregister them:
 
 ```bash
+rm -f ~/.cursor/plugins/local/compforge
 rm -f /path/to/your-frontend-project/.cursor/skills/compforge
 ```
 
+The second command applies only if you created the project-local alternative.
 Also remove the matching `.cursor/skills/compforge` line from
 `.git/info/exclude` if you added it during setup. The source pack at
 `~/.compforge` is kept.
@@ -88,12 +114,39 @@ Use Compforge Discovery for the checkout flow. No code yet.
 Use Compforge craft: Refactor the cart page without changing behavior.
 ```
 
-## Verified vs unverified
+## Verified paths
+
+Measured on Cursor Agent `2026.08.11-e8db854` in empty temporary workspaces
+with `CURSOR_CONFIG_DIR` isolation (2026-08-24).
 
 | Path | Status |
 |---|---|
-| Project-local `.cursor/skills/compforge` | Documented experimental setup |
-| `cursor-agent --plugin-dir …` | Adapter present; **not** claimed until a Compforge smoke test proves it |
-| `/compforge:craft` as a Cursor slash command | Unverified |
+| `cursor-agent --plugin-dir …` + `Use Compforge craft: …` | Verified (activation probe) |
+| Project-local `.cursor/skills/compforge` + `--add-dir` | Verified (activation probe) |
+| Empty workspace, no plugin, no project skill | Isolated (`COMPFORGE_NOT_LOADED`) |
+| `/compforge:craft` with `--plugin-dir` | Enters Craft. Documented invoke remains `Use Compforge craft: …` |
+| Directory auto-discovery without `--plugin-dir` | Not claimed |
 
-See [Claude Code](./claude-code.md) and [Codex](./codex.md) for the supported harnesses.
+`/compforge:craft` is Claude Code's installed slash command. On Cursor Agent CLI
+it routed to Craft when the plugin was loaded; it is not installed under
+`~/.cursor/commands` by `install.sh`.
+
+See [Claude Code](./claude-code.md) and [Codex](./codex.md) for the other harnesses.
+
+### Local plugin smoke evidence
+
+Maintainers can reproduce explicit-plugin, project-local, slash, and no-skill
+controls with an authenticated Cursor CLI:
+
+```bash
+./scripts/ci/harness-smoke.sh live cursor
+```
+
+The check requires `COMPFORGE_LOADED`, Assumptions, and Component Contract from
+both supported paths. Its isolated no-skill workspace must return
+`COMPFORGE_NOT_LOADED`. Slash with `--plugin-dir` must enter Craft. It uses
+temporary workspaces and `CURSOR_CONFIG_DIR` while retaining the real `HOME` so
+the OS credential-store token remains available. Only non-secret login metadata
+(`version` and `authInfo`) is copied into each temporary config. Never add a
+provider key as a repository secret; live smoke remains a local release check.
+Static packaging (`./scripts/ci/harness-smoke.sh static`) runs in CI.

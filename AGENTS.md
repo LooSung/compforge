@@ -96,7 +96,7 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 
 Reference implementations: [examples/README.md](examples/README.md) — the same todo app on the three shipped stacks.
 
-## Hard Rules (v0.4)
+## Hard Rules (v1.0)
 
 Canonical detector-readable list: [`skills/principles/hard-rules.md`](skills/principles/hard-rules.md) (MUST / SHOULD / NEVER). Do not keep a second prose copy here.
 
@@ -116,7 +116,7 @@ Blocking versus review: import zones, FSD steiger, and `any` fail CI where `comp
 - Do not add runtime dependencies for installer scripts unless there is no simpler shell-based alternative.
 - Update `CHANGELOG.md` for user-visible changes.
 - When changing install behavior, verify with a clean temporary `HOME`.
-- Do not claim a harness integration works until documented setup steps and a clean-session smoke test prove it. Cursor's documented path is the project-local skill; `--plugin-dir` remains unverified for this pack.
+- Do not claim a harness integration works until documented setup steps and a clean-session smoke test prove it. Cursor's documented paths are `--plugin-dir` and the project-local skill; both are pinned by `scripts/ci/harness-smoke.sh live cursor`.
 - **Effect claims need runs.** Any statement that Compforge improves an outcome must cite a published pair in `docs/proof/results/`. Unfavorable runs get published too; a measure changed after seeing the data must say so in the result.
 
 ## What Not To Do

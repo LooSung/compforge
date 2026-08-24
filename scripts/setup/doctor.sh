@@ -101,6 +101,8 @@ check_file "scripts/setup/lib/common.sh"
 check_file "scripts/ci/lint-skills.sh"
 check_file "scripts/ci/smoke-test.sh"
 check_file "scripts/ci/init-smoke.sh"
+check_file "scripts/ci/harness-smoke.sh"
+check_file "scripts/ci/run-with-timeout.py"
 check_file "scripts/ci/check-doc-links.py"
 check_file "skills/SKILL.md"
 check_file "skills/workflow/delivery-plan.md"
@@ -121,7 +123,7 @@ check_command "cursor-agent"
 
 cyan "--- Cursor Agent CLI"
 if command -v cursor-agent >/dev/null 2>&1; then
-  ok "CLI found; see docs/cursor.md for the documented project-local skill setup"
+  ok "CLI found; see docs/cursor.md for the verified --plugin-dir setup"
 else
   warn "cursor-agent not found (install Cursor CLI to use Compforge with Cursor)"
 fi

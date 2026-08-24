@@ -2,7 +2,7 @@
 name: workflow-implement
 description: Implement one feature at a time into the approved skeleton, with tests. Logic in hooks, rendering in components.
 tags: [workflow, react]
-stability: experimental
+stability: stable
 ---
 
 # Workflow — Implement

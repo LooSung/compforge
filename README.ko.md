@@ -63,7 +63,7 @@ cd /path/to/your-frontend-project
 |---|---|
 | **Claude Code** | Claude Code 재시작 후 `/compforge:craft <요청>` |
 | **Codex CLI** | Codex 재시작 후 `/skills`에서 **compforge**를 고르고 `/` 없이 요청 |
-| **Cursor Agent CLI** | 프로젝트 로컬 스킬을 연결한 뒤 `Use Compforge craft: …` |
+| **Cursor Agent CLI** | `--plugin-dir ~/.cursor/plugins/local/compforge` 후 `Use Compforge craft: …` |
 
 Claude Code:
 
@@ -77,13 +77,13 @@ Codex CLI:
 Use Compforge craft: 장바구니 아이템에 수량 조절 스테퍼 추가해줘
 ```
 
-Cursor Agent CLI는 `install.sh`가 설정하지 않습니다. 대상 프로젝트에 스킬을
-링크하세요(문서화된 실험적 경로 — `--plugin-dir`은 주장하지 않습니다):
+Cursor Agent CLI는 `install.sh`가 설정하지 않습니다. 로컬 플러그인으로 등록하고
+명시적으로 넘기세요:
 
 ```bash
-mkdir -p .cursor/skills
-ln -s ~/.compforge/skills .cursor/skills/compforge
-printf '%s\n' '.cursor/skills/compforge' >> .git/info/exclude
+mkdir -p ~/.cursor/plugins/local
+ln -s ~/.compforge ~/.cursor/plugins/local/compforge
+cursor-agent --plugin-dir ~/.cursor/plugins/local/compforge
 ```
 
 ```text
@@ -159,6 +159,8 @@ Craft가 편집 전에 Resume 블록을 제시합니다. 세션이 끝났는데 
 | [장바구니 워크스루](docs/guides/cart/README.ko.md) | 한 화면을 Discovery → Test까지 |
 | [Reviewer checklist](docs/reviewer-checklist.md) | 구현 후 규칙 점검 |
 | [Templates](templates/README.md) | `init`이 프로젝트에 복사하는 강제 설정 |
+| [Support scope](docs/support-scope.md) | 검증된 범위, 하니스 경로, 1.x 호환 계약 |
+| [Skill stability](docs/skill-stability.md) | stable / experimental 스킬 구분 |
 
 ## 왜 Compforge인가
 
@@ -216,7 +218,7 @@ function CartPage() {
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v0.9.0
+git checkout v1.0.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
@@ -228,7 +230,7 @@ chmod +x scripts/setup/*.sh
 |---|---|
 | **Claude Code** | `~/.claude/skills/compforge`, `~/.claude/commands/compforge` |
 | **Codex CLI** | `~/.codex/skills/compforge` |
-| **Cursor Agent CLI** | 수동 프로젝트 로컬 스킬 |
+| **Cursor Agent CLI** | `--plugin-dir`로 `~/.cursor/plugins/local/compforge` |
 
 `install.sh`는 Claude·Codex 설정 디렉터리가 있을 때만 링크를 만듭니다.
 대상이 없으면 `INSTALL_CLAUDE=1` 또는 `INSTALL_CODEX=1`로 명시합니다.
@@ -246,8 +248,8 @@ cd ~/.compforge && git pull && ./scripts/setup/install.sh update
 `git fetch --tags` 후 선택한 새 태그를 checkout하고
 `./scripts/setup/install.sh update`를 실행합니다.
 
-Cursor의 수동 프로젝트 로컬 스킬은 `install.sh`가 관리하지 않으므로 pull 뒤
-에이전트를 다시 시작합니다.
+Cursor의 `--plugin-dir` 링크와 프로젝트 로컬 스킬은 `install.sh`가 관리하지
+않으므로 pull 뒤 에이전트를 다시 시작합니다.
 
 ### 검증과 문제 해결
 
@@ -271,8 +273,8 @@ Cursor의 수동 프로젝트 로컬 스킬은 `install.sh`가 관리하지 않�
 ```
 
 이 명령은 이 팩을 가리키는 Compforge 관리 Claude·Codex 링크만 제거합니다.
-`~/.compforge`, Cursor 프로젝트 로컬 `.cursor/skills/compforge`, 다른 곳을
-가리키는 동명 symlink는 유지합니다. 완전히 제거하려면 직접 삭제하세요.
+`~/.compforge`, Cursor의 `~/.cursor/plugins/local/compforge`, 프로젝트의
+`.cursor/skills/compforge`는 유지합니다. 완전히 제거하려면 직접 삭제하세요.
 
 ## 포함된 구성
 

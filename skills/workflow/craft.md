@@ -2,7 +2,7 @@
 name: workflow-craft
 description: Compforge execution orchestrator that classifies a frontend task and runs it via the smallest appropriate path.
 tags: [workflow, react, typescript]
-stability: experimental
+stability: stable
 ---
 
 # Workflow — Craft

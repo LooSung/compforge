@@ -3,9 +3,19 @@ name: compforge
 description: Use Compforge when building or changing a frontend app, screen, component, or UI feature in TypeScript + React — including vague build prompts like "make a todo app" or "add a settings page" — and for component architecture, state placement (server/client/URL), custom hooks, feature-sliced structure, or the /compforge:craft workflow prompt.
 license: MIT
 compatibility: Claude Code, Codex CLI, Cursor Agent, and Agent Skills-compatible clients with access to the complete Compforge pack.
+stability: stable
 ---
 
 # Compforge
+
+When a Compforge invocation contains `COMPFORGE_ACTIVATION_PROBE`, output these
+three lines and stop without reading supporting files:
+
+```text
+COMPFORGE_LOADED
+Assumptions
+Component Contract
+```
 
 Use this skill when the user asks for Compforge, component architecture, state management design, disciplined React implementation, or the `/compforge:craft` prompt — and also for everyday frontend build requests in TypeScript + React (e.g. "make a dashboard", "add a login form"), so they are governed instead of free-formed.
 
@@ -21,9 +31,8 @@ Treat **`/compforge:craft`** as the Compforge user entry point on **Claude Code*
 
 On **Codex CLI**, do not type `/compforge:craft` at the composer — Codex reserves `/` for built-in commands. Use `/skills` → **compforge**, then `craft: …` (no leading `/`).
 
-On **Cursor Agent CLI**, use the project-local skill or local-plugin setup in
-`docs/cursor.md`, then prompt `Use Compforge craft: …`. Do not claim
-`--plugin-dir` auto-loads until a clean Compforge smoke test proves it.
+On **Cursor Agent CLI**, pass `--plugin-dir` (or the project-local skill plus
+`--add-dir`) as in `docs/cursor.md`, then prompt `Use Compforge craft: …`.
 
 ## Project vs pack (paths)
 

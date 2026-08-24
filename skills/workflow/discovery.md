@@ -2,7 +2,7 @@
 name: workflow-discovery
 description: The first step when starting a new feature area or screen. Define user flows, screens, and domain terms only, with no code.
 tags: [workflow, react]
-stability: experimental
+stability: stable
 ---
 
 # Workflow — Discovery

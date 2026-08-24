@@ -2,7 +2,7 @@
 name: hooks-discipline
 description: Custom hook extraction rules and useEffect discipline - when to extract, how to test, what effects are for.
 tags: [react, hooks]
-stability: experimental
+stability: stable
 ---
 
 # Hooks Discipline

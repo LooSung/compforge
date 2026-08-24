@@ -2,7 +2,7 @@
 name: playbook-feature
 description: Execution playbook for adding one behavior to an existing frontend feature under Compforge rules.
 tags: [playbook, feature, react]
-stability: experimental
+stability: stable
 ---
 
 # Playbook — Feature
