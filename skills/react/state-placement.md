@@ -24,9 +24,14 @@ most React bugs: stale copies, sync effects, phantom re-renders.
 
 **Derived** — compute inline or with `useMemo` if measured-expensive. Never `useState` + `useEffect` to "sync" it (`antipatterns/useeffect-abuse.md`).
 
-**Server** — the query layer owns caching, refetch, loading/error. Components never copy query results into `useState`. Mutations invalidate or optimistically update through the query layer's API.
+**Server** — the query layer owns caching, refetch, loading/error. Components
+never copy query results into `useState`. Mutations invalidate or
+optimistically update through the query layer's API. Values that enter from
+JSON, URL search params, or storage are `unknown` until narrowed (a type
+guard, or a schema library already in the project). `as Todo[]` is the same
+lie as `any`.
 
-**URL** — anything the user should be able to bookmark, share, or restore on refresh: active tab, filters, pagination, selected item. If losing it on refresh would annoy the user, it's URL state.
+**URL** — anything the user should be able to bookmark, share, or restore on refresh: active tab, filters, pagination, selected item. If losing it on refresh would annoy the user, it's URL state. Narrow the raw string at the hook that reads it (see `useTodoFilter` in the examples).
 
 **Store/context** — only when two components far apart in the tree genuinely share it (theme, session, cart badge). A store used by one feature is a smell — keep it local to that feature.
 
@@ -37,6 +42,7 @@ most React bugs: stale copies, sync effects, phantom re-renders.
 | Symptom | Wrong home | Fix |
 |---|---|---|
 | `useEffect` copying props/query data into state | stored derived/server | delete state; derive or read query |
+| `fetch().json() as Todo[]` | un-narrowed I/O | parse or guard in the query layer |
 | Filter resets on refresh | local | move to URL |
 | Global store with 20 unrelated fields | store as dumping ground | split per feature; localize |
 | Two components sync via callback chains | local too low | lift to common owner |
@@ -45,4 +51,5 @@ most React bugs: stale copies, sync effects, phantom re-renders.
 - [ ] Every new state named in the Design's placement table
 - [ ] No `useState` holding server or derivable data
 - [ ] Bookmarkable UI state lives in the URL
+- [ ] JSON / URL / storage values are narrowed before they become domain types
 - [ ] Store additions justified by two distant consumers

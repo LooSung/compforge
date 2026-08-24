@@ -17,6 +17,8 @@ Stack it in two layers:
 1. **Delivered gate** — `compforge init` (`scripts/setup/init.sh`) copies the
    stack template and a GitHub Actions check, then runs a **negative self-test**:
    a deliberate cross-feature import must fail, or init refuses to succeed.
+   It also refuses a tsconfig that does not set `compilerOptions.strict` to
+   true, and every stack self-tests `no-explicit-any`.
 2. **Standard tools** — ESLint `import/no-restricted-paths` for feature folders,
    steiger (`@feature-sliced/steiger-plugin`) for FSD. Analyze the actual import
    graph to prove the same rules once more.
@@ -56,18 +58,29 @@ Detection is by the `next` dependency, not by folder layout — a Next project a
 has `src/features`, so a layout-only check installs the vite zones and silently
 drops the server boundary.
 
-## Feature-Sliced Design — steiger
+## Feature-Sliced Design — steiger + `any`
 
-Template: `templates/react-vite-fsd/steiger.config.ts`
+Templates: `templates/react-vite-fsd/steiger.config.ts` and
+`templates/react-vite-fsd/eslint.compforge.config.js`
 
-The template keeps `fsd/insignificant-slice` **on**. The example turns it off
-only because a one-page demo has a single consumer for every slice.
+Steiger owns layers and forbidden imports. The ESLint file only blocks `any` —
+FSD does not get import zones. The template keeps `fsd/insignificant-slice`
+**on**. The example turns it off only because a one-page demo has a single
+consumer for every slice.
 
 Run:
 
 ```bash
 npx steiger ./src
+npx eslint --config eslint.compforge.config.js src
 ```
+
+## TypeScript `strict` and `tsc`
+
+`compilerOptions.strict` must be `true` in the project's `tsconfig.json`. Init
+does not rewrite that file, and it does not follow `extends`. `tsc --noEmit` is
+the project's job — init prints a snippet if no script runs it. Examples include
+it in `npm run check`.
 
 ## Staying alive
 
@@ -78,7 +91,8 @@ compforge init --verify
 ```
 
 Reads `compforge-lock.json`, refuses a stack that drifted from the lock, warns on
-a pack-version mismatch, and re-runs the negative self-test.
+a pack-version mismatch, refuses a tsconfig without `strict: true`, and re-runs
+the negative self-test.
 
 ## CI wiring
 
@@ -86,8 +100,9 @@ a pack-version mismatch, and re-runs the negative self-test.
 - This pack: `.github/workflows/examples.yml` runs `npm run check` on the three
   examples (lint/arch + `tsc --noEmit` + vitest; Next also runs `next build`),
   then `scripts/ci/init-smoke.sh` — stack detection, delivery, self-test,
-  idempotent re-run, drift refusal, and a pack with the server zones removed
-  that **must** be rejected.
+  idempotent re-run, drift refusal, a pack with the server zones removed,
+  a tsconfig with `strict: false`, and an FSD template that lost
+  `no-explicit-any`, all of which **must** be rejected.
 
 ## Blocking policy
 
@@ -96,7 +111,9 @@ Say which gate fails the build. Do not leave it implied.
 | Gate | Blocking? | What it checks |
 |---|---|---|
 | `compforge init` ESLint zones / `no-explicit-any` | **yes** | import direction, no `any`, no server-only imports on Next |
-| `compforge init` steiger | **yes** | FSD public API and forbidden imports |
+| `compforge init` FSD steiger + `no-explicit-any` | **yes** | FSD public API, forbidden imports, no `any` |
+| `compforge init` `strict: true` | **yes** | `tsconfig.json` must set it; init does not rewrite tsconfig |
+| `tsc --noEmit` | project's job | init prints a snippet; examples run it in `npm run check` |
 | Target `compforge-check.yml` | **yes** | the stack command above |
 | Pack skill lint, doctor, smoke, init smoke, examples `npm run check` | **yes** | pack integrity, delivery, and reference apps |
 | Architecture review (detector) | **no** | new-only 200-line files, extra exports, `any`, server data in `useState`, derived state in `useEffect` |
@@ -119,6 +136,7 @@ Canonical MUST / SHOULD / NEVER: `skills/principles/hard-rules.md`.
 
 - Do not leave a boundary rule as a README sentence only and drop build enforcement.
 - Do not ship zones without the `.ts` resolver — a delivered-but-dead guard is worse than none.
+- Do not claim `strict: true` or no `any` on a stack whose init self-test does not prove it.
 - Do not overwrite an `eslint.config.js` init did not generate; print a merge snippet instead.
 - Do not overwrite a hand-written `AGENTS.md`; only the marked block is rewritten.
 - Do not copy the Hard Rules into the target repository — pin the pack and link.

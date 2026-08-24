@@ -8,7 +8,8 @@ guide for a skill pack, not a hosted-service SLA.
 - TypeScript + React with Vite: feature-folder and Feature-Sliced Design references.
 - TypeScript + React with Next.js App Router: `react-next-app` reference.
 - Component boundaries, server/client/URL state placement, Craft, and
-  `compforge init` enforcement (ESLint zones or steiger).
+  `compforge init` enforcement (ESLint zones or steiger, `no-explicit-any`,
+  and a `strict: true` tsconfig check).
 
 Vue, Angular, Svelte, plain JS, mobile-native, and backend work are outside
 this pack. OOPforge covers backend OOP/DDD.
@@ -47,9 +48,9 @@ credential is stored in the repository.
   without provider credentials.
 - Authenticated live probes are optional maintainer checks, not hosted CI gates.
 - Architecture-review detectors use the Hard Rule IDs in
-  `skills/principles/hard-rules.md`. Import zones, steiger, and `any` block
-  where `compforge init` installed them. Detector review comments are
-  non-blocking by default.
+  `skills/principles/hard-rules.md`. Import zones, steiger, `any`, and
+  `strict: true` block where `compforge init` installed them. Detector review
+  comments are non-blocking by default.
 - Accessibility detectors (`CONTROL_WITHOUT_ACCESSIBLE_NAME`,
   `FORM_CONTROL_WITHOUT_LABEL`, `INTERACTIVE_HANDLER_WITHOUT_KEYBOARD`) run in
   the same review. They are a text scan of JSX, so they are evidence about

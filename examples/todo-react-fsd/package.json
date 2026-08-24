@@ -7,8 +7,9 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "arch": "steiger ./src",
+    "lint": "eslint src",
     "test": "vitest run",
-    "check": "tsc --noEmit && npm run test && npm run arch"
+    "check": "npm run lint && tsc --noEmit && npm run test && npm run arch"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.80.0",
@@ -23,9 +24,11 @@
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@vitejs/plugin-react": "^4.5.0",
+    "eslint": "^9.29.0",
     "jsdom": "^26.1.0",
     "steiger": "^0.5.0",
     "typescript": "~5.8.3",
+    "typescript-eslint": "^8.34.0",
     "vite": "^7.0.0",
     "vitest": "^3.2.0"
   }

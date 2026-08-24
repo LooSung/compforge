@@ -43,6 +43,7 @@
 | [v0.8.0](https://github.com/LooSung/compforge/releases/tag/v0.8.0) | 교육(장바구니 워크스루 + `react-next-app` 예제) |
 | [v0.9.0](https://github.com/LooSung/compforge/releases/tag/v0.9.0) | 배달(`AGENTS.md` 포인터 + lock + `--verify`, Next `init`) |
 | [v1.0.0](https://github.com/LooSung/compforge/releases/tag/v1.0.0) | 고정 가능(하니스 스모크, 접근성 detector, 지원 범위·안정성·보안) |
+| [v1.1.0](https://github.com/LooSung/compforge/releases/tag/v1.1.0) | 타입 규칙 무결성 (`strict` verify, FSD `any`, I/O `unknown`) |
 
 1.0 조건 네 개는 결과로 닫혔다. 하니스 실측 기록은 [`verification/harness-v1.0.0.md`](verification/harness-v1.0.0.md).
 

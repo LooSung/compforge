@@ -5,6 +5,36 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-08-25
+
+Type-rule integrity. The Hard Rules already required `strict: true` and forbade
+`any`; init now proves both on every stack instead of leaving FSD and tsconfig
+as documentation. No schema library. No type-aware ESLint gate.
+
+### Added
+
+- **`strict: true` gate** in `compforge init` / `--verify`: refuses a project
+  whose `tsconfig.json` does not set `compilerOptions.strict` to true. Init
+  does not rewrite tsconfig, and it does not follow `extends`.
+- **FSD `no-explicit-any`**: `templates/react-vite-fsd/eslint.compforge.config.js`.
+  Steiger still owns layers; the FSD check command now runs eslint then steiger.
+- **`any` self-test** on all three stacks — a deliberate `any` must fail
+  `no-explicit-any`, or init refuses to succeed.
+- I/O sentence in `skills/react/state-placement.md`: JSON / URL / storage enter
+  as `unknown` and are narrowed in the query layer. `as Todo[]` is the same lie
+  as `any`. No new detector.
+
+### Changed
+
+- Init prints a `tsc --noEmit` snippet when no script runs it; it still does
+  not rewrite `package.json`.
+- Workflow templating uses a string replace (not sed) so FSD's `&&` check
+  command cannot be corrupted.
+- `scripts/ci/init-smoke.sh` refuses `strict: false` and an FSD template that
+  dropped `no-explicit-any`.
+- Existing FSD installs must re-run `compforge init` to pick up the eslint
+  check command.
+
 ## [1.0.1] — 2026-08-24
 
 Documentation patch. The 1.0 usage contract does not change.

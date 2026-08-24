@@ -11,6 +11,7 @@ extracted from the runnable examples, where each one is exercised by CI.
 | [`react-vite-feature/eslint.compforge.config.js`](./react-vite-feature/eslint.compforge.config.js) | feature folders | unidirectional imports (shared ← features ← app), no cross-feature imports, no `any` |
 | [`react-next-app/eslint.compforge.config.js`](./react-next-app/eslint.compforge.config.js) | Next.js App Router | the same, plus no server-only imports from `features/` or `shared/` |
 | [`react-vite-fsd/steiger.config.ts`](./react-vite-fsd/steiger.config.ts) | Feature-Sliced Design | FSD layer rules via `@feature-sliced/steiger-plugin` |
+| [`react-vite-fsd/eslint.compforge.config.js`](./react-vite-fsd/eslint.compforge.config.js) | Feature-Sliced Design | no `any` (architecture stays with steiger) |
 | [`github/compforge-check.yml`](./github/compforge-check.yml) | all | **blocking** — runs the stack's check on every PR (`__COMPFORGE_CHECK_CMD__` is filled in by init) |
 | [`github/compforge-architecture-review.yml`](./github/compforge-architecture-review.yml) | all | **non-blocking** — new-only detector findings + correction prompt |
 
@@ -42,5 +43,6 @@ Init never overwrites a file it did not generate: an existing
 An existing `AGENTS.md` keeps everything outside the Compforge markers.
 
 Re-run `compforge init --verify` at any time: it reads `compforge-lock.json`,
-refuses a stack that has drifted from the lock, and re-runs the negative
-self-test so a dead guard cannot pass unnoticed.
+refuses a stack that has drifted from the lock, refuses a tsconfig without
+`strict: true`, and re-runs the negative self-test so a dead guard cannot pass
+unnoticed.

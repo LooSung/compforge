@@ -1,6 +1,6 @@
 # todo-react-fsd
 
-The Compforge reference todo app on the **`react-vite-fsd`** stack: Feature-Sliced Design layers, slice public APIs (`index.ts`), architecture enforced by [steiger](https://github.com/feature-sliced/steiger).
+The Compforge reference todo app on the **`react-vite-fsd`** stack: Feature-Sliced Design layers, slice public APIs (`index.ts`), architecture enforced by [steiger](https://github.com/feature-sliced/steiger), `any` blocked by ESLint.
 
 Same app, different architecture: [`todo-react-feature`](../todo-react-feature/).
 Same app on Next: [`todo-react-next`](../todo-react-next/).
@@ -10,7 +10,7 @@ Same app on Next: [`todo-react-next`](../todo-react-next/).
 ```bash
 npm install
 npm run dev     # Vite dev server
-npm run check   # tsc + vitest + steiger (FSD architecture lint)
+npm run check   # lint + tsc + vitest + steiger
 ```
 
 ## What this example demonstrates (beyond the feature-stack version)
@@ -22,7 +22,7 @@ npm run check   # tsc + vitest + steiger (FSD architecture lint)
 | Entity vs feature split | `entities/todo` owns the domain (types, query layer, presentational UI); `features/add-todo` and `features/filter-todos` own user interactions |
 | Self-contained features | `AddTodoForm` and `TodoFilterButtons` wire their own state; the page only places them |
 | Single source of truth across slices | page and filter feature both read the URL — nothing to sync |
-| Mechanical enforcement | `npm run arch` runs steiger with `fsd.configs.recommended` |
+| Mechanical enforcement | `npm run lint` (`no-explicit-any`) and `npm run arch` (steiger) |
 
 ## Structure
 

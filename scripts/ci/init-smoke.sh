@@ -12,7 +12,9 @@
 #      AGENTS.md content survives;
 #   5. lock/stack drift is refused;
 #   6. the self-test itself can fail — a pack whose template lost the
-#      src/server zones must be rejected, not reported green.
+#      src/server zones must be rejected, not reported green;
+#   7. a tsconfig with strict: false is refused;
+#   8. a pack whose FSD template lost no-explicit-any is refused.
 #
 # Usage:
 #   ./scripts/ci/init-smoke.sh [example-name ...]
@@ -69,7 +71,13 @@ smoke_one() {
   target="$(stage_example "$name")"
 
   # 1. detection — the regression that motivated the Next stack.
-  detected="$("$INIT" --dry-run "$target" 2>&1 | sed -n 's/^.*detected stack: \([a-z-]*\).*$/\1/p' | head -1)"
+  # Capture the full dry-run: `head` in a pipefail pipeline would SIGPIPE
+  # init once it had one line, and abort the smoke.
+  local dry_out
+  dry_out="$("$INIT" --dry-run "$target" 2>&1)" \
+    || fail "$name: dry-run failed"$'\n'"$dry_out"
+  detected="$(printf '%s\n' "$dry_out" | sed -n 's/^.*detected stack: \([a-z-]*\).*$/\1/p')"
+  detected="${detected%%$'\n'*}"
   [ "$detected" = "$want" ] || fail "$name detected as '$detected', expected '$want'"
 
   # 2. install + negative self-test.
@@ -81,6 +89,12 @@ smoke_one() {
   [ -f "$target/compforge-lock.json" ] || fail "$name: no compforge-lock.json delivered"
   grep -q "\"stack\": \"$want\"" "$target/compforge-lock.json" \
     || fail "$name: lock does not record stack $want"
+  if [ "$want" = "react-vite-fsd" ]; then
+    [ -f "$target/eslint.compforge.config.js" ] \
+      || fail "$name: FSD init did not deliver eslint.compforge.config.js"
+    grep -q 'eslint.compforge.config.js' "$target/compforge-lock.json" \
+      || fail "$name: FSD lock checkCommand does not run eslint"
+  fi
 
   # 3. verify re-runs the self-test from the lock.
   "$INIT" --verify "$target" >"$WORK/$name.verify.log" 2>&1 \
@@ -137,6 +151,55 @@ PY
   green "ok: a dropped boundary is caught, not reported green"
 }
 
+# 7. strict: false must be refused. Init does not rewrite tsconfig.json.
+smoke_strict_refused() {
+  local target
+  cyan "==> tsconfig strict: false must be refused"
+  target="$(stage_example todo-react-feature)"
+  python3 - "$target/tsconfig.json" <<'PY'
+import json, sys
+from pathlib import Path
+p = Path(sys.argv[1])
+data = json.loads(p.read_text(encoding="utf-8"))
+data["compilerOptions"]["strict"] = False
+p.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+PY
+  if "$INIT" "$target" >"$WORK/strict.log" 2>&1; then
+    cat "$WORK/strict.log"
+    fail "init reported success with compilerOptions.strict set to false"
+  fi
+  grep -q 'REFUSED: TypeScript strict' "$WORK/strict.log" \
+    || { cat "$WORK/strict.log"; fail "init failed for some reason other than strict: true"; }
+  green "ok: a missing strict flag is caught, not reported green"
+}
+
+# 8. A pack whose FSD template lost no-explicit-any must be refused.
+smoke_broken_fsd_any() {
+  local broken="$WORK/broken-fsd-any" target
+  mkdir -p "$broken"
+  tar -C "$PACK_DIR" --exclude examples --exclude .git --exclude node_modules -cf - . | tar -C "$broken" -xf -
+
+  python3 - "$broken/templates/react-vite-fsd/eslint.compforge.config.js" <<'PY'
+import sys
+from pathlib import Path
+p = Path(sys.argv[1])
+p.write_text(
+    p.read_text(encoding="utf-8").replace("'@typescript-eslint/no-explicit-any': 'error'", ""),
+    encoding="utf-8",
+)
+PY
+
+  cyan "==> broken pack (FSD no-explicit-any removed) must be refused"
+  target="$(stage_example todo-react-fsd)"
+  if "$broken/scripts/setup/init.sh" "$target" >"$WORK/broken-fsd-any.log" 2>&1; then
+    cat "$WORK/broken-fsd-any.log"
+    fail "init reported success with no-explicit-any removed from the FSD template"
+  fi
+  grep -q 'SELF-TEST FAILED' "$WORK/broken-fsd-any.log" \
+    || { cat "$WORK/broken-fsd-any.log"; fail "init failed for some reason other than the any self-test"; }
+  green "ok: a dropped any rule is caught, not reported green"
+}
+
 examples=("$@")
 if [ "${#examples[@]}" -eq 0 ]; then
   examples=(todo-react-feature todo-react-fsd todo-react-next)
@@ -149,6 +212,12 @@ done
 for example in "${examples[@]}"; do
   if [ "$example" = "todo-react-next" ]; then
     smoke_broken_pack
+  fi
+  if [ "$example" = "todo-react-fsd" ]; then
+    smoke_broken_fsd_any
+  fi
+  if [ "$example" = "todo-react-feature" ]; then
+    smoke_strict_refused
   fi
 done
 

@@ -60,6 +60,6 @@ is the mechanical subset a detector can read.
 
 ## Blocking versus review
 
-Import zones, FSD steiger, and `any` are **blocking** where `compforge init`
-installed them. Detector findings on this list are **non-blocking** PR review
-unless that policy file says otherwise. See `skills/skeleton/lint-enforcement.md`.
+Import zones, FSD steiger, `any`, and `strict: true` are **blocking** where
+`compforge init` installed them. Detector findings on this list are **non-blocking**
+PR review unless that policy file says otherwise. See `skills/skeleton/lint-enforcement.md`.

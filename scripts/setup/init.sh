@@ -7,16 +7,18 @@
 #   1. An AGENTS.md pointer block — an agent that clones only the target repo
 #      learns to read the pack before touching UI code. The Hard Rules are not
 #      copied; the block records what this repo is pinned to.
-#   2. The stack's enforcement template (ESLint import zones or steiger) plus a
-#      GitHub Actions check, with per-feature zones generated from the
-#      directories that actually exist.
+#   2. The stack's enforcement template (ESLint import zones and/or
+#      no-explicit-any, steiger for FSD) plus a GitHub Actions check, with
+#      per-feature zones generated from the directories that actually exist.
 #
 # Then it runs a negative self-test: a deliberate violation must fail lint. A
-# silent no-op (the .ts resolver trap) cannot survive an install.
+# silent no-op (the .ts resolver trap) cannot survive an install. It also
+# refuses a tsconfig that does not set compilerOptions.strict to true.
 #
 # What it never does: overwrite a file it did not generate, install npm
-# dependencies, or touch package.json. Existing files get a printed merge
-# snippet instead; an existing AGENTS.md keeps everything outside the markers.
+# dependencies, or touch package.json / tsconfig.json. Existing files get a
+# printed merge snippet instead; an existing AGENTS.md keeps everything
+# outside the markers. Missing tsc --noEmit is a printed snippet, not a rewrite.
 #
 # Usage:
 #   ./scripts/setup/init.sh [--stack react-vite-feature|react-vite-fsd|react-next-app] [target-dir]
@@ -51,8 +53,9 @@ Usage:
 target-dir defaults to the current directory. The stack is detected from
 package.json and the src/ layout; pass --stack when detection reports ambiguity.
 
---verify re-reads $LOCK_NAME, confirms the delivered files are still there, and
-re-runs the negative self-test so a dead guard cannot pass unnoticed.
+--verify re-reads $LOCK_NAME, confirms the delivered files are still there,
+refuses a tsconfig without strict: true, and re-runs the negative self-test
+so a dead guard cannot pass unnoticed.
 USAGE
 }
 
@@ -208,7 +211,7 @@ else:
 PY
 }
 
-install_eslint_entry() {
+install_eslint_config_entry() {
   if [ ! -f "$TARGET/eslint.config.js" ] && [ ! -f "$TARGET/eslint.config.mjs" ]; then
     write_file "$TARGET/eslint.config.js" <<'EOF'
 import compforge from './eslint.compforge.config.js';
@@ -221,9 +224,12 @@ EOF
   fi
 
   require_dep eslint
-  require_dep eslint-plugin-import
   require_dep typescript-eslint
+}
 
+install_eslint_entry() {
+  install_eslint_config_entry
+  require_dep eslint-plugin-import
   CHECK_CMD="npx eslint --config eslint.compforge.config.js src"
 }
 
@@ -247,10 +253,13 @@ init_fsd() {
     write_file "$TARGET/steiger.config.ts" <"$TEMPLATES/react-vite-fsd/steiger.config.ts"
   fi
 
+  write_file "$TARGET/eslint.compforge.config.js" <"$TEMPLATES/react-vite-fsd/eslint.compforge.config.js"
+  install_eslint_config_entry
+
   require_dep steiger
   require_dep '@feature-sliced/steiger-plugin'
 
-  CHECK_CMD="npx steiger src"
+  CHECK_CMD="npx eslint --config eslint.compforge.config.js src && npx steiger src"
 }
 
 run_stack_init() {
@@ -341,7 +350,21 @@ install_workflow() {
   if [ -f "$wf" ]; then
     yellow "$wf already exists — not touched."
   else
-    sed "s|__COMPFORGE_CHECK_CMD__|$CHECK_CMD|" "$TEMPLATES/github/compforge-check.yml" | write_file "$wf"
+    # Python replace, not sed: CHECK_CMD may contain `&&`, and sed treats `&`
+    # in the replacement as the matched text.
+    python3 - "$TEMPLATES/github/compforge-check.yml" "$wf" "$CHECK_CMD" "$DRY_RUN" <<'PY'
+import sys
+from pathlib import Path
+
+src, dest, cmd, dry = Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3], sys.argv[4] == "1"
+text = src.read_text(encoding="utf-8").replace("__COMPFORGE_CHECK_CMD__", cmd)
+if dry:
+    print(f"dry-run: would write {dest}")
+else:
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(text, encoding="utf-8")
+    print(f"wrote {dest}")
+PY
   fi
 }
 
@@ -352,6 +375,50 @@ install_review_workflow() {
   else
     write_file "$wf" <"$TEMPLATES/github/compforge-architecture-review.yml"
   fi
+}
+
+# TypeScript MUST use strict: true. Init does not rewrite tsconfig.json;
+# missing or false is a refused install, not a silent default.
+require_strict_tsconfig() {
+  python3 - "$TARGET" <<'PY'
+import json, re, sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+tsconfig = root / "tsconfig.json"
+if not tsconfig.is_file():
+    sys.exit("REFUSED: no tsconfig.json. Compforge requires TypeScript with compilerOptions.strict set to true.")
+
+text = tsconfig.read_text(encoding="utf-8")
+refused = (
+    "REFUSED: TypeScript strict: true is a Compforge Hard Rule. "
+    "Set compilerOptions.strict to true in tsconfig.json "
+    "(init does not rewrite it, and does not follow extends)."
+)
+try:
+    data = json.loads(text)
+except json.JSONDecodeError:
+    # Comments or trailing commas. Do not strip /* */ — paths like "@/*" are
+    # valid JSON strings and a naive strip corrupts them.
+    if re.search(r'"strict"\s*:\s*true\b', text) is None:
+        sys.exit(refused)
+else:
+    if (data.get("compilerOptions") or {}).get("strict") is not True:
+        sys.exit(refused)
+PY
+}
+
+hint_tsc_if_missing() {
+  if python3 - "$TARGET/package.json" <<'PY'
+import json, sys
+scripts = json.load(open(sys.argv[1])).get("scripts") or {}
+sys.exit(0 if any("tsc --noEmit" in str(value) for value in scripts.values()) else 1)
+PY
+  then
+    return
+  fi
+  yellow "No tsc --noEmit script found. Compforge does not rewrite package.json. Add:"
+  printf '\n  "typecheck": "tsc --noEmit"\n\n'
 }
 
 # --- self-tests ---------------------------------------------------------------
@@ -449,9 +516,41 @@ fixture_server_leak() { # $1 = fixture root
   printf 'export const ok = 2;\n' >"$1/src/shared/ok.ts"
 }
 
+selftest_no_explicit_any() { # $1 = eslint config template
+  local template="$1"
+  local st="$TARGET/.compforge-selftest-any"
+  rm -rf "$st"
+  mkdir -p "$st/src"
+  printf 'export const bad: any = 1;\n' >"$st/src/bad.ts"
+  printf 'export const ok: number = 1;\n' >"$st/src/ok.ts"
+  cp "$template" "$st/eslint.selftest.config.js"
+
+  local out rc=0
+  out="$(cd "$st" && npx eslint --no-config-lookup --config eslint.selftest.config.js src/bad.ts 2>&1)" || rc=$?
+  if [ "$rc" -eq 0 ] || ! printf '%s' "$out" | grep -q 'no-explicit-any'; then
+    red "SELF-TEST FAILED: a deliberate \`any\` did not trip no-explicit-any."
+    red "The enforcement would be a silent no-op. Raw output:"
+    printf '%s\n' "$out"
+    rm -rf "$st"
+    exit 3
+  fi
+
+  rc=0
+  out="$(cd "$st" && npx eslint --no-config-lookup --config eslint.selftest.config.js src/ok.ts 2>&1)" || rc=$?
+  if [ "$rc" -ne 0 ]; then
+    red "SELF-TEST FAILED: a file without \`any\` did not pass (config error, not a violation):"
+    printf '%s\n' "$out"
+    rm -rf "$st"
+    exit 3
+  fi
+
+  rm -rf "$st"
+}
+
 selftest_feature() {
   selftest_eslint "$TEMPLATES/react-vite-feature/eslint.compforge.config.js" cross-feature fixture_cross_feature
-  green "self-test passed: a cross-feature import fails, a compliant file passes."
+  selftest_no_explicit_any "$TEMPLATES/react-vite-feature/eslint.compforge.config.js"
+  green "self-test passed: a cross-feature import fails, a compliant file passes, \`any\` fails."
 }
 
 selftest_next() {
@@ -460,7 +559,8 @@ selftest_next() {
   # The boundary that only exists on this stack: a client feature reaching into
   # server-only code. Detecting the stack as react-vite-feature silently drops it.
   selftest_eslint "$tpl" server fixture_server_leak
-  green "self-test passed: cross-feature and server-only imports both fail, compliant files pass."
+  selftest_no_explicit_any "$tpl"
+  green "self-test passed: cross-feature and server-only imports both fail, compliant files pass, \`any\` fails."
 }
 
 selftest_fsd() {
@@ -484,7 +584,8 @@ selftest_fsd() {
   fi
 
   rm -rf "$st"
-  green "self-test passed: steiger fails on a cross-feature import."
+  selftest_no_explicit_any "$TEMPLATES/react-vite-fsd/eslint.compforge.config.js"
+  green "self-test passed: steiger fails on a cross-feature import, \`any\` fails."
 }
 
 run_selftests() {
@@ -528,8 +629,9 @@ run_verify() {
     yellow "pack version drift: installed $installed, locked $locked_version. Re-run init to re-pin."
   fi
 
+  require_strict_tsconfig
   run_selftests
-  green "compforge verify complete: pointer intact, guard still fails on a violation."
+  green "compforge verify complete: pointer intact, strict tsconfig present, guard still fails on a violation."
 }
 
 # --- run ---------------------------------------------------------------------
@@ -540,6 +642,7 @@ if [ "$VERIFY" = 1 ]; then
 fi
 
 resolve_stack
+require_strict_tsconfig
 
 cyan "compforge init → $TARGET ($STACK)"
 
@@ -563,5 +666,6 @@ if [ "$DRY_RUN" = 1 ]; then
 fi
 
 run_selftests
+hint_tsc_if_missing
 
 green "compforge init complete: constitution pointer + zones installed, blocking CI + non-blocking review workflow ready, self-test green."

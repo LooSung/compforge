@@ -5,7 +5,7 @@ Runnable proof: the **same todo app** implemented once per supported stack. The 
 | Stack | Folder | Architecture | Enforcement |
 |---|---|---|---|
 | `react-vite-feature` | [todo-react-feature](./todo-react-feature/) | Feature folders, app-level composition, no barrels | ESLint `import/no-restricted-paths` zones |
-| `react-vite-fsd` | [todo-react-fsd](./todo-react-fsd/) | Feature-Sliced Design layers + slice public APIs | steiger (`@feature-sliced/steiger-plugin`) |
+| `react-vite-fsd` | [todo-react-fsd](./todo-react-fsd/) | Feature-Sliced Design layers + slice public APIs | steiger + ESLint `no-explicit-any` |
 | `react-next-app` | [todo-react-next](./todo-react-next/) | Next.js App Router + feature folders | ESLint zones, including no import of `src/server` |
 
 Walkthrough (not a third todo): [docs/guides/cart](../docs/guides/cart/README.md) — Discovery → Test on a cart screen.
@@ -28,7 +28,7 @@ npm run check   # lint/arch + tsc --noEmit + vitest (+ next build on Next)
 
 - **Granularity**: one `features/todos/` folder vs three FSD slices (`entities/todo`, `features/add-todo`, `features/filter-todos`) — the honest cost/benefit of each architecture on an app this size.
 - **Import discipline**: direct file imports and no cross-feature imports vs slice public APIs (`index.ts`).
-- **Enforcement tool**: ESLint zones vs steiger.
+- **Enforcement tool**: ESLint zones vs steiger plus `no-explicit-any`.
 - **Server/client boundary** (Next only): Server Components compose; interactive UI is a `'use client'` island; `src/server/` is never imported by features.
 
 Read both `README.md`s side by side to see the trade-off the stack table in `skills/lang/frontend-stack.md` describes.
