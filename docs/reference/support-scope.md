@@ -32,7 +32,10 @@ setup via `install.sh` are not currently supported paths.
 with `--plugin-dir` it entered Craft in a clean headless session; the documented
 Cursor invoke remains `Use Compforge craft: …`.
 
-`doctor.sh` validates files and links. It does not prove agent activation.
+`doctor.sh` validates the invoked checkout's files. Installed links resolve
+against `$COMPFORGE_HOME`, then a valid `~/.compforge`, then the invoked
+checkout. A link to another valid Compforge pack is a warning; a link to a
+non-pack directory fails. Doctor does not prove agent activation.
 Maintainers can run `scripts/ci/harness-smoke.sh live <harness>` with their own
 local CLI authentication. A positive run must report `COMPFORGE_LOADED`, and an
 isolated negative control must report `COMPFORGE_NOT_LOADED`. Cursor slash with
@@ -61,7 +64,7 @@ credential is stored in the repository.
 
 The pack version is the shared version in the three plugin manifests, Git tag,
 and changelog. Skill maturity is tracked separately in
-[`skills/stability.json`](../skills/stability.json).
+[`skills/stability.json`](../../skills/stability.json).
 
 Compforge 1.x keeps this core usage contract compatible:
 

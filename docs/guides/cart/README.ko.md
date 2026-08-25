@@ -46,5 +46,6 @@ Codex / Cursor는 `Use Compforge craft: …` (`/` 없이). 단계 목록과 예�
 | 4. Skeleton | [04-skeleton.md](./04-skeleton.md) |
 | 5. Implement | [05-implement.md](./05-implement.md) |
 | 6. Test | [06-test.md](./06-test.md) |
+| 7. import 규칙 참고 | [07-import-rules.md](./07-import-rules.md) |
 
 각 단계 끝에 **사람 승인**이 있다. 다음 단계로 건너뛰지 않는다.

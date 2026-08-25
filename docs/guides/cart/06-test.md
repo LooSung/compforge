@@ -31,6 +31,14 @@ not in `useEffect`.
 
 ---
 
+## Cross-check the references
+
+The runnable feature example uses the same mutation/invalidation boundary in
+[`useTodos.ts`](../../../examples/todo-react-feature/src/features/todos/hooks/useTodos.ts).
+Run all supported stacks using [`examples/README.md`](../../../examples/README.md).
+
+---
+
 ## Done
 
 The walkthrough ends here. Checkout and coupons are **not** this guide.

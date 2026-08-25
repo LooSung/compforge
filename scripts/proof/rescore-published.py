@@ -110,17 +110,6 @@ def rescore_arm(commit: str, starter: str, patch: Path) -> dict[str, object]:
         return evaluate(root)
 
 
-def finding_rules(payload: dict[str, object]) -> list[str]:
-    findings = payload.get("findings", [])
-    if not isinstance(findings, list):
-        return []
-    return sorted(
-        str(item.get("rule", ""))
-        for item in findings
-        if isinstance(item, dict)
-    )
-
-
 def main() -> int:
     rows: list[dict[str, object]] = []
     for meta in sorted(RESULTS.glob("*/artifacts/metadata.txt")):
@@ -150,8 +139,6 @@ def main() -> int:
                 out.write_text(json.dumps(rescored, indent=2, sort_keys=True) + "\n", encoding="utf-8")
                 record["original_count"] = original.get("violation_count")
                 record["rescored_count"] = rescored.get("violation_count")
-                record["original_rules"] = finding_rules(original)
-                record["rescored_rules"] = finding_rules(rescored)
                 record["status"] = "ok"
             except Exception as exc:  # noqa: BLE001 — report per-arm, keep going
                 record["status"] = "error"
@@ -161,42 +148,6 @@ def main() -> int:
                   f"{record.get('original_count')} -> {record.get('rescored_count')}",
                   file=sys.stderr)
 
-    summary = RESULTS / "2026-08-20-evaluator-rescore.md"
-    lines = [
-        "# Evaluator rescore of published pairs",
-        "",
-        "Same saved patches, current `scripts/proof/evaluate-run.py`.",
-        "Agents were not re-run. Original `*-evaluation.json` files are unchanged.",
-        "",
-        "| Pair | Arm | Original | Rescored | Notes |",
-        "|---|---|---|---|---|",
-    ]
-    for row in rows:
-        if row["status"] != "ok":
-            lines.append(
-                f"| `{row['pair']}` | {row['arm']} | — | — | {row.get('error', 'error')} |"
-            )
-            continue
-        original_rules = set(row["original_rules"])  # type: ignore[arg-type]
-        rescored_rules = set(row["rescored_rules"])  # type: ignore[arg-type]
-        added = sorted(rescored_rules - original_rules)
-        note = "same" if not added and row["original_count"] == row["rescored_count"] else (
-            "new rules: " + ", ".join(added) if added else "count changed"
-        )
-        lines.append(
-            f"| `{row['pair']}` | {row['arm']} | {row['original_count']} | "
-            f"{row['rescored_count']} | {note} |"
-        )
-    lines.extend(
-        [
-            "",
-            "Do not treat a count change as a new agent outcome. It is a measure",
-            "change on frozen diffs. New agent runs are a separate experiment.",
-            "",
-        ]
-    )
-    summary.write_text("\n".join(lines), encoding="utf-8")
-    print(summary)
     return 0 if all(row["status"] == "ok" for row in rows) else 1
 
 

@@ -2,7 +2,9 @@
 
 > **No implementation.** Tree, state homes, and contracts only.
 
-Read skill: `{pack}/skills/workflow/design.md`
+Read skills: `{pack}/skills/workflow/design.md`,
+`{pack}/skills/react/component-boundary.md`,
+`{pack}/skills/react/state-placement.md`
 
 Save output to: `docs/design.md` (in your project)
 
@@ -42,7 +44,17 @@ Save output to: `docs/design.md` (in your project)
 ## UI States
 - CartList: loading / lines / empty ("Your cart is empty") / error retry
 - CartLine: quantity control named; remove named
+
+## Data Flow
+- Quantity/remove → `useCart` mutation → invalidate or optimistically update the cart query.
+- The query cache owns `lines`; `cartTotal(lines)` stays derived.
+- Query pending/error and `lines.length === 0` select named UI states.
+- A stock 409 surfaces through mutation error state; it never creates a second line copy.
 ```
+
+Reference pattern: the runnable feature example keeps mutations and query
+invalidation together in
+[`useTodos.ts`](../../../examples/todo-react-feature/src/features/todos/hooks/useTodos.ts).
 
 ---
 

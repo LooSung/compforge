@@ -57,6 +57,17 @@ class DocLinkTests(unittest.TestCase):
         source = self.write("docs/guide.md", "[root](../README.md#root)\n")
         self.assertEqual([], MODULE.check_file(self.root, source))
 
+    def test_docs_index_covers_top_level_documents(self) -> None:
+        self.write("docs/guide.md", "# Guide\n")
+        self.write("docs/README.md", "[Guide](guide.md)\n")
+        self.assertEqual([], MODULE.check_docs_index(self.root))
+
+    def test_docs_index_reports_orphan(self) -> None:
+        self.write("docs/guide.md", "# Guide\n")
+        self.write("docs/README.md", "# Index\n")
+        findings = MODULE.check_docs_index(self.root)
+        self.assertEqual("top-level document missing from docs index", findings[0].reason)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -13,7 +13,8 @@
 Compforge는 **TypeScript + React 프론트엔드에 수직 특화된 방법론 + 아키텍처 강제 팩**이다.
 범용 코딩 에이전트가 아니라, 그 위에 얹혀 **구조를 기본값으로 만드는 하네스**다.
 
-- 대상 스택: **TypeScript + React** (Vite 또는 Next.js). Vue는 1.x 장기 목표이며 1.0 범위 밖이다.
+- 대상 스택: **TypeScript + React** (Vite 또는 Next.js). Vue는 1.x 지원
+  범위 밖이며 일정이 약속되지 않았다.
 - 고정 범위는 [`support-scope.md`](support-scope.md).
 - 푸는 문제: 제약이 없으면 에이전트가 600줄 페이지에 `useState`와 `useEffect` 체인을 쌓는다.
 - 핵심 지표는 토큰 절감이 아니라 **아키텍처 위반율**과 **재작업률**이다.
@@ -43,7 +44,7 @@ Discovery → Design → Delivery Plan → Skeleton → Implement → Test
 | Test | 훅 / 컴포넌트 / E2E | 테스트 없는 로직 훅 |
 
 작은 작업은 전체 파이프라인을 강제하지 않고 **Craft**가 가장 작은 경로를 고른다.
-한 화면을 끝까지 걷는 예시는 [장바구니 워크스루](guides/cart/README.ko.md)다.
+한 화면을 끝까지 걷는 예시는 [장바구니 워크스루](../guides/cart/README.ko.md)다.
 
 ---
 
@@ -108,7 +109,7 @@ advisory 요청이면 구현하지 않는다.
 
 ## 6. 하드 룰 요약
 
-측정 가능한 한도. 정본은 `AGENTS.md`.
+측정 가능한 한도. 정본은 `skills/principles/hard-rules.md`.
 
 - 컴포넌트 파일 200줄, 파일당 export 1개, 스킬 200줄.
 - `strict` + `any` 금지, 직접 변이 금지.

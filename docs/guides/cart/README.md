@@ -53,6 +53,7 @@ Pick **one** stack at Skeleton: `react-vite-feature` (this guide) or
 | 4. Skeleton | [04-skeleton.md](./04-skeleton.md) |
 | 5. Implement | [05-implement.md](./05-implement.md) |
 | 6. Test | [06-test.md](./06-test.md) |
+| 7. Import rules reference | [07-import-rules.md](./07-import-rules.md) |
 
 ---
 

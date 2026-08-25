@@ -98,7 +98,8 @@ Test Targets (hooks/components):
 - For each structure you added (feature folder, hook, query, context), name the invariant it protects and the user's word for it, or put it back on the ladder (`component-discipline` #7).
 - Confirm anything a person was asked to approve was written in their words, not Contract jargon (`component-discipline` #14).
 - Check comment discipline: no narration comments; names explain what, comments explain why.
-- If broader review is needed, run the per-layer checks in `docs/reviewer-checklist.md`.
+- If broader review is needed, run the per-layer checks in
+  `{pack}/docs/reference/reviewer-checklist.md`.
 - Run the necessary tests and record reproducible commands, toolchain identity (node/npm path or version, required env vars), and results.
 - For any failed or skipped verification, leave a reason and the risk.
 

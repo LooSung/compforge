@@ -4,6 +4,8 @@ Same saved patches, current `scripts/proof/evaluate-run.py`.
 Agents were not re-run. Original `*-evaluation.json` files are unchanged.
 Rescored JSON sits beside them as `*-evaluation-rescored.json`.
 Reproducer: `python3 scripts/proof/rescore-published.py`.
+The script refreshes only those machine-readable JSON files; this report's
+interpretation and validity notes are curated and are never regenerated.
 
 This is a **measure change on frozen diffs**, not a new comparison. Do not
 quote these counts as a new agent outcome.

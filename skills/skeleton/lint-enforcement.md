@@ -87,7 +87,7 @@ it in `npm run check`.
 A delivered guard is only worth the last time it was proven to fail:
 
 ```bash
-compforge init --verify
+{pack}/scripts/setup/init.sh --verify
 ```
 
 Reads `compforge-lock.json`, refuses a stack that drifted from the lock, warns on

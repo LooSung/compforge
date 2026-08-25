@@ -32,11 +32,15 @@ Treat **`/compforge:craft`** as the Compforge user entry point on **Claude Code*
 On **Codex CLI**, do not type `/compforge:craft` at the composer — Codex reserves `/` for built-in commands. Use `/skills` → **compforge**, then `craft: …` (no leading `/`).
 
 On **Cursor Agent CLI**, pass `--plugin-dir` (or the project-local skill plus
-`--add-dir`) as in `docs/cursor.md`, then prompt `Use Compforge craft: …`.
+`--add-dir`) as in `{pack}/docs/setup/cursor.md`, then prompt
+`Use Compforge craft: …`.
 
 ## Project vs pack (paths)
 
-- **Pack** — `~/.compforge` or `$COMPFORGE_HOME`: skills, commands, examples. Not where user app code lives.
+- **Pack** — `$COMPFORGE_HOME`, then `~/.compforge`; when maintaining Compforge
+  itself, the repository checkout is the final fallback. This is not where user
+  app code lives.
+- **Skill references** — paths such as `workflow/...` and `react/...` resolve from `{pack}/skills`; paths prefixed with `{pack}` resolve from the pack root.
 - **Target project** — the repo the user is working on; start the agent **from this directory**.
 - **Compforge maintenance** — if the user asks to change Compforge itself, the pack repository is the work target; do not reject it as the wrong directory.
 - User file paths (`docs/foo.md`, `@path`, absolute paths) resolve against the confirmed work target. For app work this is the target project, never the pack. If missing, ask for an absolute path — do not search only under `~/.compforge`.
@@ -80,4 +84,4 @@ Anti-patterns:
 - useEffect abuse: `antipatterns/useeffect-abuse.md`
 - Prop drilling: `antipatterns/prop-drilling.md`
 
-Roadmap and direction: `../docs/roadmap.md`
+1.x direction and non-goals: `{pack}/docs/project/direction.md`

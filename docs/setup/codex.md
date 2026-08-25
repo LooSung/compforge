@@ -65,5 +65,5 @@ Optional: `~/.compforge/scripts/setup/init.sh` leaves an `AGENTS.md` pointer and
 cd ~/.compforge && git pull && ./scripts/setup/install.sh update
 ```
 
-See [Claude Code](./claude-code.md) and [Cursor](./cursor.md) for the other harnesses.
-Release evidence: [harness verification](verification/harness-v1.0.0.md).
+See [Claude Code](claude-code.md) and [Cursor](cursor.md) for the other harnesses.
+Release evidence: [harness verification](../verification/harness-v1.0.0.md).

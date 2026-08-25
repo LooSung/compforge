@@ -1,6 +1,6 @@
 # Step 1 — Discovery
 
-[English](./01-discovery.md) · [한국어](./README.ko.md)
+[English](./01-discovery.md) · [한국어 개요](./README.ko.md)
 
 > **No code.** Define language, flows, and screens only.
 

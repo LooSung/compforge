@@ -9,20 +9,30 @@ PACK_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 STARTER="${PROOF_STARTER:-examples/todo-react-feature}"
 STARTER_DEPTH="$(printf '%s' "$STARTER" | awk -F/ '{print NF}')"
 MODEL="${PROOF_MODEL:-}"
+MODE="${PROOF_MODE:-run}"
 RUN_ID="${PROOF_RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)}"
 OUTPUT_BASE="${PROOF_OUTPUT_BASE:-${TMPDIR:-/tmp}/compforge-proof-runs}"
 OUTPUT_BASE="$(python3 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$OUTPUT_BASE")"
 OUTPUT_ROOT="$OUTPUT_BASE/$RUN_ID"
 SKIP_CHECK="${PROOF_SKIP_CHECK:-0}"
+SOURCE_COMMIT="$(git -C "$PACK_DIR" rev-parse HEAD)"
 
 TASK='Add search to the todo list. Match on the title, case-insensitive, and combine with the existing status filter. Keep the query in the URL so a filtered view survives reload and can be shared. Show how many todos match, and show a distinct empty state when the query matches nothing. Add a "complete all matches" action that marks every currently matching todo completed; a todo that is already completed must stay completed. The search input needs an accessible label, and the match count must be announced to assistive technology. Add tests for the matching logic and for the new behavior. Do not change unrelated behavior.'
 
-if [ -z "$MODEL" ]; then
+case "$MODE" in
+  run|export) ;;
+  *)
+    printf 'PROOF_MODE must be run or export.\n' >&2
+    exit 2
+    ;;
+esac
+
+if [ "$MODE" = "run" ] && [ -z "$MODEL" ]; then
   printf 'PROOF_MODEL is required so both runs use an explicit model.\n' >&2
   exit 2
 fi
 
-if [ "$MODEL" = "auto" ]; then
+if [ "$MODE" = "run" ] && [ "$MODEL" = "auto" ]; then
   printf 'PROOF_MODEL=auto is invalid: both runs must pin one model ID.\n' >&2
   exit 2
 fi
@@ -35,23 +45,30 @@ case "$OUTPUT_BASE/" in
     ;;
 esac
 
-if ! git -C "$PACK_DIR" cat-file -e "HEAD:$STARTER" 2>/dev/null; then
+if ! git -C "$PACK_DIR" cat-file -e "$SOURCE_COMMIT:$STARTER" 2>/dev/null; then
   printf 'PROOF_STARTER "%s" is not committed at HEAD.\n' "$STARTER" >&2
   printf 'The starter is archived from the recorded commit, so it must be tracked.\n' >&2
   exit 2
 fi
 
-if ! command -v cursor-agent >/dev/null 2>&1; then
+if [ "${PROOF_ALLOW_DIRTY:-0}" != 1 ] &&
+  [ -n "$(git -C "$PACK_DIR" status --porcelain -- "$STARTER" skills)" ]; then
+  printf 'Proof inputs are dirty. Commit them or set PROOF_ALLOW_DIRTY=1.\n' >&2
+  exit 2
+fi
+
+if [ "$MODE" = "run" ] && ! command -v cursor-agent >/dev/null 2>&1; then
   printf 'cursor-agent is required.\n' >&2
   exit 2
 fi
 
-if ! cursor-agent status >/dev/null 2>&1; then
+if [ "$MODE" = "run" ] && ! cursor-agent status >/dev/null 2>&1; then
   printf 'Cursor Agent is not authenticated. Run: cursor-agent login\n' >&2
   exit 2
 fi
 
-if [ "$SKIP_CHECK" != "1" ] && ! command -v npm >/dev/null 2>&1; then
+if [ "$MODE" = "run" ] && [ "$SKIP_CHECK" != "1" ] &&
+  ! command -v npm >/dev/null 2>&1; then
   printf 'npm is required, or set PROOF_SKIP_CHECK=1.\n' >&2
   exit 2
 fi
@@ -106,14 +123,15 @@ prepare_workspace() {
   mkdir -p "$workspace"
   # Archive from the recorded commit, not the working tree: the starter must
   # match the source commit in metadata, and node_modules must stay out.
-  git -C "$PACK_DIR" archive HEAD "$STARTER" \
+  git -C "$PACK_DIR" archive "$SOURCE_COMMIT" "$STARTER" \
     | tar -x -C "$workspace" --strip-components="$STARTER_DEPTH"
   neutralize_starter "$workspace"
 
   printf 'node_modules/\ndist/\n' >"$workspace/.gitignore"
   if [ "$name" = "treatment" ]; then
-    mkdir -p "$workspace/.cursor/skills"
-    cp -R "$PACK_DIR/skills" "$workspace/.cursor/skills/compforge"
+    mkdir -p "$workspace/.cursor/skills/compforge"
+    git -C "$PACK_DIR" archive "$SOURCE_COMMIT" skills \
+      | tar -x -C "$workspace/.cursor/skills/compforge" --strip-components=1
   fi
 
   git -C "$workspace" init -q
@@ -192,23 +210,37 @@ validate_treatment() {
 }
 
 write_metadata() {
+  local agent_version="not-run"
+  local checks="not-run"
+  if [ "$MODE" = "run" ]; then
+    agent_version="$(cursor-agent --version)"
+    checks="$([ "$SKIP_CHECK" = "1" ] && printf skipped || printf 'npm ci && npm run check')"
+  fi
+
   {
     printf 'run_id=%s\n' "$RUN_ID"
-    printf 'model=%s\n' "$MODEL"
-    printf 'cursor_agent_version=%s\n' "$(cursor-agent --version)"
-    printf 'source_commit=%s\n' "$(git -C "$PACK_DIR" rev-parse HEAD)"
+    printf 'mode=%s\n' "$MODE"
+    printf 'model=%s\n' "${MODEL:-not-run}"
+    printf 'cursor_agent_version=%s\n' "$agent_version"
+    printf 'source_commit=%s\n' "$SOURCE_COMMIT"
     printf 'starter=%s\n' "$STARTER"
     printf 'starter_neutralized=README.md removed; methodology comments and page title scrubbed\n'
     printf 'treatment_delivery=project-local .cursor/skills/compforge\n'
-    printf 'checks_run=%s\n' "$([ "$SKIP_CHECK" = "1" ] && printf skipped || printf 'npm ci && npm run check')"
+    printf 'checks_run=%s\n' "$checks"
     printf 'task=%s\n' "$TASK"
   } >"$OUTPUT_ROOT/metadata.txt"
+  printf '%s\n' "$SOURCE_COMMIT" >"$OUTPUT_ROOT/source-commit.txt"
 }
 
 mkdir -p "$OUTPUT_ROOT"
 write_metadata
 prepare_workspace control
 prepare_workspace treatment
+
+if [ "$MODE" = "export" ]; then
+  printf 'Proof workspaces exported: %s\n' "$OUTPUT_ROOT"
+  exit 0
+fi
 
 run_agent control "$TASK"
 validate_control

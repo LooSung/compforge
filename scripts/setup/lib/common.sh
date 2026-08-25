@@ -11,3 +11,30 @@ compforge_pack_dir() {
   local setup_dir="$1"
   cd "$setup_dir/../.." && pwd
 }
+
+compforge_is_pack_dir() {
+  local candidate="$1"
+  [ -f "$candidate/skills/SKILL.md" ] &&
+    [ -f "$candidate/.claude-plugin/plugin.json" ] &&
+    [ -f "$candidate/.codex-plugin/plugin.json" ]
+}
+
+compforge_installed_pack_dir() {
+  local setup_dir="$1"
+  local candidate
+
+  if [ -n "${COMPFORGE_HOME:-}" ]; then
+    candidate="$COMPFORGE_HOME"
+  elif compforge_is_pack_dir "$HOME/.compforge"; then
+    candidate="$HOME/.compforge"
+  else
+    compforge_pack_dir "$setup_dir"
+    return
+  fi
+
+  if [ -d "$candidate" ]; then
+    cd "$candidate" && pwd
+  else
+    printf '%s\n' "$candidate"
+  fi
+}

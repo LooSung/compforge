@@ -1,6 +1,6 @@
 # Compforge Examples
 
-Runnable proof: the **same todo app** implemented once per supported stack. The examples exist to validate the Hard Rules in [`AGENTS.md`](../AGENTS.md) — a rule the examples cannot satisfy gets fixed or dropped, not ignored.
+Runnable proof: the **same todo app** implemented once per supported stack. The examples exist to validate the canonical [Hard Rules](../skills/principles/hard-rules.md) — a rule the examples cannot satisfy gets fixed or dropped, not ignored.
 
 | Stack | Folder | Architecture | Enforcement |
 |---|---|---|---|
@@ -31,4 +31,4 @@ npm run check   # lint/arch + tsc --noEmit + vitest (+ next build on Next)
 - **Enforcement tool**: ESLint zones vs steiger plus `no-explicit-any`.
 - **Server/client boundary** (Next only): Server Components compose; interactive UI is a `'use client'` island; `src/server/` is never imported by features.
 
-Read both `README.md`s side by side to see the trade-off the stack table in `skills/lang/frontend-stack.md` describes.
+Read all three example `README.md` files side by side to see the trade-off the stack table in `skills/lang/frontend-stack.md` describes.

@@ -101,17 +101,34 @@ check_cursor_skill() {
     fail ".cursor-plugin skill name must match directory: compforge"
 }
 
-check_cursor_manifest_paths() {
-  local file="$PACK_DIR/.cursor-plugin/plugin.json"
-  local skills commands
-  skills="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["skills"])' "$file")"
-  commands="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["commands"])' "$file")"
-  if [ "$skills" != "./.cursor-plugin/skills/" ]; then
-    fail ".cursor-plugin/plugin.json: unexpected skills path: $skills"
-  elif [ "$commands" != "./commands/" ]; then
-    fail ".cursor-plugin/plugin.json: unexpected commands path: $commands"
+check_manifest_component_paths() {
+  if python3 - "$PACK_DIR" <<'PY'
+import json
+from pathlib import Path
+import sys
+
+root = Path(sys.argv[1])
+claude = json.loads((root / ".claude-plugin/plugin.json").read_text())
+codex = json.loads((root / ".codex-plugin/plugin.json").read_text())
+cursor = json.loads((root / ".cursor-plugin/plugin.json").read_text())
+
+components = [
+    ("Claude skills", claude["skills"]["directory"], "../skills", root / ".claude-plugin"),
+    ("Claude commands", claude["commands"]["directory"], "../commands", root / ".claude-plugin"),
+    ("Codex skills", codex["skills"], "./skills/", root),
+    ("Cursor skills", cursor["skills"], "./.cursor-plugin/skills/", root),
+    ("Cursor commands", cursor["commands"], "./commands/", root),
+]
+for label, actual, expected, base in components:
+    if actual != expected:
+        raise SystemExit(f"{label}: expected {expected!r}, got {actual!r}")
+    if not (base / actual).is_dir():
+        raise SystemExit(f"{label}: missing directory {(base / actual).resolve()}")
+PY
+  then
+    ok "plugin manifest component paths"
   else
-    ok ".cursor-plugin component paths"
+    fail "plugin manifest component paths"
   fi
 }
 
@@ -135,7 +152,7 @@ check_doc_links() {
   fi
 }
 
-check_agents_skill_refs() {
+check_agents_refs() {
   local agents_file="$PACK_DIR/AGENTS.md"
   local path
 
@@ -146,11 +163,15 @@ check_agents_skill_refs() {
 
   while IFS= read -r path; do
     if [ ! -f "$PACK_DIR/$path" ]; then
-      fail "AGENTS.md references missing file: $path"
+      if [ "$path" = "docs/planning/management.md" ]; then
+        ok "AGENTS.md optional private reference: $path"
+      else
+        fail "AGENTS.md references missing file: $path"
+      fi
     else
       ok "AGENTS.md reference: $path"
     fi
-  done < <(grep -oE 'skills/[^`[:space:]]+\.md' "$agents_file" | sort -u || true)
+  done < <(grep -oE '(skills|docs)/[^`[:space:]]+\.md' "$agents_file" | sort -u || true)
 }
 
 cyan "==> Compforge lint"
@@ -169,13 +190,13 @@ check_manifest_versions
 cyan "--- Harness packaging"
 check_craft_command
 check_cursor_skill
-check_cursor_manifest_paths
+check_manifest_component_paths
 
 cyan "--- Documentation links"
 check_doc_links
 
-cyan "--- AGENTS.md skill references"
-check_agents_skill_refs
+cyan "--- AGENTS.md file references"
+check_agents_refs
 
 if [ "$FAILED" -eq 0 ]; then
   green "==> lint complete: no issues"

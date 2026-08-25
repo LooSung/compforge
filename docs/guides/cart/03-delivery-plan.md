@@ -29,6 +29,7 @@ Save output to: `docs/delivery-plan.md` (in your project)
 - Queries / mutations: GET/PATCH/DELETE as in Design
 - URL state: none
 - Errors / empty / loading: named on CartStatus / CartEmpty
+- Mutations invalidate or optimistically update the cart query; totals remain derived
 
 ## Responsibility Map
 | Concern | Page | Feature | Hook | Query |

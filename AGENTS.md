@@ -2,6 +2,8 @@
 
 If you are an AI coding agent working in this repository, follow Compforge itself.
 
+Compforge continuity: off
+
 ## Mission
 
 Compforge is a portable component-architecture methodology pack for coding agents — **methodology plus agent harness** for frontend work.
@@ -9,6 +11,22 @@ Compforge is a portable component-architecture methodology pack for coding agent
 It defines disciplined React/TypeScript as a **dialect agents follow** (skills = grammar, hard rules = lint, `examples/` = reference implementations, install/commands = runtime). Protect the core promise: small components, explicit state placement, clear boundaries, and human checkpoints.
 
 Sister project: [OOPforge](https://github.com/LooSung/oopforge) applies the same harness model to backend OOP/DDD.
+
+## Maintainer Management
+
+Maintainer direction is private and local. When present, its single source is
+`docs/planning/management.md`, which is gitignored.
+
+- Do not add future plans, backlogs, internal metrics, or release drafts to
+  tracked files.
+- `CHANGELOG.md` records completed user-visible changes under `Unreleased`; it
+  never carries future plans.
+- Public docs describe current behavior, support, evidence, and positioning.
+- Do not create `.craft/` continuity state while maintaining this repository.
+
+Before a Compforge upgrade, architecture change, or release, read the private
+management file when it exists. If it is absent, the user's explicit request or
+linked issue defines scope; do not infer private priorities or block the work.
 
 ## Required Workflow
 
@@ -39,7 +57,8 @@ Use `/compforge:craft` (`commands/craft.md`) as the single Compforge user entry 
 
 Resolve the Compforge pack root in order: `$COMPFORGE_HOME` → `~/.compforge` → repository root (when developing this pack).
 
-Skill files live at `{pack}/skills/...`. Do **not** use legacy `skills/compforge/...` paths.
+Skill files live at `{pack}/skills/...`. Do **not** use legacy
+`skills/compforge/...` paths. See `docs/reference/path-convention.md`.
 
 ## Project Configuration (target project `AGENTS.md`)
 
@@ -67,7 +86,7 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | Test | Unit / component / E2E | `skills/workflow/test.md` |
 | Refactor | Behavior-preserving cleanup | `skills/workflow/refactor.md` |
 | Continuity | Resume work across sessions | `skills/workflow/continuity.md` |
-| Code review | Detect rule violations | `skills/principles/hard-rules.md` + `skills/antipatterns/` + `docs/reviewer-checklist.md` |
+| Code review | Detect rule violations | `skills/principles/hard-rules.md` + `skills/antipatterns/` + `docs/reference/reviewer-checklist.md` |
 
 ### Task → skill (within a stage)
 
@@ -90,17 +109,18 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 
 | Harness | Guide |
 |---|---|
-| Codex | `docs/codex.md` |
-| Claude Code | `docs/claude-code.md` |
-| Cursor | `docs/cursor.md` |
+| Codex | `docs/setup/codex.md` |
+| Claude Code | `docs/setup/claude-code.md` |
+| Cursor | `docs/setup/cursor.md` |
 
 Reference implementations: [examples/README.md](examples/README.md) — the same todo app on the three shipped stacks.
 
 ## Support Scope
 
 Canonical harness paths, supported stacks, compatibility, and exclusions are
-defined in `docs/support-scope.md`. Skill maturity is machine-readable in
-`skills/stability.json` and explained in `docs/skill-stability.md`. Harness
+defined in `docs/reference/support-scope.md`. Skill maturity is machine-readable
+in `skills/stability.json` and explained in
+`docs/reference/skill-stability.md`. Harness
 smoke evidence lives in `docs/verification/`.
 
 ## Hard Rules (v1.0)
@@ -113,10 +133,9 @@ Blocking versus review: import zones, FSD steiger, `any`, and `strict: true` fai
 
 ### Layer layout
 
-- **Each feature is its own folder** — grouping files only by type (`components/`, `hooks/`, `utils/` at the top level for the whole app) is a violation once the app has more than one feature.
-- **Pages/routes must not contain business logic** — they compose features.
-- After skeleton, list the directory tree and confirm the feature folders exist with the right file types. See `skills/skeleton/frontend-skeleton.md` self-check.
-- Enforced in the target project by `compforge init` — ESLint `import/no-restricted-paths` zones for `react-vite-feature` and `react-next-app` (the latter also blocks `src/server` imports from features/shared); steiger (`@feature-sliced/steiger-plugin`) plus `no-explicit-any` for `react-vite-fsd`. All three stacks self-test `any` and refuse a tsconfig without `strict: true`. Init also writes the `AGENTS.md` constitution pointer and `compforge-lock.json`; `--verify` re-runs those checks. See `skills/skeleton/lint-enforcement.md`.
+Layer requirements live in `skills/principles/hard-rules.md`; do not restate them
+here. Use `skills/skeleton/frontend-skeleton.md` for the post-skeleton self-check
+and `skills/skeleton/lint-enforcement.md` for delivered enforcement.
 
 ## Repository Discipline
 
@@ -131,4 +150,4 @@ Blocking versus review: import zones, FSD steiger, `any`, and `strict: true` fai
 - Do not merge workflow stages to save time.
 - Do not put data fetching, routing, or store wiring inside presentational components.
 - Do not create mega-prompts, mega-skills, or broad abstractions without evidence.
-- Do not mix refactoring with feature changes; use `workflow/refactor.md` only for behavior-preserving cleanup.
+- Do not mix refactoring with feature changes; use `skills/workflow/refactor.md` only for behavior-preserving cleanup.

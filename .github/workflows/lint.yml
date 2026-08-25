@@ -20,24 +20,35 @@ jobs:
           bash -n scripts/setup/doctor.sh
           bash -n scripts/setup/init.sh
           bash -n scripts/setup/lib/common.sh
+          bash -n scripts/setup/lib/init-core.sh
+          bash -n scripts/setup/lib/init-delivery.sh
+          bash -n scripts/setup/lib/init-selftest.sh
           bash -n scripts/ci/lint-skills.sh
           bash -n scripts/ci/smoke-test.sh
           bash -n scripts/ci/init-smoke.sh
           bash -n scripts/ci/harness-smoke.sh
+          bash -n scripts/ci/harness/probes.sh
+          bash -n scripts/proof/run-comparison.sh
       - name: Lint skills and repository
         run: |
           chmod +x scripts/ci/lint-skills.sh
           ./scripts/ci/lint-skills.sh
+          python3 scripts/ci/check-maintained-file-sizes.py
       - name: Self-test documentation links
         run: python3 scripts/ci/test-doc-links.py
       - name: Self-test hard timeout runner
         run: python3 scripts/ci/test-run-with-timeout.py
       - name: Static harness packaging
         run: ./scripts/ci/harness-smoke.sh static
-      - name: Self-test proof evaluator
-        run: python3 scripts/proof/test-evaluate-run.py
+      - name: Self-test proof tooling
+        run: |
+          python3 scripts/proof/test-evaluate-run.py
+          python3 scripts/proof/test-proof-runner.py
+          python3 scripts/proof/test-rescore-published.py
       - name: Self-test architecture review
-        run: python3 scripts/ci/test-review.py
+        run: |
+          python3 scripts/ci/test-review.py
+          python3 scripts/ci/test-review-a11y.py
 
   doctor:
     name: Pack structure (doctor)

@@ -142,8 +142,18 @@ PROOF_MODEL="<model-id>" PROOF_STARTER=docs/proof/starters/todo-react-legacy \
   ./scripts/proof/run-comparison.sh
 ```
 
-The starter is archived from `HEAD`, so it must be committed before it can be
-used.
+The starter and treatment skills are archived from the same source commit.
+Relevant dirty files are rejected unless `PROOF_ALLOW_DIRTY=1` is explicitly
+set for a characterization run.
+
+To inspect the exact neutralized workspaces without invoking an agent:
+
+```bash
+PROOF_MODE=export ./scripts/proof/run-comparison.sh
+```
+
+CI uses this mode to prove that both the starter and treatment skill come from
+the recorded commit rather than the working tree.
 
 `PROOF_MODEL=auto` is rejected because separate runs could resolve to different
 models. Pin one ID returned by `cursor-agent --list-models`.
@@ -186,7 +196,9 @@ After inspecting the raw artifacts:
    an unverifiable result is not a result.
 2. Record the exact model, agent version, source commit, commands, violations,
    check results, and rework.
-3. Link the result from `README.md` and `docs/roadmap.md`.
+3. Link the result from the **Results** section below. Link it from `README.md`
+   only when it supports a claim made there; future release planning stays
+   private.
 4. Keep both successful and unfavorable results.
 5. Do not convert a single run into a universal percentage claim.
 
@@ -236,8 +248,11 @@ the wrong patterns.
   completion accepted because a util file contained the word "completed", and
   net-versus-added effect counting — are covered by
   `scripts/proof/test-evaluate-run.py`. Published pairs keep their original
-  machine output in `artifacts/`. Frozen diffs were re-scored with the fixed
-  evaluator in [2026-08-20 evaluator rescore](./results/2026-08-20-evaluator-rescore.md);
+  machine output in `artifacts/`. `scripts/proof/rescore-published.py` refreshes
+  only the rescored JSON and is guarded by
+  `scripts/proof/test-rescore-published.py` from overwriting curated reports.
+  Frozen diffs were re-scored with the fixed evaluator in
+  [2026-08-20 evaluator rescore](./results/2026-08-20-evaluator-rescore.md);
   agents were not re-run.
 - Missing `.craft/` creation invalidates the treatment skill load.
 - A control workspace that can discover Compforge instructions invalidates the

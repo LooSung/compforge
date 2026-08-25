@@ -31,8 +31,7 @@ build/
 .vite/
 
 # Internal docs (not part of public pack surface)
-docs/release/
-docs/planning/
+docs/planning/management.md
 
 # Compforge continuity work docs (personal in-progress notes, not committed)
 .craft/

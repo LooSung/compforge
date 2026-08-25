@@ -16,6 +16,14 @@ Read skills: `{pack}/skills/workflow/implement.md`,
 4. `CartLine` quantity and remove (accessible names).
 5. `CartPage` composes loading / empty / error / lines.
 
+## Wiring
+
+- `app/providers.tsx` owns the query client.
+- `useCart` is the feature's only query/mutation door and invalidates the cart
+  query after writes.
+- `CartPage` composes query status and the derived empty branch; presentational
+  components receive data and callbacks.
+
 Do **not** store totals in `useState`. Do **not** sync lines in `useEffect`.
 Quantity while typing stays on `CartLine`. Failed stock updates surface through
 the mutation error state, not a second copy of the line.

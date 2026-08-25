@@ -10,6 +10,7 @@ SETUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SETUP_DIR/lib/common.sh"
 
 PACK_DIR="$(compforge_pack_dir "$SETUP_DIR")"
+INSTALLED_PACK_DIR="$(compforge_installed_pack_dir "$SETUP_DIR")"
 FAILED=0
 
 ok() { green "OK $*"; }
@@ -49,14 +50,34 @@ check_link() {
     return
   fi
 
-  local actual
+  local actual actual_path expected_path actual_root
   actual="$(readlink "$dst")"
-
-  if [ "$actual" = "$expected" ]; then
-    ok "$label link: $dst -> $actual"
-  else
-    fail "$label link target mismatch: $dst -> $actual (expected: $expected)"
+  case "$actual" in
+    /*) actual_path="$actual" ;;
+    *) actual_path="$(dirname "$dst")/$actual" ;;
+  esac
+  if [ -d "$actual_path" ]; then
+    actual_path="$(cd "$actual_path" && pwd -P)"
   fi
+  if [ -d "$expected" ]; then
+    expected_path="$(cd "$expected" && pwd -P)"
+  else
+    expected_path="$expected"
+  fi
+
+  if [ "$actual_path" = "$expected_path" ]; then
+    ok "$label link: $dst -> $actual"
+    return
+  fi
+
+  actual_root="$(dirname "$actual_path")"
+  if [ "$(basename "$actual_path")" = "$(basename "$expected_path")" ] &&
+    compforge_is_pack_dir "$actual_root"; then
+    warn "$label link points to another valid Compforge pack: $dst -> $actual (installed: $expected)"
+    return
+  fi
+
+  fail "$label link target mismatch: $dst -> $actual (expected: $expected)"
 }
 
 check_command() {
@@ -99,14 +120,21 @@ check_file "scripts/setup/install.sh"
 check_file "scripts/setup/uninstall.sh"
 check_file "scripts/setup/doctor.sh"
 check_file "scripts/setup/lib/common.sh"
+check_file "scripts/setup/lib/init-core.sh"
+check_file "scripts/setup/lib/init-delivery.sh"
+check_file "scripts/setup/lib/init-selftest.sh"
 check_file "scripts/ci/lint-skills.sh"
 check_file "scripts/ci/smoke-test.sh"
 check_file "scripts/ci/init-smoke.sh"
 check_file "scripts/ci/harness-smoke.sh"
+check_file "scripts/ci/harness/probes.sh"
+check_file "scripts/ci/harness/static_packaging.py"
+check_file "scripts/ci/check-maintained-file-sizes.py"
 check_file "scripts/ci/run-with-timeout.py"
 check_file "scripts/ci/check-doc-links.py"
-check_file "docs/support-scope.md"
+check_file "docs/reference/support-scope.md"
 check_file "docs/README.md"
+check_file ".github/SECURITY.md"
 check_file "SECURITY.md"
 check_file "skills/stability.json"
 check_file "skills/SKILL.md"
@@ -128,16 +156,21 @@ check_command "cursor-agent"
 
 cyan "--- Cursor Agent CLI"
 if command -v cursor-agent >/dev/null 2>&1; then
-  ok "CLI found; see docs/cursor.md for the verified --plugin-dir setup"
+  ok "CLI found; see docs/setup/cursor.md for the verified --plugin-dir setup"
 else
   warn "cursor-agent not found (install Cursor CLI to use Compforge with Cursor)"
 fi
-warn "Cursor is not installed automatically; doctor does not prove Craft loaded. See docs/cursor.md."
+warn "Cursor is not installed automatically; doctor does not prove Craft loaded. See docs/setup/cursor.md."
 
 cyan "--- Installed links"
-check_link "Claude skills" "$HOME/.claude/skills/compforge" "$PACK_DIR/skills"
-check_link "Claude commands" "$HOME/.claude/commands/compforge" "$PACK_DIR/commands"
-check_link "Codex skills" "$HOME/.codex/skills/compforge" "$PACK_DIR/skills"
+if ! compforge_is_pack_dir "$INSTALLED_PACK_DIR"; then
+  fail "invalid installed pack root: $INSTALLED_PACK_DIR"
+elif [ "$INSTALLED_PACK_DIR" != "$PACK_DIR" ]; then
+  warn "checking pack at $PACK_DIR; installed links resolve from $INSTALLED_PACK_DIR"
+fi
+check_link "Claude skills" "$HOME/.claude/skills/compforge" "$INSTALLED_PACK_DIR/skills"
+check_link "Claude commands" "$HOME/.claude/commands/compforge" "$INSTALLED_PACK_DIR/commands"
+check_link "Codex skills" "$HOME/.codex/skills/compforge" "$INSTALLED_PACK_DIR/skills"
 
 
 if [ "$FAILED" -eq 0 ]; then

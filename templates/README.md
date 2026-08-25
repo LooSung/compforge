@@ -42,7 +42,8 @@ Init never overwrites a file it did not generate: an existing
 `eslint.config.js` stays untouched and init prints the merge snippet instead.
 An existing `AGENTS.md` keeps everything outside the Compforge markers.
 
-Re-run `compforge init --verify` at any time: it reads `compforge-lock.json`,
+Re-run `{pack}/scripts/setup/init.sh --verify` at any time: it reads
+`compforge-lock.json`,
 refuses a stack that has drifted from the lock, refuses a tsconfig without
 `strict: true`, and re-runs the negative self-test so a dead guard cannot pass
 unnoticed.

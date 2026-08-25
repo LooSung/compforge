@@ -20,7 +20,8 @@ code generator.
 
 Sister pack for backends: [OOPforge](https://github.com/LooSung/oopforge).
 
-[Positioning](docs/positioning.md) · [Support scope](docs/support-scope.md) ·
+[Positioning](docs/project/positioning.md) ·
+[Support scope](docs/reference/support-scope.md) ·
 [Proof protocol](docs/proof/README.md) · [Docs index](docs/README.md)
 
 [English](./README.md) · [한국어](./README.ko.md)
@@ -42,10 +43,8 @@ and Codex links. It does not configure Cursor automatically.
 ~/.compforge/scripts/setup/doctor.sh
 ```
 
-`doctor.sh` validates the pack and available symlinks. A successful result does
-not prove that a running agent loaded Craft; use the harness-specific check in
-step 4. If it warns that your chosen Claude or Codex link is missing, run
-`INSTALL_CLAUDE=1 ~/.compforge/scripts/setup/install.sh` or the Codex equivalent.
+`doctor.sh` validates pack structure and links; it does not prove Craft loaded.
+Use the harness-specific setup in step 4 to verify activation.
 
 ### 3. Open your frontend project
 
@@ -76,24 +75,14 @@ Codex CLI:
 Use Compforge craft: Add a quantity stepper to the cart item
 ```
 
-Cursor Agent CLI is not configured by `install.sh`. Register the pack as a
-local plugin and pass it explicitly:
-
-```bash
-mkdir -p ~/.cursor/plugins/local
-ln -s ~/.compforge ~/.cursor/plugins/local/compforge
-cursor-agent --plugin-dir ~/.cursor/plugins/local/compforge
-```
-
-```text
-Use Compforge craft: Add a quantity stepper to the cart item
-```
+Cursor is not configured by `install.sh`; follow the
+[Cursor setup](docs/setup/cursor.md) for the local-plugin or project-skill path.
 
 For a fresh execution task, a loaded Craft flow identifies the smallest path
 and surfaces Assumptions and a Component Contract before UI logic. Advisory
 requests recommend a path without implementing. Exact setup:
-[Claude Code](docs/claude-code.md) · [Codex](docs/codex.md) ·
-[Cursor](docs/cursor.md).
+[Claude Code](docs/setup/claude-code.md) · [Codex](docs/setup/codex.md) ·
+[Cursor](docs/setup/cursor.md).
 
 ### 5. Optional: leave the pack in the project
 
@@ -106,19 +95,15 @@ with a PR-blocking GitHub Actions check. It is not required to try Craft.
 ~/.compforge/scripts/setup/init.sh
 ```
 
-It detects the stack from `package.json` and `src/`, never overwrites files it
-did not generate — a hand-written `AGENTS.md` keeps everything outside the
-Compforge markers — and finishes with a **negative self-test**: a deliberate
-violation must fail, or init refuses to report success. Re-run after adding a
-feature. To prove later that the guard is still alive:
+Init preserves files it did not generate and proves the delivered guard with a
+negative self-test. To re-run that proof later:
 
 ```bash
 ~/.compforge/scripts/setup/init.sh --verify
 ```
 
-The pointer names the pack and the pinned version; it does not copy the Hard
-Rules, which would go stale on the next release. Details:
-[`templates/`](./templates/README.md).
+The pointer does not copy Hard Rules that would go stale. Delivery details and
+self-test behavior live in [`templates/README.md`](./templates/README.md).
 
 ## The Basic Workflow
 
@@ -129,28 +114,18 @@ preserves the full sequence for a new feature area or large screen:
 Discovery → Design → Delivery Plan → Skeleton → Implement → Test
 ```
 
-| Stage | Output | Do not do |
-|---|---|---|
-| **Discovery** | User flows, screens, glossary, open questions | Code |
-| **Design** | Component tree, state homes, API contracts | Implementation |
-| **Delivery Plan** | Scope, order, tests, release risks | Coding |
-| **Skeleton** | Feature folders, typed empty components/hooks | Business logic |
-| **Implement** | One tested feature at a time, hooks first | Multiple features at once |
-| **Test** | Unit (hooks), component, and E2E evidence | Untested logic hooks |
-
-Each stage ends with a human checkpoint. Ask Craft to start at a named stage
-only when earlier decisions already exist. Refactoring stays outside the feature
-flow because it must preserve behavior.
+Each stage ends with a human checkpoint. Outputs and routing are canonical in
+[`AGENTS.md`](AGENTS.md#required-workflow); refactoring remains a separate,
+behavior-preserving workflow.
 
 Shipped stack identifiers are `react-vite-feature`, `react-vite-fsd`, and
-`react-next-app`. Vue is gated behind the React vertical. See
-[docs/roadmap.md](docs/roadmap.md).
+`react-next-app`. Vue is outside the 1.x support scope. See
+[docs/reference/support-scope.md](docs/reference/support-scope.md).
 
 ### Resume work across sessions
 
-Execution tasks keep lightweight notes under `.craft/`. If unfinished work
-exists, Craft presents a Resume block before editing. When a session ends with
-work remaining, `.craft/next-session-prompt.md` records the next decision.
+Execution tasks keep lightweight `.craft/` notes and resume unfinished work
+before editing. See [`skills/workflow/continuity.md`](skills/workflow/continuity.md).
 
 ## Learn by example
 
@@ -158,11 +133,11 @@ work remaining, `.craft/next-session-prompt.md` records the next decision.
 |---|---|
 | [Examples index](examples/README.md) | Same todo app on the three shipped stacks |
 | [Cart walkthrough](docs/guides/cart/README.md) | Discovery → Test on one real screen |
-| [Docs index](docs/README.md) | Setup, reference, verification |
+| [Docs index](docs/README.md) | Setup, project, reference, guides, evidence |
 | [Harness verification](docs/verification/README.md) | What was actually smoked for v1.0.0 |
-| [Support scope](docs/support-scope.md) | Tested scope, verified harness paths, 1.x compatibility contract |
-| [Skill stability](docs/skill-stability.md) | Which skills are stable and which are still experimental |
-| [Reviewer checklist](docs/reviewer-checklist.md) | Post-implementation rule check |
+| [Support scope](docs/reference/support-scope.md) | Tested scope, verified harness paths, 1.x compatibility contract |
+| [Skill stability](docs/reference/skill-stability.md) | Which skills are stable and which are still experimental |
+| [Reviewer checklist](docs/reference/reviewer-checklist.md) | Post-implementation rule check |
 | [Templates](templates/README.md) | Enforcement `init` copies into a project |
 
 ## Why Compforge
@@ -171,13 +146,8 @@ Most teams know what a clean React codebase looks like. The hard part is
 stopping an agent from collapsing a screen into a 600-line page with eleven
 `useState`s and a `useEffect` chain.
 
-| Principle | What it means |
-|---|---|
-| **Small** | One skill, one concept; 200 lines per skill |
-| **Measurable** | 200 lines/component file, 1 export/file |
-| **Workflow-first** | Discovery → Test with human checkpoints |
-| **State-first** | Every piece of state has exactly one named home |
-| **Proof over philosophy** | Effect claims cite [published runs](docs/proof/) |
+The canonical [product principles](docs/project/positioning.md#product-principles)
+define the small, measurable, workflow-first, state-first approach.
 
 ### Before
 
@@ -208,12 +178,9 @@ a repeatable layout. See the runnable [examples](examples/README.md).
 
 ### Evidence and limits
 
-The [proof protocol](docs/proof/README.md) fixes the task, control, treatment,
-evaluation rules, and publication standard. What the [published runs](docs/proof/)
-currently support, and nothing wider: *Compforge stops an agent from copying a
-codebase's bad patterns; it adds nothing to a codebase that already has good
-ones, and on a weaker model it reduces violations without preventing the core
-one.* Unfavourable runs are published too. This is not a percentage claim.
+The [evidence standard](docs/project/positioning.md#evidence-standard) defines which
+claims the [proof protocol and published runs](docs/proof/README.md) support.
+Unfavourable runs are published too; no universal percentage is claimed.
 
 ## Installation, updates, and removal
 
@@ -223,7 +190,7 @@ release instead:
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v1.1.0
+git checkout v1.2.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
@@ -231,15 +198,11 @@ chmod +x scripts/setup/*.sh
 
 ### Install targets
 
-| Harness | Installed or registered path |
-|---|---|
-| **Claude Code** | `~/.claude/skills/compforge` and `~/.claude/commands/compforge` |
-| **Codex CLI** | `~/.codex/skills/compforge` |
-| **Cursor Agent CLI** | `~/.cursor/plugins/local/compforge` via `--plugin-dir`; `install.sh` does not configure it |
-
-`install.sh` only creates Claude and Codex links when their config directories
-exist. Set `INSTALL_CLAUDE=1` or `INSTALL_CODEX=1` to create a missing target
-explicitly.
+Canonical paths and invocation contracts live in
+[`docs/reference/support-scope.md`](docs/reference/support-scope.md#canonical-harness-paths).
+Harness-specific install controls remain in the
+[Claude](docs/setup/claude-code.md), [Codex](docs/setup/codex.md), and
+[Cursor](docs/setup/cursor.md) guides.
 
 ### Update
 
@@ -264,14 +227,16 @@ Run these commands from `~/.compforge`:
 ./scripts/setup/doctor.sh              # pack structure and installed links
 ./scripts/setup/install.sh --dry-run   # planned link changes
 ./scripts/setup/install.sh --force     # replace conflicting symlinks
-./scripts/ci/smoke-test.sh             # isolated Claude/Codex install lifecycle
-./scripts/ci/harness-smoke.sh static   # manifests, skill stability, probe tokens
+./scripts/ci/harness-smoke.sh static   # packaged harness contracts
+./scripts/ci/smoke-test.sh             # clean-HOME install lifecycle
 ```
 
-These checks do not execute a live Craft response. Verify activation with the
-entry point in the relevant harness guide:
-[Claude Code](docs/claude-code.md) · [Codex](docs/codex.md) ·
-[Cursor](docs/cursor.md).
+From a development checkout, doctor checks that checkout's structure but
+validates links against `$COMPFORGE_HOME` or `~/.compforge`; another valid pack
+warns, while a non-pack target fails. These checks do not execute Craft. Verify
+activation with the relevant harness guide:
+[Claude Code](docs/setup/claude-code.md) · [Codex](docs/setup/codex.md) ·
+[Cursor](docs/setup/cursor.md).
 
 ### Remove
 
@@ -279,36 +244,34 @@ entry point in the relevant harness guide:
 ./scripts/setup/uninstall.sh
 ```
 
-This removes only Compforge-managed Claude and Codex links that still point at
-this pack. It keeps `~/.compforge`, Cursor's `~/.cursor/plugins/local/compforge`
-link, any project-local `.cursor/skills/compforge` link, and any same-name
-symlink that points somewhere else. Remove those paths manually if you want a
-complete uninstall.
+This removes only managed Claude and Codex links that still point at this pack.
+Cursor and project-local removal steps live in
+[`docs/setup/cursor.md`](docs/setup/cursor.md#4-update-or-remove).
 
 ## What's included
 
 - `skills/` — workflow, React, stack, skeleton, playbooks, and review instructions
 - `commands/` — Claude Code command entry point
 - `examples/` — three runnable TypeScript + React todo references
-- `docs/` — harness guides, proof protocol, roadmap, support scope, verification
+- `docs/` — harness guides, proof protocol, 1.x direction, support scope, verification
 - `scripts/` — setup, init, lint, proof runner, and smoke tests
 - `templates/` — ESLint zones, steiger, blocking CI, non-blocking architecture review
 
-Agents use [`AGENTS.md`](./AGENTS.md) as the shared rule source;
-[`CLAUDE.md`](./CLAUDE.md) is the Claude Code adapter.
-
 ## Project policy
 
-The enforceable rules live in [`AGENTS.md`](./AGENTS.md). Skill files, scripts,
-CI, and agent instructions use English as their canonical language. Korean
-readers can use the conceptual
-[`docs/methodology.ko.md`](./docs/methodology.ko.md) guide instead of unstable
+[`AGENTS.md`](./AGENTS.md) is the shared constitution and routing source;
+detector-readable Hard Rules live in
+[`skills/principles/hard-rules.md`](./skills/principles/hard-rules.md), and
+[`CLAUDE.md`](./CLAUDE.md) is the Claude Code adapter.
+Skill files, scripts, CI, and agent instructions use English as their canonical
+language. Korean readers can use the conceptual
+[`docs/reference/methodology.ko.md`](./docs/reference/methodology.ko.md) guide instead of unstable
 per-skill translations.
 
 Compforge remains a frontend component-architecture methodology layer, not a
-model wrapper or general orchestration framework. See the
-[roadmap](./docs/roadmap.md) for 1.x maintenance and non-goals, the
-[support scope](./docs/support-scope.md) for what pinning `v1.0.0` promises,
+model wrapper or general orchestration framework. See
+[1.x direction](./docs/project/direction.md) for maintenance and non-goals, the
+[support scope](./docs/reference/support-scope.md) for the 1.x compatibility contract,
 and the [changelog](./CHANGELOG.md) for completed releases.
 
 ## License

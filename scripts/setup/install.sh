@@ -31,8 +31,8 @@ Usage:
   ./scripts/setup/install.sh [update] [--force] [--dry-run]
 
 Environment:
-  INSTALL_CLAUDE=1    Install Claude Code links even if ~/.claude is missing
-  INSTALL_CODEX=1     Install Codex links even if ~/.codex is missing
+  INSTALL_CLAUDE=0|1  Set 1 to install even when ~/.claude is missing
+  INSTALL_CODEX=0|1   Set 1 to install even when ~/.codex is missing
 USAGE
 }
 
@@ -59,6 +59,20 @@ parse_args() {
         ;;
     esac
     shift
+  done
+}
+
+validate_environment() {
+  local name value
+  for name in INSTALL_CLAUDE INSTALL_CODEX; do
+    value="${!name:-0}"
+    case "$value" in
+      0|1) ;;
+      *)
+        red "$name must be 0 or 1 (got: $value)"
+        exit 2
+        ;;
+    esac
   done
 }
 
@@ -112,13 +126,13 @@ link_path() {
 }
 
 do_install() {
-  if [ -d "$HOME/.claude" ] || [ -n "${INSTALL_CLAUDE:-}" ]; then
+  if [ -d "$HOME/.claude" ] || [ "${INSTALL_CLAUDE:-0}" = 1 ]; then
     cyan "--- Claude Code detected"
     link_path "$PACK_DIR/skills" "$HOME/.claude/skills/compforge"
     link_path "$PACK_DIR/commands" "$HOME/.claude/commands/compforge"
   fi
 
-  if [ -d "$HOME/.codex" ] || [ -n "${INSTALL_CODEX:-}" ]; then
+  if [ -d "$HOME/.codex" ] || [ "${INSTALL_CODEX:-0}" = 1 ]; then
     cyan "--- Codex CLI detected"
     link_path "$PACK_DIR/skills" "$HOME/.codex/skills/compforge"
   fi
@@ -126,6 +140,7 @@ do_install() {
 }
 
 parse_args "$@"
+validate_environment
 
 if [ "$MODE" = "update" ]; then
   cyan "==> Compforge update ($([ "$DRY_RUN" -eq 1 ] && echo dry-run || echo live))"

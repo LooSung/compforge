@@ -12,6 +12,7 @@ For `COMPFORGE_ACTIVATION_PROBE`, output `COMPFORGE_LOADED`, `Assumptions`, and
 
 Read and follow `../../../skills/SKILL.md`.
 
-Resolve every path in that file from the repository root containing
+Treat `../../../skills/` as the canonical skill root for paths such as
+`workflow/...` and `react/...`. Treat `{pack}` as the repository root containing
 `.cursor-plugin/plugin.json`. Load only the workflow and supporting skill files
 selected for the current request.

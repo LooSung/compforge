@@ -97,7 +97,7 @@ reference implementations, and CI-backed checks.
 
 Compforge stays narrow to go deep:
 
-1. TypeScript + React frontends (Vite; Next.js documented, example later).
+1. TypeScript + React frontends (Vite and Next.js, each with runnable examples).
 2. Feature folders or Feature-Sliced Design.
 3. State placement: query layer / URL / local / derived-at-render.
 4. Enforcement through review rules, examples, `compforge init`, and fitness functions.
@@ -131,12 +131,12 @@ Positioning claims should be supported by reproducible before/after runs using:
 Token usage and elapsed time may be recorded as context, but they are not the
 primary success metrics.
 
-The canonical experiment design lives in the [proof protocol](proof/README.md).
-What the published runs currently support, and nothing wider: *Compforge stops
-an agent from copying a codebase's bad patterns; it adds nothing to a codebase
-that already has good ones, and on a weaker model it reduces violations without
-preventing the core one.* Cite pairs in `docs/proof/results/`. This is not a
-percentage improvement claim.
+The canonical experiment design lives in the
+[proof protocol](../proof/README.md). What the published runs currently support,
+and nothing wider: *Compforge stops an agent from copying a codebase's bad
+patterns; it adds nothing to a codebase that already has good ones, and on a
+weaker model it reduces violations without preventing the core one.* Cite pairs
+in `docs/proof/results/`. This is not a percentage improvement claim.
 
 ## Messaging guardrails
 

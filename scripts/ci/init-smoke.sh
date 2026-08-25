@@ -89,6 +89,12 @@ smoke_one() {
   [ -f "$target/compforge-lock.json" ] || fail "$name: no compforge-lock.json delivered"
   grep -q "\"stack\": \"$want\"" "$target/compforge-lock.json" \
     || fail "$name: lock does not record stack $want"
+  python3 - "$target/compforge-lock.json" <<'PY' \
+    || fail "$name: lock advertises the unsupported standalone compforge CLI"
+import json, sys
+d = json.load(open(sys.argv[1]))
+raise SystemExit("verifyCommand" in d)
+PY
   if [ "$want" = "react-vite-fsd" ]; then
     [ -f "$target/eslint.compforge.config.js" ] \
       || fail "$name: FSD init did not deliver eslint.compforge.config.js"

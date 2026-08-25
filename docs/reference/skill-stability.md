@@ -1,8 +1,8 @@
 # Skill stability
 
-[`skills/stability.json`](../skills/stability.json) separates established skills
-from guidance that is still being explored. The registry also lets static checks
-catch missing or unlisted skill files.
+[`skills/stability.json`](../../skills/stability.json) separates established
+skills from guidance that is still being explored. The registry also lets static
+checks catch missing or unlisted skill files.
 
 For stable skills:
 

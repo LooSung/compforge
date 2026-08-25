@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check local Markdown links in git-tracked documentation."""
+"""Check local Markdown links in repository documentation."""
 
 from __future__ import annotations
 
@@ -104,9 +104,47 @@ def check_file(root: Path, source: Path) -> list[Finding]:
     return findings
 
 
-def tracked_markdown(root: Path) -> list[Path]:
+def check_docs_index(root: Path) -> list[Finding]:
+    docs = root / "docs"
+    index = docs / "README.md"
+    if not index.is_file():
+        return [Finding(index, 1, "docs/README.md", "missing docs index")]
+
+    indexed: set[Path] = set()
+    for _, line in without_fenced_code(index.read_text(encoding="utf-8")):
+        for match in LINK_RE.finditer(line):
+            parsed = local_target(match.group(1))
+            if parsed is None:
+                continue
+            target = resolve_target(root, index, parsed[0])
+            if target is not None:
+                indexed.add(target)
+
+    return [
+        Finding(
+            index,
+            1,
+            str(path.relative_to(root)),
+            "top-level document missing from docs index",
+        )
+        for path in sorted(docs.glob("*.md"))
+        if path != index
+        and path.resolve() not in indexed
+    ]
+
+
+def repository_markdown(root: Path) -> list[Path]:
     result = subprocess.run(
-        ["git", "ls-files", "-z", "--", "*.md"],
+        [
+            "git",
+            "ls-files",
+            "--cached",
+            "--others",
+            "--exclude-standard",
+            "-z",
+            "--",
+            "*.md",
+        ],
         cwd=root,
         check=True,
         capture_output=True,
@@ -119,9 +157,10 @@ def main() -> int:
     root = Path(__file__).resolve().parents[2]
     findings = [
         finding
-        for source in tracked_markdown(root)
+        for source in repository_markdown(root)
         for finding in check_file(root, source)
     ]
+    findings.extend(check_docs_index(root))
     if findings:
         for finding in findings:
             print(f"FAIL {finding.render(root)}")
