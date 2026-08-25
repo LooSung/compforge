@@ -35,32 +35,49 @@ link_codex_auth() {
 }
 
 validate_claude_candidate() {
-  local validation_dir
-  validation_dir="$(mktemp -d)"
-  TEMP_DIRS+=("$validation_dir")
+  local validation_dir="$1"
+  local probe_name="$2"
   mkdir -p "$validation_dir/.claude-plugin"
   cp "$PACK_DIR/.claude-plugin/plugin.json" \
     "$validation_dir/.claude-plugin/plugin.json"
   ln -s "$PACK_DIR/skills" "$validation_dir/skills"
-  ln -s "$PACK_DIR/commands" "$validation_dir/commands"
+  mkdir "$validation_dir/commands"
+  cp "$PACK_DIR/commands/"*.md "$validation_dir/commands/"
+  cat > "$validation_dir/commands/$probe_name.md" <<EOF
+---
+name: $probe_name
+description: Verify that this exact Compforge candidate plugin loaded.
+---
+
+Output exactly these four lines and stop:
+
+\`\`\`text
+COMPFORGE_PLUGIN_ROOT=\${CLAUDE_PLUGIN_ROOT}
+COMPFORGE_LOADED
+Assumptions
+Component Contract
+\`\`\`
+EOF
   claude plugin validate --strict "$validation_dir" >&2
 }
 
 live_claude() {
   require_command claude
-  validate_claude_candidate
-  claude --version >&2
-  local run_dir positive negative
+  local run_dir candidate_dir probe_name positive negative
   run_dir="$(mktemp -d)"
   TEMP_DIRS+=("$run_dir")
+  candidate_dir="$run_dir/candidate"
+  probe_name="harness-probe-$$-$RANDOM"
+  validate_claude_candidate "$candidate_dir" "$probe_name"
+  claude --version >&2
   positive="$run_dir/positive.txt"
   negative="$run_dir/negative.txt"
   (
     cd "$run_dir"
     probe_step "Claude session-plugin command positive"
-    run_timed claude --plugin-dir "$PACK_DIR" -p --no-session-persistence \
+    run_timed claude --plugin-dir "$candidate_dir" -p --no-session-persistence \
       --permission-mode plan --tools "" \
-      >"$positive" <<<"/compforge:harness-probe"
+      >"$positive" <<<"/compforge:$probe_name"
     probe_step "Claude safe-mode negative"
     run_timed claude --safe-mode -p --no-session-persistence \
       --permission-mode plan --tools "" >"$negative" <<<"$NEGATIVE_PROBE"
@@ -70,7 +87,7 @@ live_claude() {
     cp "$positive" "$COMPFORGE_HARNESS_OUT/claude-positive.txt"
     cp "$negative" "$COMPFORGE_HARNESS_OUT/claude-negative.txt"
   fi
-  assert_claude_candidate "$positive" "$PACK_DIR"
+  assert_claude_candidate "$positive" "$candidate_dir"
   assert_negative "$negative"
 }
 

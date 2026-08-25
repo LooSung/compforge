@@ -5,6 +5,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.2.2] — 2026-08-25
+
+### Fixed
+
+- The Claude Craft command now supports both session-plugin
+  `${CLAUDE_PLUGIN_ROOT}` resolution and the canonical
+  `~/.claude/skills/compforge` symlink install path.
+- Claude live smoke now generates a uniquely named temporary probe, preventing
+  a same-named command from an older global install from masking the candidate.
+
 ## [1.2.1] — 2026-08-25
 
 ### Added

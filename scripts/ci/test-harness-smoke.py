@@ -17,6 +17,18 @@ HARNESS = ROOT / "scripts/ci/harness-smoke.sh"
 
 
 class HarnessSmokeTests(unittest.TestCase):
+    def test_craft_command_supports_plugin_and_symlink_roots(self) -> None:
+        command = (ROOT / "commands/craft.md").read_text(encoding="utf-8")
+
+        self.assertIn(
+            "${CLAUDE_PLUGIN_ROOT}/skills/workflow/craft.md",
+            command,
+        )
+        self.assertIn(
+            "~/.claude/skills/compforge/workflow/craft.md",
+            command,
+        )
+
     def test_claude_manifest_uses_plugin_root_contract(self) -> None:
         manifest = json.loads(
             (ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8")
@@ -44,8 +56,8 @@ class HarnessSmokeTests(unittest.TestCase):
 
             self.assertEqual(0, result.returncode, f"{result.stderr}\n{log}")
             self.assertIn("plugin validate --strict", log)
-            self.assertIn(f"--plugin-dir {ROOT}", log)
-            self.assertIn("stdin=/compforge:harness-probe", log)
+            self.assertIn("--plugin-dir ", log)
+            self.assertRegex(log, r"stdin=/compforge:harness-probe-\d+-\d+")
             for link, target in expected.items():
                 self.assertEqual(str(target), os.readlink(link))
 
@@ -59,8 +71,8 @@ class HarnessSmokeTests(unittest.TestCase):
 
             self.assertEqual(0, result.returncode, f"{result.stderr}\n{log}")
             self.assertIn("plugin validate --strict", log)
-            self.assertIn(f"--plugin-dir {ROOT}", log)
-            self.assertIn("stdin=/compforge:harness-probe", log)
+            self.assertIn("--plugin-dir ", log)
+            self.assertRegex(log, r"stdin=/compforge:harness-probe-\d+-\d+")
             self.assertFalse((home / ".claude/skills/compforge").exists())
             self.assertFalse((home / ".claude/commands/compforge").exists())
             self.assertFalse((home / ".codex/skills/compforge").exists())
@@ -105,7 +117,16 @@ class HarnessSmokeTests(unittest.TestCase):
                   *" --plugin-dir "*)
                     prompt="$(cat)"
                     printf 'stdin=%s\n' "$prompt" >> "$FAKE_CLAUDE_LOG"
-                    printf 'COMPFORGE_PLUGIN_ROOT=%s\n' "$EXPECTED_PLUGIN_ROOT"
+                    plugin_root=""
+                    previous=""
+                    for argument in "$@"; do
+                      if [ "$previous" = "--plugin-dir" ]; then
+                        plugin_root="$argument"
+                        break
+                      fi
+                      previous="$argument"
+                    done
+                    printf 'COMPFORGE_PLUGIN_ROOT=%s\n' "$plugin_root"
                     printf 'COMPFORGE_LOADED\nAssumptions\nComponent Contract\n'
                     ;;
                   *)
@@ -124,7 +145,6 @@ class HarnessSmokeTests(unittest.TestCase):
             {
                 "COMPFORGE_HARNESS_TIMEOUT": "10",
                 "EXPECTED_LINKS": str(expected_file),
-                "EXPECTED_PLUGIN_ROOT": str(ROOT),
                 "FAKE_CLAUDE_LOG": str(log),
                 "HOME": str(home),
                 "PATH": f"{bin_dir}{os.pathsep}{env['PATH']}",

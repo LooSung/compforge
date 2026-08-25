@@ -71,7 +71,6 @@ def check_stability(root: Path) -> None:
 def check_required_paths(root: Path) -> None:
     required = [
         "commands/craft.md",
-        "commands/harness-probe.md",
         "skills/workflow/craft.md",
         "skills/principles/hard-rules.md",
         ".cursor-plugin/skills/compforge/SKILL.md",
@@ -95,18 +94,11 @@ def check_required_paths(root: Path) -> None:
         if "COMPFORGE_ACTIVATION_PROBE" not in (root / relative).read_text():
             raise SystemExit(f"missing activation probe: {relative}")
 
-    probe_command = root / "commands/harness-probe.md"
-    probe_text = probe_command.read_text()
-    if (
-        "COMPFORGE_LOADED" not in probe_text
-        or "COMPFORGE_PLUGIN_ROOT=${CLAUDE_PLUGIN_ROOT}" not in probe_text
-    ):
-        raise SystemExit("missing Claude session-plugin probe output")
-
     craft_command = (root / "commands/craft.md").read_text()
     expected_root = "${CLAUDE_PLUGIN_ROOT}/skills/workflow/craft.md"
-    if expected_root not in craft_command:
-        raise SystemExit("Claude Craft command does not resolve from plugin root")
+    expected_link = "~/.claude/skills/compforge/workflow/craft.md"
+    if expected_root not in craft_command or expected_link not in craft_command:
+        raise SystemExit("Claude Craft command does not support both load paths")
 
 
 def main() -> None:

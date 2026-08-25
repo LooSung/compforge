@@ -40,9 +40,10 @@ Maintainers can run `scripts/ci/harness-smoke.sh live <harness>` with their own
 local CLI authentication. A positive run must report `COMPFORGE_LOADED`, and an
 isolated negative control must report `COMPFORGE_NOT_LOADED`. Cursor slash with
 `--plugin-dir` must enter Craft. Claude loads the candidate checkout with a
-session-only `--plugin-dir` and verifies the plugin root reported by its harness
-command; it never rewrites installed Claude or Codex links. Codex uses an
-isolated temporary `CODEX_HOME`. Cursor's isolated live probe reuses its OS
+session-only `--plugin-dir` and verifies the plugin root reported by a uniquely
+named temporary command, so an older installed command cannot satisfy the
+candidate check. It never rewrites installed Claude or Codex links. Codex uses
+an isolated temporary `CODEX_HOME`. Cursor's isolated live probe reuses its OS
 credential-store token through sanitized login metadata, or a local
 `CURSOR_API_KEY` when present. No provider credential is stored in the
 repository.

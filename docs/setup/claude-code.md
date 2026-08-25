@@ -61,9 +61,10 @@ or Codex links:
 
 The check first runs Claude's strict validator against an isolated view of the
 candidate package. The positive probe then loads this checkout for one session
-with `--plugin-dir` and invokes a harness command that reports the resolved
-plugin root. The negative probe uses Claude safe mode. Both probes leave
-`~/.claude` and `~/.codex` links unchanged.
+with `--plugin-dir` and invokes a uniquely named temporary command that reports
+the resolved plugin root. The unique name prevents an older installed command
+from satisfying the candidate check. The negative probe uses Claude safe mode.
+Both probes leave `~/.claude` and `~/.codex` links unchanged.
 
 ## Reference example
 
