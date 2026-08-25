@@ -23,7 +23,7 @@
     "interface": {
         "displayName": "Compforge",
         "shortDescription": "Frontend component discipline for coding agents",
-        "longDescription": "Use Compforge to guide Codex through Discovery, Design, Skeleton, and Implement workflows with component boundaries, state placement rules, and TypeScript-strict frontend architecture.",
+        "longDescription": "Use Compforge craft, refactor, or consult to guide Codex through TypeScript + React frontend work with component boundaries, state placement, and a staged delivery workflow.",
         "developerName": "Mr.Louis",
         "category": "Coding",
         "capabilities": [
@@ -32,8 +32,8 @@
             "Write"
         ],
         "defaultPrompt": [
-            "React로 Todo 기능을 Compforge 규칙에 맞춰 설계해줘.",
-            "새 화면을 Discovery 단계부터 시작해줘."
+            "Use Compforge craft: React로 Todo 기능을 Compforge 규칙에 맞춰 설계해줘.",
+            "Use Compforge consult: 이 화면의 상태 배치를 리뷰해줘."
         ],
         "websiteURL": "https://github.com/LooSung/compforge",
         "brandColor": "#0EA5E9",

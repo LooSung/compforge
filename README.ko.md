@@ -55,9 +55,9 @@ Compforge 팩은 `~/.compforge`에 있고 앱 코드는 **프론트엔드 저장
 cd /path/to/your-frontend-project
 ```
 
-### 4. Craft를 로드하고 한 번 요청
+### 4. Compforge를 로드하고 한 번 요청
 
-| 하네스 | Craft 로드와 호출 |
+| 하네스 | 로드와 호출 |
 |---|---|
 | **Claude Code** | Claude Code 재시작 후 `/compforge:craft <요청>` |
 | **Codex CLI** | Codex 재시작 후 `/skills`에서 **compforge**를 고르고 `/` 없이 요청 |
@@ -67,21 +67,24 @@ Claude Code:
 
 ```text
 /compforge:craft 장바구니 아이템에 수량 조절 스테퍼 추가해줘
+/compforge:refactor 장바구니 페이지를 동작 보존으로 쪼개줘
+/compforge:consult 장바구니 상태 배치를 리뷰해줘
 ```
 
 Codex CLI:
 
 ```text
 Use Compforge craft: 장바구니 아이템에 수량 조절 스테퍼 추가해줘
+Use Compforge refactor: 장바구니 페이지를 동작 보존으로 쪼개줘
+Use Compforge consult: 장바구니 상태 배치를 리뷰해줘
 ```
 
 Cursor는 `install.sh`가 설정하지 않습니다.
 [Cursor 설정](docs/setup/cursor.md)에서 로컬 플러그인 또는 프로젝트 스킬 경로를
 선택하세요.
 
-새 실행 작업에서 Craft가 로드되면 가장 작은 경로를 고르고 UI 로직 전에
-Assumptions와 Component Contract를 제시합니다. 자문 요청은 구현하지 않고
-경로만 추천합니다. 설정 상세:
+Craft가 기본입니다. UI 로직 전에 Assumptions와 Component Contract를 제시합니다.
+인가가 맞으면 Refactor나 Consult를 쓰세요. 설정 상세:
 [Claude Code](docs/setup/claude-code.md) · [Codex](docs/setup/codex.md) ·
 [Cursor](docs/setup/cursor.md).
 

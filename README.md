@@ -55,9 +55,9 @@ Always start the agent from that project:
 cd /path/to/your-frontend-project
 ```
 
-### 4. Load Craft and make one request
+### 4. Load Compforge and make one request
 
-| Harness | Load and invoke Craft |
+| Harness | Load and invoke |
 |---|---|
 | **Claude Code** | Restart Claude Code, then `/compforge:craft <request>` |
 | **Codex CLI** | Restart Codex, use `/skills` to select **compforge**, then prompt without a leading `/` |
@@ -67,20 +67,23 @@ Claude Code:
 
 ```text
 /compforge:craft Add a quantity stepper to the cart item
+/compforge:refactor Split the cart page without changing behavior
+/compforge:consult Review the cart state placement
 ```
 
 Codex CLI:
 
 ```text
 Use Compforge craft: Add a quantity stepper to the cart item
+Use Compforge refactor: Split the cart page without changing behavior
+Use Compforge consult: Review the cart state placement
 ```
 
 Cursor is not configured by `install.sh`; follow the
 [Cursor setup](docs/setup/cursor.md) for the local-plugin or project-skill path.
 
-For a fresh execution task, a loaded Craft flow identifies the smallest path
-and surfaces Assumptions and a Component Contract before UI logic. Advisory
-requests recommend a path without implementing. Exact setup:
+Craft is the default. It surfaces Assumptions and a Component Contract before
+UI logic. Use Refactor or Consult when their authorization fits. Exact setup:
 [Claude Code](docs/setup/claude-code.md) · [Codex](docs/setup/codex.md) ·
 [Cursor](docs/setup/cursor.md).
 

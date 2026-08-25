@@ -5,6 +5,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+### Changed
+
+- README quickstart now shows `craft`, `refactor`, and `consult` before the
+  optional init step.
+
 ## [1.3.0] — 2026-08-25
 
 Public command surface. Craft stays the default entry point. Refactor and
