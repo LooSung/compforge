@@ -64,8 +64,11 @@ or Codex links:
 The check first runs Claude's strict validator against an isolated view of the
 candidate package. The positive probe then loads this checkout for one session
 with `--plugin-dir` and invokes a uniquely named temporary command that reports
-the resolved plugin root. The unique name prevents an older installed command
-from satisfying the candidate check. The negative probe uses Claude safe mode.
+the resolved plugin root, then `/compforge:refactor` and `/compforge:consult`
+activation probes. Positive probes use `--permission-mode dontAsk` because
+Claude plan mode refused the activation token. The unique name prevents an
+older installed command from satisfying the candidate check. The negative probe
+uses Claude safe mode.
 Both probes leave `~/.claude` and `~/.codex` links unchanged.
 
 ## Reference example

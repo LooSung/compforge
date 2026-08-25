@@ -58,6 +58,8 @@ class HarnessSmokeTests(unittest.TestCase):
             self.assertIn("plugin validate --strict", log)
             self.assertIn("--plugin-dir ", log)
             self.assertRegex(log, r"stdin=/compforge:harness-probe-\d+-\d+")
+            self.assertIn("stdin=/compforge:refactor COMPFORGE_ACTIVATION_PROBE", log)
+            self.assertIn("stdin=/compforge:consult COMPFORGE_ACTIVATION_PROBE", log)
             for link, target in expected.items():
                 self.assertEqual(str(target), os.readlink(link))
 
@@ -73,6 +75,8 @@ class HarnessSmokeTests(unittest.TestCase):
             self.assertIn("plugin validate --strict", log)
             self.assertIn("--plugin-dir ", log)
             self.assertRegex(log, r"stdin=/compforge:harness-probe-\d+-\d+")
+            self.assertIn("stdin=/compforge:refactor COMPFORGE_ACTIVATION_PROBE", log)
+            self.assertIn("stdin=/compforge:consult COMPFORGE_ACTIVATION_PROBE", log)
             self.assertFalse((home / ".claude/skills/compforge").exists())
             self.assertFalse((home / ".claude/commands/compforge").exists())
             self.assertFalse((home / ".codex/skills/compforge").exists())

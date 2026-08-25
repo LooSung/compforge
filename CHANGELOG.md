@@ -10,12 +10,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 - Public `refactor` and `consult` commands. Craft stays the default entry
   point. Refactor preserves behavior; Consult does not change implementation
   code. There is no public `test` command.
+- Live harness probes now activate `refactor` and `consult` on Claude, Codex,
+  and Cursor in addition to Craft.
 
 ### Changed
 
 - The Test workflow now defaults to hook and DOM component tests. Playwright
   E2E is not part of the default surface; live API wiring is a manual
   connected check.
+- Claude live positive probes use `--permission-mode dontAsk`. Plan mode
+  refused the activation token as an injection.
 
 ## [1.2.2] — 2026-08-25
 

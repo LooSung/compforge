@@ -76,8 +76,14 @@ live_claude() {
     cd "$run_dir"
     probe_step "Claude session-plugin command positive"
     run_timed claude --plugin-dir "$candidate_dir" -p --no-session-persistence \
-      --permission-mode plan --tools "" \
+      --permission-mode dontAsk --tools "" \
       >"$positive" <<<"/compforge:$probe_name"
+    for name in refactor consult; do
+      probe_step "Claude $name command positive"
+      run_timed claude --plugin-dir "$candidate_dir" -p --no-session-persistence \
+        --permission-mode dontAsk --tools "" \
+        >"$run_dir/claude-$name.txt" <<<"/compforge:$name $ACTIVATION_TOKEN"
+    done
     probe_step "Claude safe-mode negative"
     run_timed claude --safe-mode -p --no-session-persistence \
       --permission-mode plan --tools "" >"$negative" <<<"$NEGATIVE_PROBE"
@@ -86,8 +92,12 @@ live_claude() {
     mkdir -p "$COMPFORGE_HARNESS_OUT"
     cp "$positive" "$COMPFORGE_HARNESS_OUT/claude-positive.txt"
     cp "$negative" "$COMPFORGE_HARNESS_OUT/claude-negative.txt"
+    cp "$run_dir/claude-refactor.txt" "$COMPFORGE_HARNESS_OUT/claude-refactor.txt"
+    cp "$run_dir/claude-consult.txt" "$COMPFORGE_HARNESS_OUT/claude-consult.txt"
   fi
   assert_claude_candidate "$positive" "$candidate_dir"
+  assert_positive "$run_dir/claude-refactor.txt"
+  assert_positive "$run_dir/claude-consult.txt"
   assert_negative "$negative"
 }
 
@@ -110,6 +120,12 @@ live_codex() {
   CODEX_HOME="$positive_home" run_timed codex exec --skip-git-repo-check \
     --ignore-user-config --ephemeral --sandbox read-only -C "$workspace" \
     -o "$positive" "Use Compforge craft: $NEGATIVE_PROBE"
+  for name in refactor consult; do
+    probe_step "Codex $name positive"
+    CODEX_HOME="$positive_home" run_timed codex exec --skip-git-repo-check \
+      --ignore-user-config --ephemeral --sandbox read-only -C "$workspace" \
+      -o "$run_dir/codex-$name.txt" "Use Compforge $name: $NEGATIVE_PROBE"
+  done
   probe_step "Codex isolated negative"
   CODEX_HOME="$negative_home" run_timed codex exec --skip-git-repo-check \
     --ignore-user-config --ephemeral --sandbox read-only -C "$workspace" \
@@ -118,8 +134,12 @@ live_codex() {
     mkdir -p "$COMPFORGE_HARNESS_OUT"
     cp "$positive" "$COMPFORGE_HARNESS_OUT/codex-positive.txt"
     cp "$negative" "$COMPFORGE_HARNESS_OUT/codex-negative.txt"
+    cp "$run_dir/codex-refactor.txt" "$COMPFORGE_HARNESS_OUT/codex-refactor.txt"
+    cp "$run_dir/codex-consult.txt" "$COMPFORGE_HARNESS_OUT/codex-consult.txt"
   fi
   assert_positive "$positive"
+  assert_positive "$run_dir/codex-refactor.txt"
+  assert_positive "$run_dir/codex-consult.txt"
   assert_negative "$negative"
 }
 
@@ -174,6 +194,12 @@ live_cursor() {
   probe_step "Cursor explicit-plugin positive"
   run_cursor "$plugin_workspace" "$plugin_output" \
     "Use Compforge craft: $NEGATIVE_PROBE" --plugin-dir "$PACK_DIR"
+  for name in refactor consult; do
+    probe_step "Cursor $name positive"
+    mkdir -p "$run_dir/$name"
+    run_cursor "$run_dir/$name" "$run_dir/cursor-$name.txt" \
+      "Use Compforge $name: $NEGATIVE_PROBE" --plugin-dir "$PACK_DIR"
+  done
   ln -s "$PACK_DIR/skills" "$local_workspace/.cursor/skills/compforge"
   probe_step "Cursor project-local positive"
   run_cursor "$local_workspace" "$local_output" \
@@ -189,8 +215,12 @@ live_cursor() {
     cp "$local_output" "$COMPFORGE_HARNESS_OUT/cursor-project-local.txt"
     cp "$negative_output" "$COMPFORGE_HARNESS_OUT/cursor-negative.txt"
     cp "$slash_output" "$COMPFORGE_HARNESS_OUT/cursor-slash.txt"
+    cp "$run_dir/cursor-refactor.txt" "$COMPFORGE_HARNESS_OUT/cursor-refactor.txt"
+    cp "$run_dir/cursor-consult.txt" "$COMPFORGE_HARNESS_OUT/cursor-consult.txt"
   fi
   assert_positive "$plugin_output"
+  assert_positive "$run_dir/cursor-refactor.txt"
+  assert_positive "$run_dir/cursor-consult.txt"
   assert_positive "$local_output"
   assert_negative "$negative_output"
   report_slash "$slash_output"
