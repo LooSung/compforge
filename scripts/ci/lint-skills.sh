@@ -113,17 +113,20 @@ codex = json.loads((root / ".codex-plugin/plugin.json").read_text())
 cursor = json.loads((root / ".cursor-plugin/plugin.json").read_text())
 
 components = [
-    ("Claude skills", claude["skills"]["directory"], "../skills", root / ".claude-plugin"),
-    ("Claude commands", claude["commands"]["directory"], "../commands", root / ".claude-plugin"),
-    ("Codex skills", codex["skills"], "./skills/", root),
-    ("Cursor skills", cursor["skills"], "./.cursor-plugin/skills/", root),
-    ("Cursor commands", cursor["commands"], "./commands/", root),
+    ("Claude skills", claude["skills"], ["./skills/"], root),
+    ("Claude commands", claude["commands"], ["./commands/"], root),
+    ("Codex skills", [codex["skills"]], ["./skills/"], root),
+    ("Cursor skills", [cursor["skills"]], ["./.cursor-plugin/skills/"], root),
+    ("Cursor commands", [cursor["commands"]], ["./commands/"], root),
 ]
+if not isinstance(claude.get("repository"), str):
+    raise SystemExit("Claude repository must be a string")
 for label, actual, expected, base in components:
     if actual != expected:
         raise SystemExit(f"{label}: expected {expected!r}, got {actual!r}")
-    if not (base / actual).is_dir():
-        raise SystemExit(f"{label}: missing directory {(base / actual).resolve()}")
+    for relative in actual:
+        if not (base / relative).is_dir():
+            raise SystemExit(f"{label}: missing directory {(base / relative).resolve()}")
 PY
   then
     ok "plugin manifest component paths"

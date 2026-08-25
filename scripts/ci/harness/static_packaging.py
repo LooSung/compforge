@@ -8,16 +8,16 @@ from pathlib import Path
 import sys
 
 
-def manifest_components(root: Path) -> list[tuple[str, str, str, Path]]:
+def manifest_components(root: Path) -> list[tuple[str, list[str], list[str], Path]]:
     claude = json.loads((root / ".claude-plugin/plugin.json").read_text())
     codex = json.loads((root / ".codex-plugin/plugin.json").read_text())
     cursor = json.loads((root / ".cursor-plugin/plugin.json").read_text())
     return [
-        ("Claude skills", claude["skills"]["directory"], "../skills", root / ".claude-plugin"),
-        ("Claude commands", claude["commands"]["directory"], "../commands", root / ".claude-plugin"),
-        ("Codex skills", codex["skills"], "./skills/", root),
-        ("Cursor skills", cursor["skills"], "./.cursor-plugin/skills/", root),
-        ("Cursor commands", cursor["commands"], "./commands/", root),
+        ("Claude skills", claude["skills"], ["./skills/"], root),
+        ("Claude commands", claude["commands"], ["./commands/"], root),
+        ("Codex skills", [codex["skills"]], ["./skills/"], root),
+        ("Cursor skills", [cursor["skills"]], ["./.cursor-plugin/skills/"], root),
+        ("Cursor commands", [cursor["commands"]], ["./commands/"], root),
     ]
 
 
@@ -31,11 +31,18 @@ def check_manifests(root: Path) -> None:
     if len(versions) != 1:
         raise SystemExit("manifest versions differ")
 
+    claude = json.loads(paths[0].read_text())
+    if not isinstance(claude.get("repository"), str):
+        raise SystemExit("Claude repository must be a string")
+
     for label, actual, expected, base in manifest_components(root):
         if actual != expected:
             raise SystemExit(f"{label}: expected {expected!r}, got {actual!r}")
-        if not (base / actual).is_dir():
-            raise SystemExit(f"{label}: missing directory {(base / actual).resolve()}")
+        for relative in actual:
+            if not (base / relative).is_dir():
+                raise SystemExit(
+                    f"{label}: missing directory {(base / relative).resolve()}"
+                )
 
 
 def check_stability(root: Path) -> None:
@@ -64,10 +71,12 @@ def check_stability(root: Path) -> None:
 def check_required_paths(root: Path) -> None:
     required = [
         "commands/craft.md",
+        "commands/harness-probe.md",
         "skills/workflow/craft.md",
         "skills/principles/hard-rules.md",
         ".cursor-plugin/skills/compforge/SKILL.md",
         "scripts/ci/harness/probes.sh",
+        "scripts/ci/test-harness-smoke.py",
         "docs/reference/support-scope.md",
         "docs/reference/path-convention.md",
         "docs/setup/cursor.md",
@@ -85,6 +94,19 @@ def check_required_paths(root: Path) -> None:
     ):
         if "COMPFORGE_ACTIVATION_PROBE" not in (root / relative).read_text():
             raise SystemExit(f"missing activation probe: {relative}")
+
+    probe_command = root / "commands/harness-probe.md"
+    probe_text = probe_command.read_text()
+    if (
+        "COMPFORGE_LOADED" not in probe_text
+        or "COMPFORGE_PLUGIN_ROOT=${CLAUDE_PLUGIN_ROOT}" not in probe_text
+    ):
+        raise SystemExit("missing Claude session-plugin probe output")
+
+    craft_command = (root / "commands/craft.md").read_text()
+    expected_root = "${CLAUDE_PLUGIN_ROOT}/skills/workflow/craft.md"
+    if expected_root not in craft_command:
+        raise SystemExit("Claude Craft command does not resolve from plugin root")
 
 
 def main() -> None:

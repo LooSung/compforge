@@ -14,7 +14,7 @@ Component Contract
 
 Read and execute:
 
-`{pack}/skills/workflow/craft.md`
+`${CLAUDE_PLUGIN_ROOT}/skills/workflow/craft.md`
 
 User request:
 

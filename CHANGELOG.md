@@ -5,6 +5,21 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.2.1] — 2026-08-25
+
+### Added
+
+- A credential-free regression test proves Claude candidate activation never
+  creates or rewrites installed Claude or Codex links.
+
+### Fixed
+
+- Claude plugin metadata now follows the current manifest schema, and the Craft
+  command resolves its workflow through `${CLAUDE_PLUGIN_ROOT}`.
+- Claude live smoke loads the current checkout with session-only `--plugin-dir`
+  and verifies its reported plugin root instead of temporarily rebinding global
+  links.
+
 ## [1.2.0] — 2026-08-25
 
 ### Added

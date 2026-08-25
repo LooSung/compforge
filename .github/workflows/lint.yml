@@ -40,6 +40,8 @@ jobs:
         run: python3 scripts/ci/test-run-with-timeout.py
       - name: Static harness packaging
         run: ./scripts/ci/harness-smoke.sh static
+      - name: Self-test harness activation isolation
+        run: python3 scripts/ci/test-harness-smoke.py
       - name: Self-test proof tooling
         run: |
           python3 scripts/proof/test-evaluate-run.py

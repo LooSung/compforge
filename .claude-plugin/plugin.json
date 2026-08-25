@@ -1,6 +1,6 @@
 {
     "name": "compforge",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "TypeScript + React 컴포넌트 아키텍처, 상태 배치, 엄격한 타입 규율을 위한 방법론 팩.",
     "author": {
         "name": "Mr.Louis",
@@ -8,10 +8,7 @@
     },
     "license": "MIT",
     "homepage": "https://github.com/LooSung/compforge",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/LooSung/compforge.git"
-    },
+    "repository": "https://github.com/LooSung/compforge",
     "keywords": [
         "react",
         "typescript",
@@ -22,10 +19,10 @@
         "korean",
         "methodology"
     ],
-    "skills": {
-        "directory": "../skills"
-    },
-    "commands": {
-        "directory": "../commands"
-    }
+    "skills": [
+        "./skills/"
+    ],
+    "commands": [
+        "./commands/"
+    ]
 }

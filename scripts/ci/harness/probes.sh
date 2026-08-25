@@ -1,19 +1,7 @@
-# Shared link lifecycle and activation assertions for harness smoke tests.
-
-restore_links() {
-  local entry path target
-  set +u
-  for entry in "${SAVED_LINKS[@]}"; do
-    path="${entry%%=*}"
-    target="${entry#*=}"
-    ln -sfn "$target" "$path"
-  done
-  set -u
-}
+# Shared activation assertions for harness smoke tests.
 
 cleanup() {
   local path
-  restore_links
   set +u
   for path in "${TEMP_DIRS[@]}"; do
     rm -rf "$path"
@@ -26,32 +14,6 @@ require_command() {
     red "FAIL missing command: $1"
     exit 1
   }
-}
-
-require_link_target() {
-  local link="$1"
-  local expected="$2"
-  if [ ! -L "$link" ] || [ "$(readlink "$link")" != "$expected" ]; then
-    red "FAIL expected link: $link -> $expected"
-    exit 1
-  fi
-}
-
-save_link() {
-  local path="$1"
-  if [ -L "$path" ]; then
-    SAVED_LINKS+=("$path=$(readlink "$path")")
-  fi
-}
-
-bind_pack_links() {
-  mkdir -p "$HOME/.claude/skills" "$HOME/.claude/commands" "$HOME/.codex/skills"
-  save_link "$HOME/.claude/skills/compforge"
-  save_link "$HOME/.claude/commands/compforge"
-  save_link "$HOME/.codex/skills/compforge"
-  ln -sfn "$PACK_DIR/skills" "$HOME/.claude/skills/compforge"
-  ln -sfn "$PACK_DIR/commands" "$HOME/.claude/commands/compforge"
-  ln -sfn "$PACK_DIR/skills" "$HOME/.codex/skills/compforge"
 }
 
 run_timed() {
@@ -81,6 +43,18 @@ assert_positive() {
     return 1
   fi
   green "PASS positive activation probe"
+}
+
+assert_claude_candidate() {
+  local output="$1"
+  local expected_root="$2"
+  assert_positive "$output" || return 1
+  grep -Fxq "COMPFORGE_PLUGIN_ROOT=$expected_root" "$output" ||
+    {
+      probe_failure "Claude probe did not load the candidate plugin root" "$output"
+      return 1
+    }
+  green "PASS Claude candidate plugin root"
 }
 
 assert_negative() {

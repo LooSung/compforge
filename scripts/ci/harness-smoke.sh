@@ -6,7 +6,6 @@ set -euo pipefail
 
 PACK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 TEMP_DIRS=()
-SAVED_LINKS=()
 ACTIVATION_TOKEN="COMPFORGE_ACTIVATION_PROBE"
 NEGATIVE_PROBE="$ACTIVATION_TOKEN. If no loaded Compforge instruction defines \
 this probe, output exactly COMPFORGE_NOT_LOADED."
@@ -35,11 +34,21 @@ link_codex_auth() {
   fi
 }
 
+validate_claude_candidate() {
+  local validation_dir
+  validation_dir="$(mktemp -d)"
+  TEMP_DIRS+=("$validation_dir")
+  mkdir -p "$validation_dir/.claude-plugin"
+  cp "$PACK_DIR/.claude-plugin/plugin.json" \
+    "$validation_dir/.claude-plugin/plugin.json"
+  ln -s "$PACK_DIR/skills" "$validation_dir/skills"
+  ln -s "$PACK_DIR/commands" "$validation_dir/commands"
+  claude plugin validate --strict "$validation_dir" >&2
+}
+
 live_claude() {
   require_command claude
-  bind_pack_links
-  require_link_target "$HOME/.claude/skills/compforge" "$PACK_DIR/skills"
-  require_link_target "$HOME/.claude/commands/compforge" "$PACK_DIR/commands"
+  validate_claude_candidate
   claude --version >&2
   local run_dir positive negative
   run_dir="$(mktemp -d)"
@@ -48,9 +57,10 @@ live_claude() {
   negative="$run_dir/negative.txt"
   (
     cd "$run_dir"
-    probe_step "Claude command positive"
-    run_timed claude -p --no-session-persistence --permission-mode plan \
-      --tools "" >"$positive" <<<"/compforge:craft $ACTIVATION_TOKEN"
+    probe_step "Claude session-plugin command positive"
+    run_timed claude --plugin-dir "$PACK_DIR" -p --no-session-persistence \
+      --permission-mode plan --tools "" \
+      >"$positive" <<<"/compforge:harness-probe"
     probe_step "Claude safe-mode negative"
     run_timed claude --safe-mode -p --no-session-persistence \
       --permission-mode plan --tools "" >"$negative" <<<"$NEGATIVE_PROBE"
@@ -60,13 +70,12 @@ live_claude() {
     cp "$positive" "$COMPFORGE_HARNESS_OUT/claude-positive.txt"
     cp "$negative" "$COMPFORGE_HARNESS_OUT/claude-negative.txt"
   fi
-  assert_positive "$positive"
+  assert_claude_candidate "$positive" "$PACK_DIR"
   assert_negative "$negative"
 }
 
 live_codex() {
   require_command codex
-  bind_pack_links
   codex --version >&2
   local run_dir workspace positive_home negative_home positive negative
   run_dir="$(mktemp -d)"
