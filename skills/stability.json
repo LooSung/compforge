@@ -25,6 +25,7 @@
   "experimental": [
     "skills/antipatterns/god-component.md",
     "skills/antipatterns/prop-drilling.md",
-    "skills/antipatterns/useeffect-abuse.md"
+    "skills/antipatterns/useeffect-abuse.md",
+    "skills/workflow/consult.md"
   ]
 }

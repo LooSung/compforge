@@ -17,17 +17,17 @@ HARNESS = ROOT / "scripts/ci/harness-smoke.sh"
 
 
 class HarnessSmokeTests(unittest.TestCase):
-    def test_craft_command_supports_plugin_and_symlink_roots(self) -> None:
-        command = (ROOT / "commands/craft.md").read_text(encoding="utf-8")
-
-        self.assertIn(
-            "${CLAUDE_PLUGIN_ROOT}/skills/workflow/craft.md",
-            command,
-        )
-        self.assertIn(
-            "~/.claude/skills/compforge/workflow/craft.md",
-            command,
-        )
+    def test_public_commands_support_plugin_and_symlink_roots(self) -> None:
+        expected_root = "${CLAUDE_PLUGIN_ROOT}/skills/workflow"
+        expected_link = "~/.claude/skills/compforge/workflow"
+        for name in ("craft", "refactor", "consult"):
+            command = (ROOT / f"commands/{name}.md").read_text(encoding="utf-8")
+            self.assertIn(f"{expected_root}/{name}.md", command)
+            self.assertIn(f"{expected_link}/{name}.md", command)
+            self.assertIn("COMPFORGE_ACTIVATION_PROBE", command)
+        refactor = (ROOT / "commands/refactor.md").read_text(encoding="utf-8")
+        self.assertIn(f"{expected_root}/craft.md", refactor)
+        self.assertIn(f"{expected_link}/craft.md", refactor)
 
     def test_claude_manifest_uses_plugin_root_contract(self) -> None:
         manifest = json.loads(

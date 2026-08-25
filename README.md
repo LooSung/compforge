@@ -105,10 +105,24 @@ negative self-test. To re-run that proof later:
 The pointer does not copy Hard Rules that would go stale. Delivery details and
 self-test behavior live in [`templates/README.md`](./templates/README.md).
 
+## Public commands
+
+Craft is the default. Refactor and Consult exist because their authorization
+differs. There is no public `test` command.
+
+| Command | Use it when | Must not |
+|---|---|---|
+| `craft` | Implement or select the smallest frontend path | Skip required stages or broaden scope silently |
+| `refactor` | Improve structure while preserving behavior | Add features or change visible UI behavior |
+| `consult` | Ask, compare, review, or write one planning document | Change production, test, config, or CI code |
+
+Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`.
+Codex and Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`.
+
 ## The Basic Workflow
 
-Craft is the single entry point. It selects a focused path for small changes and
-preserves the full sequence for a new feature area or large screen:
+Craft selects a focused path for small changes and preserves the full sequence
+for a new feature area or large screen:
 
 ```text
 Discovery → Design → Delivery Plan → Skeleton → Implement → Test
@@ -251,7 +265,7 @@ Cursor and project-local removal steps live in
 ## What's included
 
 - `skills/` — workflow, React, stack, skeleton, playbooks, and review instructions
-- `commands/` — Claude Code command entry point
+- `commands/` — Claude Code command entry points (`craft`, `refactor`, `consult`)
 - `examples/` — three runnable TypeScript + React todo references
 - `docs/` — harness guides, proof protocol, 1.x direction, support scope, verification
 - `scripts/` — setup, init, lint, proof runner, and smoke tests

@@ -1,6 +1,6 @@
 ---
 name: compforge
-description: Use Compforge when building or changing a frontend app, screen, component, or UI feature in TypeScript + React — including vague build prompts like "make a todo app" or "add a settings page" — and for component architecture, state placement (server/client/URL), custom hooks, feature-sliced structure, or the /compforge:craft workflow prompt.
+description: Use Compforge when building, refactoring, or consulting on a TypeScript + React frontend — including vague build prompts like "make a todo app" or "add a settings page" — and for component architecture, state placement (server/client/URL), custom hooks, feature-sliced structure, or the /compforge:craft, /compforge:refactor, and /compforge:consult workflow prompts.
 license: MIT
 compatibility: Claude Code, Codex CLI, Cursor Agent, and Agent Skills-compatible clients with access to the complete Compforge pack.
 stability: stable
@@ -27,13 +27,14 @@ One thing to remember before any frontend change: **decide what not to write, th
 
 ## Command Routing
 
-Treat **`/compforge:craft`** as the Compforge user entry point on **Claude Code** (installed slash command).
+Treat **`/compforge:craft`** as the default Compforge entry point on **Claude Code**. Use **`/compforge:refactor`** for explicit behavior-preserving cleanup and **`/compforge:consult`** for advice, proposals, review, or explicit planning documents without implementation changes.
 
-On **Codex CLI**, do not type `/compforge:craft` at the composer — Codex reserves `/` for built-in commands. Use `/skills` → **compforge**, then `craft: …` (no leading `/`).
+On **Codex CLI**, do not type Compforge `/` commands at the composer — Codex reserves `/` for built-in commands. Use `/skills` → **compforge**, then `craft: …`, `refactor: …`, or `consult: …` (no leading `/`).
 
 On **Cursor Agent CLI**, pass `--plugin-dir` (or the project-local skill plus
 `--add-dir`) as in `{pack}/docs/setup/cursor.md`, then prompt
-`Use Compforge craft: …`.
+`Use Compforge craft: …`, `Use Compforge refactor: …`, or
+`Use Compforge consult: …`.
 
 ## Project vs pack (paths)
 
@@ -48,8 +49,10 @@ On **Cursor Agent CLI**, pass `--plugin-dir` (or the project-local skill plus
 | Prompt | Read first | Output |
 |---|---|---|
 | `/compforge:craft …` (Claude) or `Use Compforge craft: …` (Codex/Cursor) | `workflow/craft.md` + `principles/component-discipline.md` | select the smallest frontend path; execute unless advisory only |
+| `/compforge:refactor …` (Claude) or `Use Compforge refactor: …` (Codex/Cursor) | `workflow/craft.md` + `workflow/refactor.md` + `principles/component-discipline.md` | preserve behavior while improving one structural decision |
+| `/compforge:consult …` (Claude) or `Use Compforge consult: …` (Codex/Cursor) | `workflow/consult.md` | answer, propose, review, or explicitly write one planning document without implementation changes |
 
-Use `/compforge:craft` as the single user entry point. For ambiguous or advisory requests, Craft recommends the smallest path without implementation. For execution requests, it performs the smallest coherent change. Do not force the full Discovery→Test pipeline for small, focused tasks.
+Use Craft as the default when the user does not know which path fits. Existing Craft refactor and advisory requests remain valid; the explicit commands narrow authorization. Do not force the full Discovery→Test pipeline for small, focused tasks.
 
 Natural language also works, for example: "Use Compforge Discovery for the checkout flow."
 
@@ -58,9 +61,11 @@ Natural language also works, for example: "Use Compforge Discovery for the check
 1. Read the routed workflow file before producing output.
 2. Read only the relevant React or stack skill files needed for the task.
 3. For `/compforge:craft`, follow `workflow/craft.md`; it owns classification, the Component Contract, execution path, and verification.
-4. Keep the normal order for new work: Discovery -> Design -> Delivery Plan -> Skeleton -> Implement -> Test.
-5. Ask for human approval before moving from one workflow stage to the next.
-6. Do not merge planning, implementation, and verification in a single step unless the user explicitly asks.
+4. For an explicit Refactor request, use Craft's startup and completion gates, select `workflow/refactor.md` without reclassification, and preserve behavior.
+5. For Consult, follow `workflow/consult.md`; default to read-only and write one planning document only after explicit document wording.
+6. Keep the normal order for new work: Discovery -> Design -> Delivery Plan -> Skeleton -> Implement -> Test.
+7. Ask for human approval before moving from one workflow stage to the next.
+8. Do not merge planning, implementation, and verification in a single step unless the user explicitly asks.
 
 ## Supporting Skills
 
@@ -83,5 +88,7 @@ Anti-patterns:
 - God component: `antipatterns/god-component.md`
 - useEffect abuse: `antipatterns/useeffect-abuse.md`
 - Prop drilling: `antipatterns/prop-drilling.md`
+
+Consultation (experimental): `workflow/consult.md`
 
 1.x direction and non-goals: `{pack}/docs/project/direction.md`

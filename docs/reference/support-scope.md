@@ -7,9 +7,9 @@ guide for a skill pack, not a hosted-service SLA.
 
 - TypeScript + React with Vite: feature-folder and Feature-Sliced Design references.
 - TypeScript + React with Next.js App Router: `react-next-app` reference.
-- Component boundaries, server/client/URL state placement, Craft, and
-  `compforge init` enforcement (ESLint zones or steiger, `no-explicit-any`,
-  and a `strict: true` tsconfig check).
+- Component boundaries, server/client/URL state placement, Craft, Refactor,
+  Consult, and `compforge init` enforcement (ESLint zones or steiger,
+  `no-explicit-any`, and a `strict: true` tsconfig check).
 
 Vue, Angular, Svelte, plain JS, mobile-native, and backend work are outside
 this pack. OOPforge covers backend OOP/DDD.
@@ -18,19 +18,20 @@ The three todo apps are executable references, not product boilerplates.
 
 ## Canonical harness paths
 
-| Harness | Supported load path | Craft invocation |
+| Harness | Supported load path | Invocation |
 |---|---|---|
-| Claude Code | `~/.claude/skills/compforge` and `~/.claude/commands/compforge` symlinks | `/compforge:craft …` |
-| Codex CLI | `~/.codex/skills/compforge` symlink | select `compforge`, then `Use Compforge craft: …` |
-| Cursor Agent CLI | explicit `--plugin-dir` | `Use Compforge craft: …` |
-| Cursor Agent CLI | `.cursor/skills/compforge` plus pack `--add-dir` | `Use Compforge craft: …` |
+| Claude Code | `~/.claude/skills/compforge` and `~/.claude/commands/compforge` symlinks | `/compforge:craft …` (default); `/compforge:refactor …`; `/compforge:consult …` |
+| Codex CLI | `~/.codex/skills/compforge` symlink | select `compforge`, then `Use Compforge craft: …` (default); `refactor: …`; `consult: …` |
+| Cursor Agent CLI | explicit `--plugin-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …` |
+| Cursor Agent CLI | `.cursor/skills/compforge` plus pack `--add-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …` |
 
 Cursor directory auto-discovery, marketplace installation, and automatic Cursor
 setup via `install.sh` are not currently supported paths.
 
-`/compforge:craft` is Claude Code's installed slash command. On Cursor Agent CLI
-with `--plugin-dir` it entered Craft in a clean headless session; the documented
-Cursor invoke remains `Use Compforge craft: …`.
+`/compforge:craft` is Claude Code's default installed slash command. Refactor
+and Consult are additional installed commands. On Cursor Agent CLI with
+`--plugin-dir`, `/compforge:craft` entered Craft in a clean headless session; the
+documented Cursor invoke remains `Use Compforge craft: …`.
 
 `doctor.sh` validates the invoked checkout's files. Installed links resolve
 against `$COMPFORGE_HOME`, then a valid `~/.compforge`, then the invoked

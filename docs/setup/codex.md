@@ -52,6 +52,8 @@ Compforge repository and treat that repository as the work target.
 
 ```text
 Use Compforge craft: Add a quantity stepper to the cart item
+Use Compforge refactor: Split the cart page without changing behavior
+Use Compforge consult: Review the cart state placement
 Use Compforge Discovery for the checkout flow. No code yet.
 ```
 

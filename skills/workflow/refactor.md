@@ -13,6 +13,18 @@ god components, logic buried in JSX, misplaced state, type-only folder structure
 
 Never combine with a feature or bug fix. If a feature is also needed, do two passes.
 Not a required step of the default delivery flow — a **supporting workflow**.
+An explicit Refactor command must not be reclassified as feature work.
+
+## Job contract (before code)
+
+Fill once. If a functional change is required, stop and split it into a Craft job.
+
+```markdown
+In scope:
+Out of scope:
+Behavior to preserve:
+One decision:
+```
 
 ## Core principles
 - Do not mix functional changes with refactoring.
@@ -93,4 +105,4 @@ the residue — otherwise the next session inherits a half-real repository.
 - Hard Rules in `skills/principles/hard-rules.md` improved or unchanged — never regressed.
 
 ## Next step
-After verification -> review, commit, push. If a functional change is needed, split it into `workflow-delivery-plan`.
+After verification -> review, commit, push. If a functional change is needed, split it into a separate Craft job.

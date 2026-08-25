@@ -24,7 +24,7 @@ Merge the existing design notes into **one execution plan**.
 - [ ] If there is an external contract (API/route/URL), define inputs/outputs/errors
 - [ ] Separate page composition, feature folders, hooks, and the query layer
 - [ ] Break the implementation order into small steps
-- [ ] Test strategy: unit (hooks/pure), component, E2E checkpoints
+- [ ] Test strategy: unit (hooks/pure), component (DOM), connected check if server data changed
 - [ ] Review checklist: file size, one export, state homes, accessibility
 - [ ] Draft commit/push/MR/release notes
 - [ ] Rollback or revert strategy
@@ -64,12 +64,12 @@ Save to `docs/delivery-plan.md` or `docs/<feature>/delivery-plan.md`:
 3. Presentational components
 4. Page composition
 5. Accessibility and named UI states
-6. Component / E2E checks
+6. Component (DOM) checks
 
 ## Test Plan
 - Unit:
 - Component:
-- E2E:
+- Connected (manual):
 
 ## Review / Merge / Release
 - Review checklist:

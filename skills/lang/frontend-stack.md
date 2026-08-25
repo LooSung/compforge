@@ -40,7 +40,7 @@ Default when the user has no preference: **`react-vite-feature`** — smallest s
 - Server state: TanStack Query (or the framework's loader/server-component equivalent).
 - Client shared state: Zustand or context — only when two distant components truly share it.
 - Styling: follow the target project's existing approach; for greenfield, CSS Modules unless the user prefers otherwise (state the default).
-- Testing: Vitest + Testing Library; Playwright for E2E.
+- Testing: Vitest + Testing Library (hooks and DOM). Playwright is not the default.
 
 ## Import direction (all stacks)
 

@@ -41,22 +41,30 @@ Discovery → Design → Delivery Plan → Skeleton → Implement → Test
 | Delivery Plan | 범위, 계약, 구현 순서, 테스트/릴리스 계획 | 코딩 |
 | Skeleton | 기능 폴더, 타입 잡힌 빈 컴포넌트/훅 | 비즈니스 로직 |
 | Implement | 한 번에 기능 하나, 훅 먼저 | 여러 개 동시 |
-| Test | 훅 / 컴포넌트 / E2E | 테스트 없는 로직 훅 |
+| Test | 훅 / 컴포넌트(DOM) | 테스트 없는 로직 훅 |
 
 작은 작업은 전체 파이프라인을 강제하지 않고 **Craft**가 가장 작은 경로를 고른다.
 한 화면을 끝까지 걷는 예시는 [장바구니 워크스루](../guides/cart/README.ko.md)다.
 
 ---
 
-## 3. Craft — 단일 진입점
+## 3. 공개 커맨드
 
-사용자 진입점은 **Craft**다. Claude Code에서는 `/compforge:craft <요청>`,
-Codex·Cursor에서는 `Use Compforge craft: …` (`/` 없이). Craft는:
+기본 진입점은 **Craft**다. Refactor와 Consult는 인가 경계가 다를 때만 쓴다.
+
+Claude Code에서는 `/compforge:craft`, `/compforge:refactor`,
+`/compforge:consult`. Codex·Cursor에서는 `Use Compforge craft: …`처럼
+자연어로 호출한다 (`/` 없이).
+
+Craft는:
 
 1. 요청을 분류해 **가장 작은 실행 경로**를 고른다.
 2. 결정이 비어 있으면 심문하지 않고 기본값을 제시한다. 스택은 TypeScript + React 게이트를 거친다.
 3. UI 로직 전에 **Component Contract**(트리, 상태 홈, props, 쿼리, 테스트 대상)를 채운다.
 4. 구현·테스트 후 프로젝트 규칙을 검증하고 완료 보고를 남긴다.
+
+명시적 Refactor는 동작을 보존한 채 구조만 바꾼다. Consult는 조언·리뷰·문서이며
+구현 코드를 바꾸지 않는다. 공개 `test` 커맨드는 없다.
 
 advisory 요청이면 구현하지 않는다.
 

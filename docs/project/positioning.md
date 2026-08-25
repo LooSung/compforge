@@ -20,7 +20,8 @@ The operating model is:
 - `AGENTS.md` is the constitution;
 - hard rules and CI checks are the lint;
 - runnable examples are the reference implementations;
-- Craft is the single entry point.
+- Craft is the default entry point. Refactor and Consult are additional
+  public commands with narrower authorization.
 
 ## The problem
 

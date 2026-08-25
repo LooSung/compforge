@@ -71,7 +71,11 @@ def check_stability(root: Path) -> None:
 def check_required_paths(root: Path) -> None:
     required = [
         "commands/craft.md",
+        "commands/refactor.md",
+        "commands/consult.md",
         "skills/workflow/craft.md",
+        "skills/workflow/refactor.md",
+        "skills/workflow/consult.md",
         "skills/principles/hard-rules.md",
         ".cursor-plugin/skills/compforge/SKILL.md",
         "scripts/ci/harness/probes.sh",
@@ -86,19 +90,39 @@ def check_required_paths(root: Path) -> None:
         if not (root / relative).is_file():
             raise SystemExit(f"missing harness path: {relative}")
 
-    for relative in (
+    probe_files = [
         "commands/craft.md",
+        "commands/refactor.md",
+        "commands/consult.md",
         "skills/SKILL.md",
         ".cursor-plugin/skills/compforge/SKILL.md",
-    ):
+    ]
+    for relative in probe_files:
         if "COMPFORGE_ACTIVATION_PROBE" not in (root / relative).read_text():
             raise SystemExit(f"missing activation probe: {relative}")
 
-    craft_command = (root / "commands/craft.md").read_text()
-    expected_root = "${CLAUDE_PLUGIN_ROOT}/skills/workflow/craft.md"
-    expected_link = "~/.claude/skills/compforge/workflow/craft.md"
-    if expected_root not in craft_command or expected_link not in craft_command:
-        raise SystemExit("Claude Craft command does not support both load paths")
+    expected_root = "${CLAUDE_PLUGIN_ROOT}/skills/workflow"
+    expected_link = "~/.claude/skills/compforge/workflow"
+    for name, workflow in (
+        ("craft", "craft.md"),
+        ("refactor", "refactor.md"),
+        ("consult", "consult.md"),
+    ):
+        command = (root / f"commands/{name}.md").read_text()
+        if (
+            f"{expected_root}/{workflow}" not in command
+            or f"{expected_link}/{workflow}" not in command
+        ):
+            raise SystemExit(
+                f"Claude {name} command does not support both load paths"
+            )
+
+    refactor_command = (root / "commands/refactor.md").read_text()
+    if (
+        f"{expected_root}/craft.md" not in refactor_command
+        or f"{expected_link}/craft.md" not in refactor_command
+    ):
+        raise SystemExit("Claude Refactor command does not load Craft gates")
 
 
 def main() -> None:

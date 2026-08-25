@@ -10,14 +10,18 @@ Install: <https://github.com/LooSung/compforge>
 
 | Read | For |
 |---|---|
-| `{pack}/skills/workflow/craft.md` | entry point for any frontend task |
+| `{pack}/skills/workflow/craft.md` | default entry point for frontend work |
+| `{pack}/skills/workflow/refactor.md` | behavior-preserving cleanup |
+| `{pack}/skills/workflow/consult.md` | advice, review, or one planning document |
 | `{pack}/skills/principles/component-discipline.md` | component boundaries, state ladder |
 | `{pack}/skills/principles/hard-rules.md` | MUST / SHOULD / NEVER (canonical) |
 | `{pack}/AGENTS.md` | stage and task routing tables |
 
 Entry point: `Use Compforge craft: <task>` (Claude Code: `/compforge:craft`).
-For a new feature area or large screen, run Discovery → Design → Delivery Plan →
-Skeleton → Implement → Test, and ask for approval between stages.
+Explicit cleanup: `Use Compforge refactor: <task>`. Advice or review:
+`Use Compforge consult: <task>`. For a new feature area or large screen, run
+Discovery → Design → Delivery Plan → Skeleton → Implement → Test, and ask for
+approval between stages.
 
 ### Enforcement installed in this repository
 

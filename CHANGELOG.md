@@ -5,6 +5,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+### Added
+
+- Public `refactor` and `consult` commands. Craft stays the default entry
+  point. Refactor preserves behavior; Consult does not change implementation
+  code. There is no public `test` command.
+
+### Changed
+
+- The Test workflow now defaults to hook and DOM component tests. Playwright
+  E2E is not part of the default surface; live API wiring is a manual
+  connected check.
+
 ## [1.2.2] — 2026-08-25
 
 ### Fixed

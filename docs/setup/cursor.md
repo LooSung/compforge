@@ -69,6 +69,8 @@ cursor-agent --plugin-dir ~/.cursor/plugins/local/compforge
 ```text
 Use Compforge craft: Add a quantity stepper to the cart item
 Use Compforge craft: Read docs/screens/checkout.md and advise only.
+Use Compforge refactor: Split the cart page without changing behavior
+Use Compforge consult: Review the cart state placement
 ```
 
 Planning-only sessions (Discovery, Design, Delivery Plan): ask for that stage
@@ -111,7 +113,8 @@ Also remove the matching `.cursor/skills/compforge` line from
 ```text
 Use Compforge craft: Add search to the todo list. Keep the query in the URL.
 Use Compforge Discovery for the checkout flow. No code yet.
-Use Compforge craft: Refactor the cart page without changing behavior.
+Use Compforge refactor: Refactor the cart page without changing behavior.
+Use Compforge consult: Compare feature folders and FSD for this screen.
 ```
 
 ## Verified paths

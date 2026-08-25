@@ -37,20 +37,22 @@ For new features or large screens, do not jump straight to code.
 3. **Delivery Plan** — read `skills/workflow/delivery-plan.md`; align requirements, scope, implementation order, tests, and release risks.
 4. **Skeleton** — read `skills/workflow/skeleton.md`; create folder structure and empty components/hooks only.
 5. **Implement** — read `skills/workflow/implement.md`; implement one feature with tests.
-6. **Test** — read `skills/workflow/test.md`; run unit, component, and E2E checks as needed.
+6. **Test** — read `skills/workflow/test.md`; run unit and component (DOM) checks. Connected verification is manual.
 
 Ask for human approval before moving from one stage to the next.
 
-**For smaller, focused tasks** (one component, extending an existing feature, refactoring, code review) — start with `/compforge:craft` (`commands/craft.md`). It selects the smallest path and does not force the full pipeline.
+**For smaller, focused tasks** (one component, extending an existing feature, refactoring, code review) — start with `/compforge:craft` (`commands/craft.md`) unless the request is explicitly Refactor or Consult. Craft selects the smallest path and does not force the full pipeline.
 
 ## Default Entry Point
 
-Use `/compforge:craft` (`commands/craft.md`) as the single Compforge user entry point.
+Use `/compforge:craft` (`commands/craft.md`) as the default Compforge user entry point.
 
 `/compforge:craft` delegates orchestration to `skills/workflow/craft.md`, reads `skills/principles/component-discipline.md` and `skills/principles/hard-rules.md`, requires Assumptions then a Component Contract before UI implementation, and verifies Hard Rules (including surgical scope) before completion.
 
-- Use `/compforge:craft` for single components, existing-feature additions, UI bug fixes, and behavior-preserving refactors.
-- For ambiguous or advisory requests, Craft recommends the smallest path without implementing.
+- Use `/compforge:craft` for single components, existing-feature additions, and UI bug fixes.
+- Use `/compforge:refactor` when the request is explicit behavior-preserving cleanup. Do not reclassify it as feature work.
+- Use `/compforge:consult` for advice, proposals, reviews, or one planning document. Do not change implementation code.
+- For ambiguous requests, Craft recommends the smallest path without implementing.
 - For a new feature area or large screen, Craft routes into the Discovery → Test workflow and keeps the human checkpoints.
 
 ## Skill Path Convention
@@ -77,14 +79,15 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 
 | Workflow stage | Goal | Read first |
 |---|---|---|
-| Craft (entrypoint) | Select and execute the smallest frontend path, or recommend only for advisory requests | `skills/workflow/craft.md` + `skills/principles/component-discipline.md` |
+| Craft (default entrypoint) | Select and execute the smallest frontend path, or recommend only for advisory requests | `skills/workflow/craft.md` + `skills/principles/component-discipline.md` |
+| Refactor | Behavior-preserving cleanup | `skills/workflow/refactor.md` |
+| Consult | Advice, proposal, review, or one planning document | `skills/workflow/consult.md` |
 | Discovery | User flows, screens, domain terms | `skills/workflow/discovery.md` |
 | Design | Component tree, state placement, API contracts | `skills/workflow/design.md` + `skills/react/component-boundary.md` |
 | Delivery Plan | Scope, order, tests, risks | `skills/workflow/delivery-plan.md` |
 | Skeleton | Folders, empty components/hooks | `skills/workflow/skeleton.md` + `skills/skeleton/frontend-skeleton.md` (stack via `skills/lang/frontend-stack.md`) |
 | Implement | One feature + tests | `skills/workflow/implement.md` + `skills/react/state-placement.md` |
-| Test | Unit / component / E2E | `skills/workflow/test.md` |
-| Refactor | Behavior-preserving cleanup | `skills/workflow/refactor.md` |
+| Test | Unit / component (DOM) | `skills/workflow/test.md` |
 | Continuity | Resume work across sessions | `skills/workflow/continuity.md` |
 | Code review | Detect rule violations | `skills/principles/hard-rules.md` + `skills/antipatterns/` + `docs/reference/reviewer-checklist.md` |
 

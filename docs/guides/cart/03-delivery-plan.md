@@ -49,7 +49,7 @@ Save output to: `docs/delivery-plan.md` (in your project)
 ## Test Plan
 - Unit: `cartTotal`, quantity replace, remove
 - Component: empty copy, quantity change, remove
-- E2E: optional; not required for this screen alone
+- Connected (manual): load the cart against the shop API; not an E2E suite
 
 ## Review / Merge / Release
 - Review: 200 lines, one export, no `any`, no derived-in-effect

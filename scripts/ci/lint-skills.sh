@@ -82,16 +82,24 @@ frontmatter_value() {
   }' "$file"
 }
 
-check_craft_command() {
-  local file="$PACK_DIR/commands/craft.md"
-  [ -f "$file" ] || { fail "missing command file: commands/craft.md"; return; }
-  if [ "$(frontmatter_value "$file" name)" != "craft" ]; then
-    fail "commands/craft.md: name must be craft"
+check_command_file() {
+  local name="$1"
+  local file="$PACK_DIR/commands/$name.md"
+  [ -f "$file" ] || { fail "missing command file: commands/$name.md"; return; }
+  if [ "$(frontmatter_value "$file" name)" != "$name" ]; then
+    fail "commands/$name.md: name must be $name"
   elif [ -z "$(frontmatter_value "$file" description)" ]; then
-    fail "commands/craft.md: frontmatter missing description"
+    fail "commands/$name.md: frontmatter missing description"
   else
-    ok "commands/craft.md frontmatter"
+    ok "commands/$name.md frontmatter"
   fi
+}
+
+check_public_commands() {
+  local name
+  for name in craft refactor consult; do
+    check_command_file "$name"
+  done
 }
 
 check_cursor_skill() {
@@ -191,7 +199,7 @@ check_json_file "$PACK_DIR/.cursor-plugin/plugin.json"
 check_manifest_versions
 
 cyan "--- Harness packaging"
-check_craft_command
+check_public_commands
 check_cursor_skill
 check_manifest_component_paths
 
