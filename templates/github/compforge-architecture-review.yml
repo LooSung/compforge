@@ -17,6 +17,6 @@ jobs:
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.actor != 'dependabot[bot]'
-    uses: LooSung/compforge/.github/workflows/reusable-architecture-review.yml@v1.3.0
+    uses: LooSung/compforge/.github/workflows/reusable-architecture-review.yml@v1.3.1
     with:
-      compforge_ref: v1.3.0
+      compforge_ref: v1.3.1

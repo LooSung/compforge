@@ -5,10 +5,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.3.1] — 2026-08-26
+
+Documentation patch. The 1.3 command surface does not change.
+
 ### Changed
 
 - README quickstart now shows `craft`, `refactor`, and `consult` before the
   optional init step.
+- Codex plugin copy and default prompts name craft, refactor, and consult.
 
 ## [1.3.0] — 2026-08-25
 
