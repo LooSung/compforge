@@ -5,6 +5,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-08-25
+
+Public command surface. Craft stays the default entry point. Refactor and
+Consult exist because they use a different authorization boundary. Frontend
+tests default to hooks and DOM; Playwright E2E is not the default.
+
 ### Added
 
 - Public `refactor` and `consult` commands. Craft stays the default entry
