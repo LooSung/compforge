@@ -10,4 +10,8 @@ Each release record includes:
 - positive activation and isolated negative-control results;
 - skipped checks and their release impact.
 
-The v1 baseline is recorded in [`harness-v1.0.0.md`](harness-v1.0.0.md).
+Records, newest first:
+
+- [`harness-v1.3.4.md`](harness-v1.3.4.md) — live activation for the `refactor`
+  and `consult` commands; Cursor's negative control recorded as skipped.
+- [`harness-v1.0.0.md`](harness-v1.0.0.md) — the v1 baseline.

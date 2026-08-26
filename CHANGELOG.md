@@ -5,6 +5,41 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.3.4] — 2026-08-26
+
+Live harness evidence for the 1.3 command surface, and the script fix that run
+exposed. Stack identifiers, selection questions, and the command surface do not
+change.
+
+### Fixed
+
+- `harness-smoke.sh live cursor` no longer fails its negative control on a
+  machine where Compforge is installed. `cursor-agent` discovers
+  `~/.claude/skills`, `~/.codex/skills`, and `~/.agents/skills` from `HOME`, so
+  the clean-workspace control saw the symlink `install.sh` creates and reported
+  `COMPFORGE_LOADED`. Because the run aborted there, it also withheld the
+  slash-probe evidence. The control is now skipped with a `SKIP` line naming the
+  leaking path, and the remaining probes still run.
+
+### Changed
+
+- The Vue scope gate in `skills/lang/frontend-stack.md`, `skills/SKILL.md`, and
+  `skills/workflow/craft.md` now says Vue is outside the 1.x support scope
+  instead of planned or not-yet-applicable. It already was in
+  `docs/reference/support-scope.md`, the READMEs, and the 1.x direction; the
+  skills were promising a stack the pack does not commit to.
+- `docs/reference/support-scope.md` records that Cursor's negative control needs
+  a `HOME` without the pack installed.
+
+### Added
+
+- [`docs/verification/harness-v1.3.4.md`](docs/verification/harness-v1.3.4.md):
+  live activation for `craft`, `refactor`, and `consult` on Claude Code 2.1.212,
+  Codex 0.148.0, and Cursor Agent 2026.08.11-e8db854. Claude and Codex negative
+  controls pass; Cursor's is recorded as skipped, not passed.
+- Self-tests covering both branches of the Cursor negative control, so the skip
+  cannot silently become the only path.
+
 ## [1.3.3] — 2026-08-26
 
 Carries the 1.3.2 complexity ladder into the Skeleton stage and the READMEs.

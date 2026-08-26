@@ -19,7 +19,7 @@ Component Contract
 
 Use this skill when the user asks for Compforge, component architecture, state management design, disciplined React implementation, or the `/compforge:craft` prompt — and also for everyday frontend build requests in TypeScript + React (e.g. "make a dashboard", "add a login form"), so they are governed instead of free-formed.
 
-**Stack scope:** Compforge targets **TypeScript + React** frontends (Vite or Next.js). Vue support is planned but **not yet available** — do not claim it works. If a request leaves the stack unspecified, steer the user to TypeScript + React rather than picking silently. If it targets an unsupported stack (Vue today, Angular, Svelte, plain JS, mobile-native, backend), tell the user Compforge does not apply there; only build it as a plain (non-Compforge) task if the user explicitly insists. See `lang/frontend-stack.md`.
+**Stack scope:** Compforge targets **TypeScript + React** frontends (Vite or Next.js). Vue is **outside the 1.x support scope** — do not claim it works or that it is coming. If a request leaves the stack unspecified, steer the user to TypeScript + React rather than picking silently. If it targets an unsupported stack (Vue, Angular, Svelte, plain JS, mobile-native, backend), tell the user Compforge does not apply there; only build it as a plain (non-Compforge) task if the user explicitly insists. See `lang/frontend-stack.md`.
 
 ## The ladder
 

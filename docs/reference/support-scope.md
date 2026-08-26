@@ -49,6 +49,14 @@ credential-store token through sanitized login metadata, or a local
 `CURSOR_API_KEY` when present. No provider credential is stored in the
 repository.
 
+Cursor's negative control cannot be isolated while the pack is installed.
+`cursor-agent` discovers `~/.claude/skills`, `~/.codex/skills`, and
+`~/.agents/skills` from `HOME`, and `CURSOR_CONFIG_DIR` does not scope that
+discovery; the CLI ignores `CLAUDE_CONFIG_DIR` and `CODEX_HOME` for it, and
+isolating `HOME` loses the credential store. `live cursor` therefore reports
+`SKIP` for that control and still collects the positive probes. Negative-control
+evidence for Cursor requires a `HOME` where Compforge is not installed.
+
 ## Automated evidence
 
 - Pull requests and pushes run packaging/static smoke, isolated-HOME install,

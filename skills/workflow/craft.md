@@ -51,7 +51,7 @@ requires it. Components render; hooks decide; every piece of state has one home.
 When the intent is execution but a decisive input is empty (stack, folder architecture, state approach, styling, supported screens/edge cases), resolve it once before code — do not interrogate; propose defaults.
 
 1. Identify the missing decision dimensions.
-2. **Stack and architecture must pass the `skills/lang/frontend-stack.md` scope gate.** If unspecified, steer to TypeScript + React (Vite); for an unsupported stack (Vue for now, Angular, Svelte) state that Compforge does not apply yet (plain build only if insisted).
+2. **Stack and architecture must pass the `skills/lang/frontend-stack.md` scope gate.** If unspecified, steer to TypeScript + React (Vite); for an unsupported stack (Vue, Angular, Svelte) state that Compforge does not apply (plain build only if insisted).
 3. For items you can set safely, **state the default** and proceed (e.g., Vite, feature folders, CSS Modules, no router).
 4. Ask only the 1–2 questions that actually change the result (architecture/scope) (e.g., "Multiple pages? -> add routing and URL state").
 5. You may offer the `examples/` todo family (feature / FSD / Next) as a reference menu.

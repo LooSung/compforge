@@ -12,6 +12,7 @@ this probe, output exactly COMPFORGE_NOT_LOADED."
 
 green() { printf "\033[32m%s\033[0m\n" "$*"; }
 red() { printf "\033[31m%s\033[0m\n" "$*" >&2; }
+yellow() { printf "\033[33m%s\033[0m\n" "$*" >&2; }
 probe_step() { printf "RUN %s\n" "$*" >&2; }
 
 # shellcheck source=scripts/ci/harness/probes.sh
@@ -204,8 +205,14 @@ live_cursor() {
   probe_step "Cursor project-local positive"
   run_cursor "$local_workspace" "$local_output" \
     "Use Compforge craft: $NEGATIVE_PROBE" --add-dir "$PACK_DIR"
-  probe_step "Cursor isolated negative"
-  run_cursor "$clean_workspace" "$negative_output" "$NEGATIVE_PROBE"
+  local leaked_skill
+  if leaked_skill="$(home_scoped_compforge_skill)"; then
+    yellow "SKIP Cursor negative control: cursor-agent reads $leaked_skill from HOME, which CURSOR_CONFIG_DIR does not scope"
+    yellow "SKIP the positives below still hold; for negative-control evidence re-run from a HOME without the pack installed (scripts/setup/uninstall.sh)"
+  else
+    probe_step "Cursor isolated negative"
+    run_cursor "$clean_workspace" "$negative_output" "$NEGATIVE_PROBE"
+  fi
   probe_step "Cursor /compforge:craft slash with --plugin-dir"
   run_cursor "$slash_workspace" "$slash_output" \
     "/compforge:craft $ACTIVATION_TOKEN" --plugin-dir "$PACK_DIR"
@@ -213,7 +220,9 @@ live_cursor() {
     mkdir -p "$COMPFORGE_HARNESS_OUT"
     cp "$plugin_output" "$COMPFORGE_HARNESS_OUT/cursor-plugin.txt"
     cp "$local_output" "$COMPFORGE_HARNESS_OUT/cursor-project-local.txt"
-    cp "$negative_output" "$COMPFORGE_HARNESS_OUT/cursor-negative.txt"
+    if [ -f "$negative_output" ]; then
+      cp "$negative_output" "$COMPFORGE_HARNESS_OUT/cursor-negative.txt"
+    fi
     cp "$slash_output" "$COMPFORGE_HARNESS_OUT/cursor-slash.txt"
     cp "$run_dir/cursor-refactor.txt" "$COMPFORGE_HARNESS_OUT/cursor-refactor.txt"
     cp "$run_dir/cursor-consult.txt" "$COMPFORGE_HARNESS_OUT/cursor-consult.txt"
@@ -222,7 +231,9 @@ live_cursor() {
   assert_positive "$run_dir/cursor-refactor.txt"
   assert_positive "$run_dir/cursor-consult.txt"
   assert_positive "$local_output"
-  assert_negative "$negative_output"
+  if [ -f "$negative_output" ]; then
+    assert_negative "$negative_output"
+  fi
   report_slash "$slash_output"
 }
 

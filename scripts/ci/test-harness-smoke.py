@@ -81,6 +81,88 @@ class HarnessSmokeTests(unittest.TestCase):
             self.assertFalse((home / ".claude/commands/compforge").exists())
             self.assertFalse((home / ".codex/skills/compforge").exists())
 
+    def test_cursor_negative_control_runs_on_a_clean_home(self) -> None:
+        result, log = self.run_fake_cursor(installed=False)
+
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("PASS negative activation control", result.stdout)
+        self.assertNotIn("SKIP Cursor negative control", result.stderr)
+        self.assertIn("COMPFORGE_ACTIVATION_PROBE", log)
+
+    def test_cursor_negative_control_skips_when_home_scoped_pack_leaks(self) -> None:
+        result, log = self.run_fake_cursor(installed=True)
+
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("SKIP Cursor negative control", result.stderr)
+        self.assertNotIn("negative control did not report isolation", result.stderr)
+        # The remaining evidence must still be collected.
+        self.assertIn("PASS slash invoked Craft with --plugin-dir", result.stdout)
+        self.assertEqual(4, result.stdout.count("PASS positive activation probe"))
+        self.assertIn("/compforge:craft", log)
+
+    def run_fake_cursor(
+        self, *, installed: bool
+    ) -> tuple[subprocess.CompletedProcess[str], str]:
+        """Drive `live cursor` against a cursor-agent double under an isolated HOME."""
+        with tempfile.TemporaryDirectory() as directory:
+            temp = Path(directory)
+            home = temp / "home"
+            (home / ".cursor").mkdir(parents=True)
+            (home / ".cursor/cli-config.json").write_text(
+                json.dumps({"version": 1, "authInfo": {"token": "test"}}),
+                encoding="utf-8",
+            )
+            if installed:
+                link = home / ".claude/skills/compforge"
+                link.parent.mkdir(parents=True)
+                target = temp / "installed-skills"
+                target.mkdir()
+                link.symlink_to(target)
+
+            bin_dir = temp / "bin"
+            bin_dir.mkdir()
+            log = temp / "cursor.log"
+            fake = bin_dir / "cursor-agent"
+            fake.write_text(
+                textwrap.dedent(
+                    """\
+                    #!/usr/bin/env bash
+                    set -euo pipefail
+                    printf '%s\n' "$*" >> "$FAKE_CURSOR_LOG"
+                    case " $* " in
+                      *" --version "*) printf 'cursor-agent test double\n' ;;
+                      *" --plugin-dir "*|*" --add-dir "*)
+                        printf 'COMPFORGE_LOADED\nAssumptions\nComponent Contract\n'
+                        ;;
+                      *) printf 'COMPFORGE_NOT_LOADED\n' ;;
+                    esac
+                    """
+                ).lstrip(),
+                encoding="utf-8",
+            )
+            fake.chmod(0o755)
+
+            env = os.environ.copy()
+            env.update(
+                {
+                    "COMPFORGE_HARNESS_TIMEOUT": "10",
+                    "FAKE_CURSOR_LOG": str(log),
+                    "HOME": str(home),
+                    "PATH": f"{bin_dir}{os.pathsep}{env['PATH']}",
+                }
+            )
+            env.pop("CURSOR_CONFIG_DIR", None)
+            env.pop("CURSOR_API_KEY", None)
+            result = subprocess.run(
+                [str(HARNESS), "live", "cursor"],
+                cwd=ROOT,
+                env=env,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            return result, log.read_text(encoding="utf-8")
+
     def run_fake_claude(
         self, home: Path, temp: Path, expected: dict[Path, Path]
     ) -> tuple[subprocess.CompletedProcess[str], str]:

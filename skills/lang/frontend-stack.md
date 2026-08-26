@@ -16,7 +16,7 @@ Supported today: **TypeScript + React**.
 | TypeScript + React | Proceed; pick a stack below |
 | Language/stack unspecified | Steer to TypeScript + React; state the default visibly |
 | JavaScript (no TS) React | Recommend TS; proceed plain-JS only if the user insists (note the risk) |
-| Vue | **Planned, not yet supported** — say so; do not apply Compforge rules to Vue code |
+| Vue | **Outside the 1.x support scope** — say so; do not apply Compforge rules to Vue code |
 | Angular, Svelte, mobile-native, backend | Compforge does not apply; plain task only if the user insists |
 
 ## Stack identifiers

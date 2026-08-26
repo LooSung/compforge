@@ -57,6 +57,23 @@ assert_claude_candidate() {
   green "PASS Claude candidate plugin root"
 }
 
+# cursor-agent discovers ~/.claude/skills, ~/.codex/skills, and ~/.agents/skills
+# from HOME. CURSOR_CONFIG_DIR does not scope skill discovery, and the CLI
+# ignores CLAUDE_CONFIG_DIR and CODEX_HOME, so an installed pack reaches an
+# otherwise isolated workspace. Isolating HOME instead loses the OS credential
+# store, which is why the control is skipped rather than forced.
+home_scoped_compforge_skill() {
+  local candidate
+  for candidate in "$HOME/.claude/skills/compforge" \
+    "$HOME/.codex/skills/compforge" "$HOME/.agents/skills/compforge"; do
+    if [ -e "$candidate" ] || [ -L "$candidate" ]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+  return 1
+}
+
 assert_negative() {
   local output="$1"
   grep -Fxq "COMPFORGE_NOT_LOADED" "$output" ||

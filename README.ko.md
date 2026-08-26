@@ -212,7 +212,7 @@ function CartPage() {
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v1.3.3
+git checkout v1.3.4
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh
