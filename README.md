@@ -136,7 +136,11 @@ Each stage ends with a human checkpoint. Outputs and routing are canonical in
 behavior-preserving workflow.
 
 Shipped stack identifiers are `react-vite-feature`, `react-vite-fsd`, and
-`react-next-app`. Vue is outside the 1.x support scope. See
+`react-next-app` — a ladder, not a menu. Compforge starts on
+`react-vite-feature` (or `react-next-app` when you need SSR) and steps up to the
+Feature-Sliced layers of `react-vite-fsd` only past roughly five feature areas
+or multiple teams, so a small screen never begins on FSD. Next.js is the SSR
+axis, not a thicker rung. Vue is outside the 1.x support scope. See
 [docs/reference/support-scope.md](docs/reference/support-scope.md).
 
 ### Resume work across sessions
@@ -207,7 +211,7 @@ release instead:
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v1.3.2
+git checkout v1.3.3
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh

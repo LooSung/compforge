@@ -5,6 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.3.3] — 2026-08-26
+
+Carries the 1.3.2 complexity ladder into the Skeleton stage and the READMEs.
+Stack identifiers, selection questions, and the command surface do not change.
+
+### Changed
+
+- `skills/skeleton/frontend-skeleton.md` and `skills/workflow/skeleton.md` now
+  scaffold the thin rung by default. An agent that enters at Skeleton no longer
+  sees three stacks as a flat menu, and must not create `pages/`, `widgets/`, or
+  `entities/` to reserve room for growth.
+- The Skeleton self-check has a layer assertion: a feature stack has no
+  `pages/`, `widgets/`, or `entities/` directory.
+- Both READMEs present the shipped stack identifiers as a ladder instead of a
+  list, so readers see `react-vite-feature` as the starting point and
+  `react-vite-fsd` as a step taken past roughly five feature areas.
+- The 0.9.0 record moved to [`docs/releases/changelog-0.9.md`](docs/releases/changelog-0.9.md),
+  finishing the 1.2.0 split that left root history holding one 0.x release. Root
+  now keeps 1.x only and fits the 300-line maintained-text gate.
+
 ## [1.3.2] — 2026-08-26
 
 Documentation patch. Stack identifiers, selection questions, and the command
@@ -228,57 +248,8 @@ All four roadmap conditions for 1.0 are closed. See
   statistics. Linguist treats both as documentation, which left only the CI
   scripts visible and reported this React pack as a Python project.
 
-## [0.9.0] — 2026-08-20
-
-Delivery release: the pack now survives a clone of the target repository, the
-Next stack is installable rather than example-only, and a delivered guard can be
-re-proven instead of assumed.
-
-### Added
-
-- **Constitution pointer** (`templates/agents/compforge-block.md`): `compforge init`
-  writes a marked block into the target's `AGENTS.md` naming the pack resolution
-  order (`$COMPFORGE_HOME` → `~/.compforge`), the Craft entry point, the files to
-  read, and the enforcement installed in that repository. It is the only delivered
-  artifact that is committed, so an agent cloning just the target repo picks it up.
-  The Hard Rules are deliberately **not** copied — a copy goes stale on the next
-  release, which is the drift this delivery exists to prevent.
-- **`compforge-lock.json`**: pack version, commit, stack, and check command pinned
-  in the target project.
-- **`compforge init --verify`**: reads the lock, refuses a stack that drifted from
-  it, warns on a pack-version mismatch, and re-runs the negative self-test. A
-  delivered guard is only worth the last time it was proven to fail.
-- **`react-next-app` stack** (`templates/react-next-app/eslint.compforge.config.js`):
-  the feature-folder zones plus the boundary that only exists on this stack —
-  `features/` and `shared/` must not import `src/server/`. Its self-test breaks a
-  server-only import, not just a cross-feature one.
-- **`scripts/ci/init-smoke.sh`**, wired into `examples.yml` per stack: pins stack
-  detection for all three examples, then checks delivery, self-test, `--verify`,
-  idempotent re-run, survival of a hand-written `AGENTS.md`, and drift refusal.
-  It also runs a pack whose Next template lost the server zones and requires that
-  install to **fail** — the negative test on the negative test.
-
-### Fixed
-
-- **Next projects were detected as `react-vite-feature`.** `detect_stack` looked
-  only for `src/features`, which a Next App Router project also has. The install
-  then delivered zones with no `src/server` boundary and still printed
-  "self-test passed", because the fixture only tried a cross-feature import.
-  Measured on `examples/todo-react-next`; a server-only leak passed lint under the
-  vite zones and fails under the Next zones. Detection is now by the `next`
-  dependency (or `next.config.*`) and runs before the layout checks.
-
-### Changed
-
-- Roadmap: the Next `init` work planned as v0.10 is folded into this release.
-  Splitting it would have tagged the misdetection above as a shipped state, with
-  the constitution pointer landing on a false green. The v1.0 condition that read
-  "v0.9 and v0.10 are tagged" is now stated as the result it always meant —
-  constitution delivered and `init` covering all three stacks.
-- `init.sh` shares one zone generator across the ESLint stacks, and the marker
-  strings are defined once in the script rather than repeated per Python block.
-
 ## Older releases
 
+- [0.9.0](docs/releases/changelog-0.9.md)
 - [0.5.0–0.8.0](docs/releases/changelog-0.5-0.8.md)
 - [0.1.0–0.4.1](docs/releases/changelog-0.1-0.4.md)

@@ -137,7 +137,11 @@ Discovery → Design → Delivery Plan → Skeleton → Implement → Test
 워크플로입니다.
 
 출하된 스택 식별자는 `react-vite-feature`, `react-vite-fsd`,
-`react-next-app`입니다. Vue는 1.x 지원 범위 밖입니다.
+`react-next-app`이며, 고르는 메뉴가 아니라 사다리입니다. Compforge는
+`react-vite-feature`(SSR이 필요하면 `react-next-app`)에서 시작하고, 기능 영역이
+대략 다섯 개를 넘거나 여러 팀이 붙을 때만 `react-vite-fsd`의 Feature-Sliced
+레이어로 한 단계 올립니다. 작은 화면은 FSD로 시작하지 않습니다. Next.js는
+복잡도 윗단이 아니라 SSR 축입니다. Vue는 1.x 지원 범위 밖입니다.
 [docs/reference/support-scope.md](docs/reference/support-scope.md)를 보세요.
 
 ### 세션 사이 작업 이어가기
@@ -208,7 +212,7 @@ function CartPage() {
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v1.3.2
+git checkout v1.3.3
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh

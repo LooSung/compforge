@@ -12,7 +12,7 @@ After Design (and Delivery Plan, when the full pipeline is in use) is approved.
 Before implementing any behavior.
 
 ## Checklist
-- [ ] Choose/confirm the stack layout via `skills/lang/frontend-stack.md`
+- [ ] Choose/confirm the stack layout via `skills/lang/frontend-stack.md` — default to the thin rung; no FSD layers unless its second question is yes
 - [ ] Create feature folders per `skills/skeleton/frontend-skeleton.md`
 - [ ] Empty components: props typed, body renders a placeholder
 - [ ] Empty hooks: signature typed, body throws `NotImplemented` or returns fixtures

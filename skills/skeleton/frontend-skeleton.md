@@ -7,7 +7,10 @@ stability: stable
 
 # Frontend Skeleton
 
-Pick the stack via `lang/frontend-stack.md` first.
+Pick the stack via `lang/frontend-stack.md` first, and respect its complexity
+ladder: scaffold the thin rung (`react-vite-feature`, or `react-next-app` when
+SSR is required) unless that skill's second question is yes. Do not create
+`pages/`, `widgets/`, or `entities/` to reserve room for growth.
 
 ## `react-vite-feature`
 
@@ -86,6 +89,8 @@ URL subscriptions must supply `getServerSnapshot`. Enforce with ESLint
 ## Self-check (run after creating)
 
 - [ ] Print the tree; every Design tree node has exactly one file.
+- [ ] Layers match the chosen rung; a feature stack has no `pages/`, `widgets/`,
+      or `entities/` directory.
 - [ ] No app-wide `components/`, `hooks/`, `utils/` dumping grounds (shared primitives live under `shared/`).
 - [ ] No cross-feature imports (`react-vite-feature`, `react-next-app`); cross-slice via `index.ts` only (`react-vite-fsd`).
 - [ ] `react-next-app`: features/shared do not import `src/server` or `src/app`.
