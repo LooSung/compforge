@@ -5,6 +5,21 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.3.2] — 2026-08-26
+
+Documentation patch. Stack identifiers, selection questions, and the command
+surface do not change.
+
+### Changed
+
+- `skills/lang/frontend-stack.md` now states the complexity ladder explicitly:
+  start on feature folders and step up to `react-vite-fsd` only when the second
+  selection question is yes. Next.js stays the SSR axis, not a thicker rung.
+- The import-direction diagram is now per stack. Feature folders no longer show
+  `entities/` and `pages/` layers they do not have.
+- The Hard Rules cross-feature import bullet names the direction per stack for
+  the same reason, instead of one merged chain.
+
 ## [1.3.1] — 2026-08-26
 
 Documentation patch. The 1.3 command surface does not change.

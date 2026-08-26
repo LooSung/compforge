@@ -53,7 +53,9 @@ is the mechanical subset a detector can read.
 - NEVER drill props more than two levels.
 - NEVER import across sibling features. `react-vite-feature`: no barrels;
   import files directly. `react-vite-fsd`: cross-slice imports go through the
-  public API only. Direction: `shared ← entities ← features ← pages/app`.
+  public API only. Direction differs per stack — feature stacks
+  `shared ← features ← app`; FSD
+  `shared ← entities ← features ← widgets ← pages ← app`.
 - NEVER narrate code in comments.
 - NEVER mix unrelated refactors into a feature or bug fix.
 - NEVER ship a defect your change makes newly reachable; fix it minimally.

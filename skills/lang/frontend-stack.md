@@ -34,6 +34,22 @@ Default when the user has no preference: **`react-vite-feature`** — smallest s
 1. **SSR/SEO needed?** yes → `react-next-app`; no → Vite.
 2. **More than ~5 feature areas or multiple teams?** yes → `-fsd`; no → `-feature`.
 
+## Complexity ladder
+
+Start thin. Step up one rung only when question 2 is yes.
+
+| Rung | Stack | Structure |
+|---|---|---|
+| Default | `react-vite-feature`, or `react-next-app` when SSR is required | `app/`, `features/<name>/`, `shared/` |
+| One step thicker | `react-vite-fsd` | adds `pages/`, `widgets/`, `entities/` |
+
+- Do not start a small screen or MVP on FSD.
+- Do not invent a third, thicker layout above `react-vite-fsd`.
+- Next.js is the SSR axis, not a rung: there is no `react-next-fsd`. A Next app
+  that outgrows feature folders is a separate decision, not this ladder.
+- Add `pages/`, `widgets/`, or `entities/` when reuse actually appears, not to
+  reserve room for it.
+
 ## Baseline choices (all stacks)
 
 - TypeScript `strict: true`.
@@ -42,13 +58,24 @@ Default when the user has no preference: **`react-vite-feature`** — smallest s
 - Styling: follow the target project's existing approach; for greenfield, CSS Modules unless the user prefers otherwise (state the default).
 - Testing: Vitest + Testing Library (hooks and DOM). Playwright is not the default.
 
-## Import direction (all stacks)
+## Import direction
+
+Lower layers never import from higher layers. The layers themselves differ per rung —
+feature stacks have no `entities/` or `pages/`.
+
+`react-vite-feature`, `react-next-app`:
 
 ```
-shared  ←  entities  ←  features  ←  pages/app
+shared  ←  features  ←  app
 ```
 
-Lower layers never import from higher layers. Cross-feature imports:
+`react-vite-fsd`:
+
+```
+shared  ←  entities  ←  features  ←  widgets  ←  pages  ←  app
+```
+
+Cross-feature imports:
 
 - `react-vite-feature`: **forbidden** — compose features at the app level; no barrel `index.ts` (Vite tree-shaking). Enforce with ESLint `import/no-restricted-paths`.
 - `react-vite-fsd`: through each slice's public API (`index.ts`) only. Enforce with steiger; `any` with ESLint.
