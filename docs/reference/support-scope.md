@@ -54,8 +54,11 @@ Cursor's negative control cannot be isolated while the pack is installed.
 `~/.agents/skills` from `HOME`, and `CURSOR_CONFIG_DIR` does not scope that
 discovery; the CLI ignores `CLAUDE_CONFIG_DIR` and `CODEX_HOME` for it, and
 isolating `HOME` loses the credential store. `live cursor` therefore reports
-`SKIP` for that control and still collects the positive probes. Negative-control
-evidence for Cursor requires a `HOME` where Compforge is not installed.
+`SKIP` for that control while the pack is installed, and still collects the
+positive probes. Negative-control evidence requires uninstalling those
+HOME-scoped links, or a HOME without the pack. A passing run against v1.3.5 is
+recorded in
+[`harness-cursor-negative-v1.3.5.md`](../verification/harness-cursor-negative-v1.3.5.md).
 
 ## Automated evidence
 

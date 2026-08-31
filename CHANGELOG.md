@@ -5,6 +5,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.3.6] — 2026-08-31
+
+Documentation patch. The 1.3 command surface does not change.
+
+### Added
+
+- [`docs/verification/harness-cursor-negative-v1.3.5.md`](docs/verification/harness-cursor-negative-v1.3.5.md):
+  Cursor's isolated negative control passed `COMPFORGE_NOT_LOADED` on v1.3.5
+  after `uninstall.sh` removed the HOME-scoped pack links. Positives and slash
+  still pass. The installed-pack `SKIP` path is unchanged.
+
 ## [1.3.5] — 2026-08-31
 
 Documentation patch. The 1.3 command surface does not change.
