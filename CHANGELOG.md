@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.5.0] — 2026-10-26
+
+Existing command. Craft stays the default. Jira writes one task, story, bug, or epic.
+
 ### Changed
 
 - **Jira types** — `/compforge:jira` defaults to Task. Story, bug, and epic use their own fixed template when the request names that type, and one invocation writes one issue. An epic body lists only its starting children; later children attach by parent link.
