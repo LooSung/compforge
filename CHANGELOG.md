@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.4.0] — 2026-10-26
+
+Public command. Craft stays the default. Jira writes one card and changes nothing else.
+
 ### Added
 
 - **Jira command** — `/compforge:jira`(Codex/Cursor는 `Use Compforge jira: …`)가
