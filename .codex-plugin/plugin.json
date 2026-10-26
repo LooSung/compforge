@@ -23,7 +23,7 @@
     "interface": {
         "displayName": "Compforge",
         "shortDescription": "Frontend component discipline for coding agents",
-        "longDescription": "Use Compforge craft, refactor, or consult to guide Codex through TypeScript + React frontend work with component boundaries, state placement, and a staged delivery workflow.",
+        "longDescription": "Use Compforge craft, refactor, consult, or jira to guide Codex through TypeScript + React frontend work with component boundaries, state placement, and a staged delivery workflow.",
         "developerName": "Mr.Louis",
         "category": "Coding",
         "capabilities": [

@@ -73,9 +73,11 @@ def check_required_paths(root: Path) -> None:
         "commands/craft.md",
         "commands/refactor.md",
         "commands/consult.md",
+        "commands/jira.md",
         "skills/workflow/craft.md",
         "skills/workflow/refactor.md",
         "skills/workflow/consult.md",
+        "skills/workflow/jira-card.md",
         "skills/principles/hard-rules.md",
         ".cursor-plugin/skills/compforge/SKILL.md",
         "scripts/ci/harness/probes.sh",
@@ -94,6 +96,7 @@ def check_required_paths(root: Path) -> None:
         "commands/craft.md",
         "commands/refactor.md",
         "commands/consult.md",
+        "commands/jira.md",
         "skills/SKILL.md",
         ".cursor-plugin/skills/compforge/SKILL.md",
     ]
@@ -107,6 +110,7 @@ def check_required_paths(root: Path) -> None:
         ("craft", "craft.md"),
         ("refactor", "refactor.md"),
         ("consult", "consult.md"),
+        ("jira", "jira-card.md"),
     ):
         command = (root / f"commands/{name}.md").read_text()
         if (
@@ -123,6 +127,14 @@ def check_required_paths(root: Path) -> None:
         or f"{expected_link}/craft.md" not in refactor_command
     ):
         raise SystemExit("Claude Refactor command does not load Craft gates")
+
+    jira_skill = (root / "skills/workflow/jira-card.md").read_text()
+    if "Never change code" not in jira_skill:
+        raise SystemExit("Jira skill must keep the card-only write boundary")
+    skill = (root / "skills/SKILL.md").read_text()
+    for marker in ("/compforge:jira", "Use Compforge jira:", "workflow/jira-card.md"):
+        if marker not in skill:
+            raise SystemExit(f"skills/SKILL.md missing Jira route: {marker}")
 
 
 def main() -> None:

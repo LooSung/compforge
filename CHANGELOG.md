@@ -5,6 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+### Added
+
+- **Jira command** — `/compforge:jira`(Codex/Cursor는 `Use Compforge jira: …`)가
+  개요·작업 내용·영향 범위·테스트 확인·참고 다섯 절의 고정 템플릿으로 Jira 작업
+  카드 하나를 쓴다. 코드는 바꾸지 않고, Jira 쓰기는 명시 요청 때만 HTML
+  task-list 로 저장한다.
+
 ## [1.3.6] — 2026-08-31
 
 Documentation patch. The 1.3 command surface does not change.

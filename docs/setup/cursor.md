@@ -71,6 +71,7 @@ Use Compforge craft: Add a quantity stepper to the cart item
 Use Compforge craft: Read docs/screens/checkout.md and advise only.
 Use Compforge refactor: Split the cart page without changing behavior
 Use Compforge consult: Review the cart state placement
+Use Compforge jira: Write one work card for the cart quantity stepper. Do not edit files.
 ```
 
 Planning-only sessions (Discovery, Design, Delivery Plan): ask for that stage
@@ -115,6 +116,7 @@ Use Compforge craft: Add search to the todo list. Keep the query in the URL.
 Use Compforge Discovery for the checkout flow. No code yet.
 Use Compforge refactor: Refactor the cart page without changing behavior.
 Use Compforge consult: Compare feature folders and FSD for this screen.
+Use Compforge jira: Write one work card for the cart search field. Do not edit files.
 ```
 
 ## Verified paths

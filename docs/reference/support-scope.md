@@ -20,16 +20,16 @@ The three todo apps are executable references, not product boilerplates.
 
 | Harness | Supported load path | Invocation |
 |---|---|---|
-| Claude Code | `~/.claude/skills/compforge` and `~/.claude/commands/compforge` symlinks | `/compforge:craft …` (default); `/compforge:refactor …`; `/compforge:consult …` |
-| Codex CLI | `~/.codex/skills/compforge` symlink | select `compforge`, then `Use Compforge craft: …` (default); `refactor: …`; `consult: …` |
-| Cursor Agent CLI | explicit `--plugin-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …` |
-| Cursor Agent CLI | `.cursor/skills/compforge` plus pack `--add-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …` |
+| Claude Code | `~/.claude/skills/compforge` and `~/.claude/commands/compforge` symlinks | `/compforge:craft …` (default); `/compforge:refactor …`; `/compforge:consult …`; `/compforge:jira …` |
+| Codex CLI | `~/.codex/skills/compforge` symlink | select `compforge`, then `Use Compforge craft: …` (default); `refactor: …`; `consult: …`; `jira: …` |
+| Cursor Agent CLI | explicit `--plugin-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …`; `Use Compforge jira: …` |
+| Cursor Agent CLI | `.cursor/skills/compforge` plus pack `--add-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …`; `Use Compforge jira: …` |
 
 Cursor directory auto-discovery, marketplace installation, and automatic Cursor
 setup via `install.sh` are not currently supported paths.
 
-`/compforge:craft` is Claude Code's default installed slash command. Refactor
-and Consult are additional installed commands. On Cursor Agent CLI with
+`/compforge:craft` is Claude Code's default installed slash command. Refactor,
+Consult, and Jira are additional installed commands. On Cursor Agent CLI with
 `--plugin-dir`, `/compforge:craft` entered Craft in a clean headless session; the
 documented Cursor invoke remains `Use Compforge craft: …`.
 

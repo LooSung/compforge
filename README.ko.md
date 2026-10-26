@@ -111,7 +111,7 @@ Init은 자신이 만들지 않은 파일을 보존하고 negative self-test로 
 
 ## 공개 커맨드
 
-Craft가 기본입니다. Refactor와 Consult는 인가 경계가 달라서 따로 있습니다.
+Craft가 기본입니다. Refactor, Consult, Jira는 인가 경계가 달라서 따로 있습니다.
 공개 `test` 커맨드는 없습니다.
 
 | 커맨드 | 쓸 때 | 하면 안 되는 일 |
@@ -119,9 +119,10 @@ Craft가 기본입니다. Refactor와 Consult는 인가 경계가 달라서 따�
 | `craft` | 구현하거나 가장 작은 프론트 경로를 고를 때 | 필수 단계를 건너뛰거나 범위를 몰래 넓히기 |
 | `refactor` | 동작을 유지한 채 구조를 정리할 때 | 기능 추가나 보이는 UI 동작 변경 |
 | `consult` | 질문, 비교, 리뷰, 계획 문서 하나 | 프로덕션·테스트·설정·CI 코드 변경 |
+| `jira` | 고정 템플릿으로 Jira 작업 카드 하나 | 카드 외의 모든 변경 |
 
-Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`.
-Codex·Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`.
+Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:jira`.
+Codex·Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `jira: …`.
 
 ## 기본 워크플로
 
@@ -271,7 +272,7 @@ Cursor의 `--plugin-dir` 링크와 프로젝트 로컬 스킬은 `install.sh`가
 ## 포함된 구성
 
 - `skills/` — 워크플로, React, 스택, 스켈레톤, 플레이북, 리뷰 지침
-- `commands/` — Claude Code 커맨드 진입점 (`craft`, `refactor`, `consult`)
+- `commands/` — Claude Code 커맨드 진입점 (`craft`, `refactor`, `consult`, `jira`)
 - `examples/` — 실행 가능한 TypeScript + React Todo 예제 3종
 - `docs/` — 하네스 가이드, Proof, 1.x 방향, 지원 범위, 검증 기록
 - `scripts/` — 설치, init, lint, proof, smoke test

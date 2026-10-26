@@ -50,10 +50,10 @@ Discovery → Design → Delivery Plan → Skeleton → Implement → Test
 
 ## 3. 공개 커맨드
 
-기본 진입점은 **Craft**다. Refactor와 Consult는 인가 경계가 다를 때만 쓴다.
+기본 진입점은 **Craft**다. Refactor, Consult, Jira는 인가 경계가 다를 때만 쓴다.
 
 Claude Code에서는 `/compforge:craft`, `/compforge:refactor`,
-`/compforge:consult`. Codex·Cursor에서는 `Use Compforge craft: …`처럼
+`/compforge:consult`, `/compforge:jira`. Codex·Cursor에서는 `Use Compforge craft: …`처럼
 자연어로 호출한다 (`/` 없이).
 
 Craft는:
@@ -64,7 +64,8 @@ Craft는:
 4. 구현·테스트 후 프로젝트 규칙을 검증하고 완료 보고를 남긴다.
 
 명시적 Refactor는 동작을 보존한 채 구조만 바꾼다. Consult는 조언·리뷰·문서이며
-구현 코드를 바꾸지 않는다. 공개 `test` 커맨드는 없다.
+구현 코드를 바꾸지 않는다. Jira는 고정 템플릿의 작업 카드 하나만 쓰고, 카드
+밖에 있는 파일은 바꾸지 않는다. 공개 `test` 커맨드는 없다.
 
 advisory 요청이면 구현하지 않는다.
 

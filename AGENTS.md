@@ -41,7 +41,7 @@ For new features or large screens, do not jump straight to code.
 
 Ask for human approval before moving from one stage to the next.
 
-**For smaller, focused tasks** (one component, extending an existing feature, refactoring, code review) — start with `/compforge:craft` (`commands/craft.md`) unless the request is explicitly Refactor or Consult. Craft selects the smallest path and does not force the full pipeline.
+**For smaller, focused tasks** (one component, extending an existing feature, refactoring, code review) — start with `/compforge:craft` (`commands/craft.md`) unless the request is explicitly Refactor, Consult, or Jira. Craft selects the smallest path and does not force the full pipeline.
 
 ## Default Entry Point
 
@@ -52,6 +52,7 @@ Use `/compforge:craft` (`commands/craft.md`) as the default Compforge user entry
 - Use `/compforge:craft` for single components, existing-feature additions, and UI bug fixes.
 - Use `/compforge:refactor` when the request is explicit behavior-preserving cleanup. Do not reclassify it as feature work.
 - Use `/compforge:consult` for advice, proposals, reviews, or one planning document. Do not change implementation code.
+- Use `/compforge:jira` to write or rewrite one Jira work card in the fixed template; it changes nothing but the card.
 - For ambiguous requests, Craft recommends the smallest path without implementing.
 - For a new feature area or large screen, Craft routes into the Discovery → Test workflow and keeps the human checkpoints.
 
@@ -82,6 +83,7 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | Craft (default entrypoint) | Select and execute the smallest frontend path, or recommend only for advisory requests | `skills/workflow/craft.md` + `skills/principles/component-discipline.md` |
 | Refactor | Behavior-preserving cleanup | `skills/workflow/refactor.md` |
 | Consult | Advice, proposal, review, or one planning document | `skills/workflow/consult.md` |
+| Jira | One Jira work card in the fixed Korean template | `skills/workflow/jira-card.md` |
 | Discovery | User flows, screens, domain terms | `skills/workflow/discovery.md` |
 | Design | Component tree, state placement, API contracts | `skills/workflow/design.md` + `skills/react/component-boundary.md` |
 | Delivery Plan | Scope, order, tests, risks | `skills/workflow/delivery-plan.md` |

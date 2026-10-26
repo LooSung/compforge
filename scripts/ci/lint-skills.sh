@@ -97,7 +97,7 @@ check_command_file() {
 
 check_public_commands() {
   local name
-  for name in craft refactor consult; do
+  for name in craft refactor consult jira; do
     check_command_file "$name"
   done
 }

@@ -15,8 +15,8 @@ Restart Claude Code. Verify:
 ```
 
 `doctor.sh` checks the pack and Claude/Codex links. It does not execute Craft.
-Restart Claude Code, then use `/compforge:craft`. Refactor and Consult are
-installed from the same `commands/` directory.
+Restart Claude Code, then use `/compforge:craft`. Refactor, Consult, and Jira
+are installed from the same `commands/` directory.
 
 Installed paths:
 
@@ -42,6 +42,7 @@ block is committed, so a teammate who clones only that repository gets it too.
 /compforge:craft Add a quantity stepper to the cart item
 /compforge:refactor Refactor the imported cart module without changing behavior
 /compforge:consult Review the cart state placement
+/compforge:jira Write one work card for the cart quantity stepper. Do not edit files.
 ```
 
 ## Update after pull

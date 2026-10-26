@@ -1,6 +1,6 @@
 ---
 name: compforge
-description: Use Compforge for TypeScript + React frontend work, component architecture, state placement, and the Craft, Refactor, and Consult workflows.
+description: Use Compforge for TypeScript + React frontend work, component architecture, state placement, and the Craft, Refactor, Consult, and Jira workflows.
 license: MIT
 compatibility: Cursor Agent with the complete Compforge plugin directory.
 ---
