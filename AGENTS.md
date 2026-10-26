@@ -83,7 +83,7 @@ Use this table to decide **which skill to read first**. Workflow stage always wi
 | Craft (default entrypoint) | Select and execute the smallest frontend path, or recommend only for advisory requests | `skills/workflow/craft.md` + `skills/principles/component-discipline.md` |
 | Refactor | Behavior-preserving cleanup | `skills/workflow/refactor.md` |
 | Consult | Advice, proposal, review, or one planning document | `skills/workflow/consult.md` |
-| Jira | One Jira work card in the fixed Korean template | `skills/workflow/jira-card.md` |
+| Jira | One Jira task, story, bug, or epic in the fixed Korean template | `skills/workflow/jira-card.md` |
 | Discovery | User flows, screens, domain terms | `skills/workflow/discovery.md` |
 | Design | Component tree, state placement, API contracts | `skills/workflow/design.md` + `skills/react/component-boundary.md` |
 | Delivery Plan | Scope, order, tests, risks | `skills/workflow/delivery-plan.md` |

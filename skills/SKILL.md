@@ -51,7 +51,7 @@ On **Cursor Agent CLI**, pass `--plugin-dir` (or the project-local skill plus
 | `/compforge:craft …` (Claude) or `Use Compforge craft: …` (Codex/Cursor) | `workflow/craft.md` + `principles/component-discipline.md` | select the smallest frontend path; execute unless advisory only |
 | `/compforge:refactor …` (Claude) or `Use Compforge refactor: …` (Codex/Cursor) | `workflow/craft.md` + `workflow/refactor.md` + `principles/component-discipline.md` | preserve behavior while improving one structural decision |
 | `/compforge:consult …` (Claude) or `Use Compforge consult: …` (Codex/Cursor) | `workflow/consult.md` | answer, propose, review, or explicitly write one planning document without implementation changes |
-| `/compforge:jira …` (Claude) or `Use Compforge jira: …` (Codex/Cursor) | `workflow/jira-card.md` | one Jira card in the fixed Korean template; writes to Jira only on explicit request |
+| `/compforge:jira …` (Claude) or `Use Compforge jira: …` (Codex/Cursor) | `workflow/jira-card.md` | one task, story, bug, or epic in the fixed Korean template; writes to Jira only on explicit request |
 
 Use Craft as the default when the user does not know which path fits. Existing Craft refactor and advisory requests remain valid; the explicit commands narrow authorization. Do not force the full Discovery→Test pipeline for small, focused tasks.
 

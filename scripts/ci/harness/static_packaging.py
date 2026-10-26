@@ -129,8 +129,17 @@ def check_required_paths(root: Path) -> None:
         raise SystemExit("Claude Refactor command does not load Craft gates")
 
     jira_skill = (root / "skills/workflow/jira-card.md").read_text()
-    if "Never change code" not in jira_skill:
-        raise SystemExit("Jira skill must keep the card-only write boundary")
+    for marker in (
+        "Never change code",
+        "Type: task | story | bug | epic",
+        "## 개요",
+        "## 작업 내용",
+        "## 현상",
+        "## 결과",
+        "Never create a second issue",
+    ):
+        if marker not in jira_skill:
+            raise SystemExit(f"Jira skill missing {marker}")
     skill = (root / "skills/SKILL.md").read_text()
     for marker in ("/compforge:jira", "Use Compforge jira:", "workflow/jira-card.md"):
         if marker not in skill:

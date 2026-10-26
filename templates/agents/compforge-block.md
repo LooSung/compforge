@@ -13,7 +13,7 @@ Install: <https://github.com/LooSung/compforge>
 | `{pack}/skills/workflow/craft.md` | default entry point for frontend work |
 | `{pack}/skills/workflow/refactor.md` | behavior-preserving cleanup |
 | `{pack}/skills/workflow/consult.md` | advice, review, or one planning document |
-| `{pack}/skills/workflow/jira-card.md` | one Jira work card; the card only |
+| `{pack}/skills/workflow/jira-card.md` | one Jira task, story, bug, or epic; the card only |
 | `{pack}/skills/principles/component-discipline.md` | component boundaries, state ladder |
 | `{pack}/skills/principles/hard-rules.md` | MUST / SHOULD / NEVER (canonical) |
 | `{pack}/AGENTS.md` | stage and task routing tables |
