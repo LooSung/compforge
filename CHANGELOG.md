@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.6.0] — 2026-10-27
+
+Jira children and a backlog card. Craft stays the default entry point.
+
 ### Added
 
 - **Jira backlog** — `/compforge:jira`에 백로그 템플릿이 있다. 본문은
