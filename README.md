@@ -117,7 +117,7 @@ Craft is the default. Refactor, Consult, and Jira keep separate write boundaries
 | `craft` | Implement or select the smallest frontend path | Skip required stages or broaden scope silently |
 | `refactor` | Improve structure while preserving behavior | Add features or change visible UI behavior |
 | `consult` | Ask, compare, review, or write one planning document | Change production, test, config, or CI code |
-| `jira` | Write one Jira work card in the fixed template | Change anything but the card |
+| `jira` | Write one Jira card, or the child tasks of one epic or story | Change anything but those issues |
 
 Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:jira`.
 Codex and Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `jira: …`.

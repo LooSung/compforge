@@ -78,6 +78,7 @@ def check_required_paths(root: Path) -> None:
         "skills/workflow/refactor.md",
         "skills/workflow/consult.md",
         "skills/workflow/jira-card.md",
+        "skills/workflow/jira-children.md",
         "skills/principles/hard-rules.md",
         ".cursor-plugin/skills/compforge/SKILL.md",
         "scripts/ci/harness/probes.sh",
@@ -131,7 +132,8 @@ def check_required_paths(root: Path) -> None:
     jira_skill = (root / "skills/workflow/jira-card.md").read_text()
     for marker in (
         "Never change code",
-        "Type: task | story | bug | epic",
+        "Type: task | story | bug | epic | backlog",
+        "## 배경",
         "## 개요",
         "## 작업 내용",
         "## 현상",
@@ -140,8 +142,34 @@ def check_required_paths(root: Path) -> None:
     ):
         if marker not in jira_skill:
             raise SystemExit(f"Jira skill missing {marker}")
+    children_command = (root / "commands/jira.md").read_text()
+    for marker in (
+        f"{expected_root}/jira-children.md",
+        f"{expected_link}/jira-children.md",
+    ):
+        if marker not in children_command:
+            raise SystemExit(f"Claude jira command missing children path: {marker}")
+    children_skill = (root / "skills/workflow/jira-children.md").read_text()
+    for marker in (
+        "Mode: children",
+        "[F.E]",
+        "[B.E]",
+        "[AI]",
+        "[DOC]",
+        "## 개요",
+        "Never edit the parent",
+        "구현 저장소",
+        "Never change code",
+    ):
+        if marker not in children_skill:
+            raise SystemExit(f"Jira children skill missing {marker}")
     skill = (root / "skills/SKILL.md").read_text()
-    for marker in ("/compforge:jira", "Use Compforge jira:", "workflow/jira-card.md"):
+    for marker in (
+        "/compforge:jira",
+        "Use Compforge jira:",
+        "workflow/jira-card.md",
+        "workflow/jira-children.md",
+    ):
         if marker not in skill:
             raise SystemExit(f"skills/SKILL.md missing Jira route: {marker}")
 
