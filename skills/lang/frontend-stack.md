@@ -9,7 +9,7 @@ stability: stable
 
 ## Scope gate (check first)
 
-Supported today: **TypeScript + React**.
+Supported: **TypeScript + React**.
 
 | Request | Action |
 |---|---|

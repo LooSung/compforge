@@ -5,6 +5,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+### Fixed
+
+- **상태 배치** — `react/state-placement.md`에서 멀리 떨어진 컴포넌트가
+  공유하는 상태는 composition 먼저, 그다음 context나 store다.
+  `component-discipline`과 Hard Rules와 같은 순서다.
+- **문구** — 지원 스택을 "Supported: TypeScript + React"로 적는다.
+  `CLAUDE.md`의 워크플로가 Test 단계까지 포함한다.
+
 ## [1.6.0] — 2026-10-27
 
 Jira children and a backlog card. Craft stays the default entry point.

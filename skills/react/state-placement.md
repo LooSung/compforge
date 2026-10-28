@@ -16,7 +16,7 @@ most React bugs: stale copies, sync effects, phantom re-renders.
 1. Derivable from existing state/props?  -> derive at render; do not store
 2. Comes from the server?                -> query layer (TanStack Query et al.)
 3. Belongs in the URL?                   -> route/search params
-4. Shared across distant components?     -> store (Zustand) or context
+4. Shared across distant components?     -> composition first, then context or store (Zustand)
 5. Otherwise                             -> useState in the owning component
 ```
 
