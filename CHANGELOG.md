@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.6.1] — 2026-10-28
+
+State placement and workflow wording fixes. Craft stays the default entry point.
+
 ### Fixed
 
 - **상태 배치** — `react/state-placement.md`에서 멀리 떨어진 컴포넌트가
