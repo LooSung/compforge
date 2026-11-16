@@ -5,6 +5,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.7.1] — 2026-11-16
+
+Live run and the cleanup pass are opt-in. Craft stays the default entry point.
+
+### Changed
+
+- **Live run** — 기본으로 꺼져 있다. 사용자가 그 요청에서 부탁했거나 대상
+  `AGENTS.md`에 `Compforge live run: on`이 있을 때만 앱를 띄운다. 꺼져 있으면
+  `Live run: not run`과 손으로 확인할 것을 한 줄로 보고한다. 앱 실행이 팩에서
+  가장 비싼 동작이라 Craft와 Refactor마다 돌지 않게 했다.
+- **Refactor cleanup pass** — 기본으로 꺼져 있다. 사용자가 부탁했거나
+  `Compforge cleanup pass: on`이 있을 때만 `/simplify`를 돌린다.
+
 ## [1.7.0] — 2026-11-16
 
 Review command, live runs, and skill hygiene against the Claude Code skill
@@ -211,83 +224,9 @@ tests default to hooks and DOM; Playwright E2E is not the default.
 - Claude live positive probes use `--permission-mode dontAsk`. Plan mode
   refused the activation token as an injection.
 
-## [1.2.2] — 2026-08-25
-
-### Fixed
-
-- The Claude Craft command now supports both session-plugin
-  `${CLAUDE_PLUGIN_ROOT}` resolution and the canonical
-  `~/.claude/skills/compforge` symlink install path.
-- Claude live smoke now generates a uniquely named temporary probe, preventing
-  a same-named command from an older global install from masking the candidate.
-
-## [1.2.1] — 2026-08-25
-
-### Added
-
-- A credential-free regression test proves Claude candidate activation never
-  creates or rewrites installed Claude or Codex links.
-
-### Fixed
-
-- Claude plugin metadata now follows the current manifest schema, and the Craft
-  command resolves its workflow through `${CLAUDE_PLUGIN_ROOT}`.
-- Claude live smoke loads the current checkout with session-only `--plugin-dir`
-  and verifies its reported plugin root instead of temporarily rebinding global
-  links.
-
-## [1.2.0] — 2026-08-25
-
-### Added
-
-- Standard GitHub contribution, issue, pull-request, conduct, and security
-  policies, plus a pack path-convention reference.
-- Proof export mode and a CI characterization test that verify starter and
-  treatment skills come from the same recorded commit.
-- Cart data-flow, wiring, example cross-check, and import-rule guidance.
-- A 300-line maintained-text gate with explicit exemptions for generated
-  lockfiles and immutable published proof patches.
-
-### Changed
-
-- `compforge init` no longer writes a `verifyCommand` for a standalone
-  `compforge` CLI that does not exist; verification guidance points directly to
-  `{pack}/scripts/setup/init.sh --verify`.
-- Cursor local-plugin notes now live only in `docs/setup/cursor.md`; the
-  unreferenced duplicate `.cursor-plugin/README.md` was removed.
-- Setup, reference, and project docs now live in logical subfolders, leaving
-  `docs/README.md` as the only top-level Markdown document under `docs/`.
-- Doctor now checks the invoked checkout's structure while resolving installed
-  links through `$COMPFORGE_HOME` or `~/.compforge`; another valid pack warns
-  instead of failing.
-- English and Korean READMEs keep the runnable quickstart and examples while
-  delegating workflow, harness, enforcement, and evidence detail to their
-  canonical documents.
-- Root CHANGELOG now keeps current 1.x history; 0.x records live under
-  `docs/releases/`. Public direction no longer carries future backlog.
-- The docs index now separates project contracts, references, guides, evidence,
-  and archives; the 1.x direction delegates product definition and release
-  history to their canonical owners. CI rejects orphaned top-level docs.
-- Architecture-review consumers pin the released `v1.2.0` workflow, and comment
-  steps skip forks and Dependabot.
-- Init, harness smoke, and architecture-review tests are split by responsibility
-  without changing their public entry points.
-- The canonical security policy lives under `.github/SECURITY.md`; the v1.0 root
-  path remains as a compatibility pointer.
-
-### Fixed
-
-- Canonical Hard Rules, workflow, pack-document, Next example, proof-publish,
-  and historical research references now match the shipped v1.1 pack.
-- Repository lint now validates Claude, Codex, and Cursor manifest component
-  paths and checks both `skills/` and `docs/` references in `AGENTS.md`.
-- Published-proof rescoring refreshes machine JSON without overwriting the
-  curated interpretation report; a CI regression test preserves that boundary.
-- `INSTALL_CLAUDE=0` and `INSTALL_CODEX=0` no longer force installation into a
-  clean HOME; invalid values are rejected and covered by smoke tests.
-
 ## Older releases
 
+- [1.2.0–1.2.2](docs/releases/changelog-1.2.md)
 - [1.0.0–1.1.0](docs/releases/changelog-1.0-1.1.md)
 - [0.9.0](docs/releases/changelog-0.9.md)
 - [0.5.0–0.8.0](docs/releases/changelog-0.5-0.8.md)

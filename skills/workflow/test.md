@@ -32,7 +32,12 @@ server data. This is not an E2E suite and does not require Playwright.
 
 ### Live run
 
-If the harness can launch and drive the app, use it for the connected check and
+Launching the app is the most expensive step in this pack, so it is opt-in.
+Run it only when the user asks in this request, or the target `AGENTS.md` has
+`Compforge live run: on`. Otherwise do not launch anything: report
+`Live run: not run` and name in one line what to check by hand.
+
+When it is on and the harness can launch and drive the app, use it for the connected check and
 for any change a person can see. In Claude Code, `/verify` confirms that one
 change does what it should; `/run` drives a scenario, which suits the Refactor
 before-and-after below. Craft and Refactor call this section; it is the one

@@ -103,7 +103,7 @@ Test Targets (hooks/components):
 - If broader review is needed, run the per-layer checks in
   `{pack}/docs/reference/reviewer-checklist.md`.
 - Run the necessary tests and record reproducible commands, toolchain identity (node/npm path or version, required env vars), and results.
-- For a change a person can see, or one that touches server data, do the **Live run** in `skills/workflow/test.md` after the tests are green.
+- **Live run** (`skills/workflow/test.md`) is opt-in: launch the app only when the user asked or `Compforge live run: on` is set. Otherwise report `Live run: not run` and what to check by hand.
 - For any failed or skipped verification, leave a reason and the risk.
 
 ## Completion report
