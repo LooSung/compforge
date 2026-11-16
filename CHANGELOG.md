@@ -5,6 +5,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.7.3] — 2026-11-16
+
+Size gate for small Craft tasks. Craft stays the default entry point.
+
+### Changed
+
+- **Size gate** — 기존 파일 두 개 이하를 고치고 새 컴포넌트·훅·상태 위치·쿼리·context를 만들지 않으며
+  의존성·공개 API를 바꾸지 않는 작업은 작은 작업이다. Assumptions와 Component Contract는
+  한 줄씩, 완료 보고는 `Changed`·`Verified`·`Scope drift` 세 줄이다. 규칙, 테스트,
+  Scope drift는 그대로 적용된다. 측정에서 형식 분량은 줄었지만 비용은 거의 같았다.
+  남은 출력의 대부분은 버그 수정 규칙이 요구하는 회귀 테스트다.
+- **Evals** — `craft-small-fix` 케이스를 더했다.
+
 ## [1.7.2] — 2026-11-16
 
 Inlined workflows in multi-file commands. Craft stays the default entry point.

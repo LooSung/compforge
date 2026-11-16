@@ -27,7 +27,7 @@ them again. Read any other file they name only when the task needs it.
 <!-- skills/workflow/craft.md -->
 # Workflow — Craft
 
-Contents: Purpose · Startup procedure · Execution-path selection · Ambiguity resolution (before implementation) · Assumptions (before Contract) · Component Contract · Verification · Completion report · Stage boundaries
+Contents: Purpose · Startup procedure · Execution-path selection · Size gate · Ambiguity resolution (before implementation) · Assumptions (before Contract) · Component Contract · Verification · Completion report · Stage boundaries
 
 ## Purpose
 
@@ -46,10 +46,10 @@ requires it. Components render; hooks decide; every piece of state has one home.
 6. For an advisory request, only recommend a path and do not implement.
 7. For an execution request, copy the checklist of the chosen skill, playbook, or workflow into your task list.
 8. If you skip any step, leave a one-line reason.
-9. Write the **Assumptions** block (below), then the Component Contract, before implementing UI logic.
+9. Write the **Assumptions** block (below), then the Component Contract, before implementing UI logic. On the small path (**Size gate**), each is one line.
 10. Implement and test along the chosen path. Keep changes surgical (`component-discipline` #11).
 11. Verify the project's stated rules (`AGENTS.md` / `skills/principles/hard-rules.md`), naming them in the report, and the results of the tests you ran.
-12. Record design decisions, verification results, **Scope drift**, and remaining risks in the completion report format. **Completion gate**: if a continuity work doc exists, do not report done before updating that doc (Status/Progress/Decisions). If the unit is done but work remains, write `.craft/next-session-prompt.md` before reporting done — do not wait to be asked (`continuity` Session cut).
+12. Record design decisions, verification results, **Scope drift**, and remaining risks in the completion report format (small path: the three-line report). **Completion gate**: if a continuity work doc exists, do not report done before updating that doc (Status/Progress/Decisions). If the unit is done but work remains, write `.craft/next-session-prompt.md` before reporting done — do not wait to be asked (`continuity` Session cut).
 
 ## Execution-path selection
 
@@ -68,6 +68,29 @@ requires it. Components render; hooks decide; every piece of state has one home.
 | Advisory request that wants a recommendation only | recommend the smallest path and do not implement |
 | Execution request but a decision is missing ("make a todo app") | fill the decision via **Ambiguity resolution** below, then select a path |
 
+## Size gate
+
+Decide once, after selecting the path. A task is **small** when all hold:
+
+- it changes at most two existing files and adds no component, hook, state home, query, or context;
+- it adds no dependency and changes no public API, route, or schema;
+- it is not a workflow stage, and the user did not ask for the full format.
+
+On the small path only the paperwork shrinks. Hard Rules, tests, and Scope drift
+still apply, and no continuity work doc is created.
+
+- Assumptions: one line, or `none`.
+- Contract: one line — `Contract: n/a — small change (<why>)`.
+- Completion report: three lines.
+
+```markdown
+Changed: <file — what changed>
+Verified: <command and result | not run — why>
+Scope drift: none | <change — why>
+```
+
+If the work grows past these limits, say so and switch to the standard path.
+
 ## Ambiguity resolution (before implementation)
 
 When the intent is execution but a decisive input is empty (stack, folder architecture, state approach, styling, supported screens/edge cases), resolve it once before code — do not interrogate; propose defaults.
@@ -81,7 +104,7 @@ When the intent is execution but a decisive input is empty (stack, folder archit
 
 ## Assumptions (before Contract)
 
-For any Craft task that requires implementation, fill this once before the Component Contract
+For any standard-size Craft task that requires implementation, fill this once before the Component Contract
 (`component-discipline` #10). Keep it short. If nothing is uncertain, write `none` with a reason.
 
 ```markdown
@@ -97,7 +120,7 @@ options in one sentence and ask — do not silently pick one.
 
 ## Component Contract
 
-For any Craft task that requires implementation, fill in the form below once before writing code.
+For any standard-size Craft task that requires implementation, fill in the form below once before writing code.
 For items that do not apply, write `none` and leave a reason.
 
 ```markdown
