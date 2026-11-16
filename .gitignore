@@ -35,3 +35,6 @@ docs/planning/management.md
 
 # Compforge continuity work docs (personal in-progress notes, not committed)
 .craft/
+
+# claude plugin eval output
+evals/results/

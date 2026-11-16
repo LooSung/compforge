@@ -28,6 +28,7 @@
     "skills/antipatterns/useeffect-abuse.md",
     "skills/workflow/consult.md",
     "skills/workflow/jira-card.md",
-    "skills/workflow/jira-children.md"
+    "skills/workflow/jira-children.md",
+    "skills/workflow/review.md"
   ]
 }

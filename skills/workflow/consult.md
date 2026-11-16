@@ -7,6 +7,8 @@ stability: experimental
 
 # Workflow — Consult
 
+Contents: Purpose · When to use · Startup · Mode selection · Answer · Proposal · Review · Document · Prohibited · Completion
+
 ## Purpose
 
 Give evidence-backed frontend advice without turning an advisory request into
@@ -61,6 +63,10 @@ unconfirmed decisions in Open Questions. Without concrete evidence, recommend
 the simpler path provisionally. Write permission: none.
 
 ## Review
+
+Consult Review covers a design, a code area, or a question about existing code.
+For one finished diff, branch, or pull request, recommend `/compforge:review`
+(`workflow/review.md`) instead and stop.
 
 Read the target project's rules first. Load only relevant Hard Rules,
 anti-patterns, and `docs/reference/reviewer-checklist.md` sections.

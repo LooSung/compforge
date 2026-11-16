@@ -7,6 +7,8 @@ stability: stable
 
 # Workflow — Refactor
 
+Contents: When to use · Job contract (before code) · Core principles · Brownfield order · One branch, one decision · Abandoning a branch · Checklist · Common moves · Prohibited · Verification · Cleanup pass (optional) · Next step
+
 ## When to use
 Existing or imported code needs structural cleanup **without behavior changes**:
 god components, logic buried in JSX, misplaced state, type-only folder structure.
@@ -102,7 +104,22 @@ the residue — otherwise the next session inherits a half-real repository.
 
 ## Verification
 - Tests green before and after; no assertions weakened.
+- When the changed surface can be seen, drive it before the first move and after
+  the last (`skills/workflow/test.md` **Live run**); the observed result must match.
 - Hard Rules in `skills/principles/hard-rules.md` improved or unchanged — never regressed.
+
+## Cleanup pass (optional)
+
+If the harness provides a diff-scoped cleanup skill (Claude Code: `/simplify`),
+run it once, **after** the checks above are green. It tidies the moves you just
+made; it does not choose the boundary decision and does not replace this workflow.
+
+- Scope it to this branch's diff. Files the refactor did not touch stay untouched.
+- It applies edits itself. Re-run type-check and tests afterwards.
+- Revert any edit that changes behavior, merges two implementations, or carries
+  a second decision — the rules in **Prohibited** still apply to its output.
+- List what it changed under **Scope drift** in the completion report.
+- No such skill in this harness: skip, and say so in one line.
 
 ## Next step
 After verification -> review, commit, push. If a functional change is needed, split it into a separate Craft job.

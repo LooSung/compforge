@@ -74,11 +74,13 @@ def check_required_paths(root: Path) -> None:
         "commands/refactor.md",
         "commands/consult.md",
         "commands/jira.md",
+        "commands/review.md",
         "skills/workflow/craft.md",
         "skills/workflow/refactor.md",
         "skills/workflow/consult.md",
         "skills/workflow/jira-card.md",
         "skills/workflow/jira-children.md",
+        "skills/workflow/review.md",
         "skills/principles/hard-rules.md",
         ".cursor-plugin/skills/compforge/SKILL.md",
         "scripts/ci/harness/probes.sh",
@@ -98,6 +100,7 @@ def check_required_paths(root: Path) -> None:
         "commands/refactor.md",
         "commands/consult.md",
         "commands/jira.md",
+        "commands/review.md",
         "skills/SKILL.md",
         ".cursor-plugin/skills/compforge/SKILL.md",
     ]
@@ -112,6 +115,7 @@ def check_required_paths(root: Path) -> None:
         ("refactor", "refactor.md"),
         ("consult", "consult.md"),
         ("jira", "jira-card.md"),
+        ("review", "review.md"),
     ):
         command = (root / f"commands/{name}.md").read_text()
         if (
@@ -172,12 +176,58 @@ def check_required_paths(root: Path) -> None:
     ):
         if marker not in skill:
             raise SystemExit(f"skills/SKILL.md missing Jira route: {marker}")
+    review_skill = (root / "skills/workflow/review.md").read_text()
+    for marker in (
+        "**P1**",
+        "**P2**",
+        "**P3**",
+        "base commit",
+        "Never modify production code",
+        "Never post to a pull request without an explicit request",
+    ):
+        if marker not in review_skill:
+            raise SystemExit(f"Review skill missing {marker}")
+    for marker in ("/compforge:review", "Use Compforge review:", "workflow/review.md"):
+        if marker not in skill:
+            raise SystemExit(f"skills/SKILL.md missing Review route: {marker}")
+
+
+SPEC_FRONTMATTER_KEYS = {
+    "name", "description", "license", "compatibility", "metadata", "allowed-tools",
+}
+
+
+def check_spec_frontmatter(root) -> None:
+    """Keep SKILL.md loadable everywhere.
+
+    Keys outside the Agent Skills spec are ignored by Claude Code but rejected
+    by claude.ai uploads and the Skills API. An unquoted ': ' or ' #' in a
+    value breaks YAML, and Claude Code then loads the skill with no fields.
+    """
+    paths = [root / "skills/SKILL.md", *sorted(root.glob(".cursor-plugin/skills/*/SKILL.md"))]
+    for path in paths:
+        relative = path.relative_to(root)
+        block = path.read_text(encoding="utf-8").split("---", 2)[1]
+        for line in block.splitlines():
+            if not line or line[0] in " \t#":
+                continue
+            key, sep, value = line.partition(":")
+            if not sep:
+                raise SystemExit(f"{relative}: unparsable frontmatter line: {line}")
+            if key not in SPEC_FRONTMATTER_KEYS:
+                raise SystemExit(
+                    f"{relative}: non-spec frontmatter key {key!r}; move it under metadata"
+                )
+            value = value.strip()
+            if value and value[0] not in "'\"|>" and (": " in value or " #" in value):
+                raise SystemExit(f"{relative}: unquoted ': ' or ' #' in {key} breaks YAML")
 
 
 def main() -> None:
     root = Path(sys.argv[1]).resolve()
     check_manifests(root)
     check_stability(root)
+    check_spec_frontmatter(root)
     check_required_paths(root)
     print("PASS static harness packaging")
 

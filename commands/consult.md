@@ -1,6 +1,7 @@
 ---
 name: consult
 description: Ask, compare, review, or explicitly document frontend work without implementation changes.
+argument-hint: "[question, comparison, review, or document request]"
 ---
 
 If the user request is exactly `COMPFORGE_ACTIVATION_PROBE`, output these three

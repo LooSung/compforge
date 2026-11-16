@@ -50,10 +50,10 @@ Discovery → Design → Delivery Plan → Skeleton → Implement → Test
 
 ## 3. 공개 커맨드
 
-기본 진입점은 **Craft**다. Refactor, Consult, Jira는 인가 경계가 다를 때만 쓴다.
+기본 진입점은 **Craft**다. Refactor, Consult, Review, Jira는 인가 경계가 다를 때만 쓴다.
 
 Claude Code에서는 `/compforge:craft`, `/compforge:refactor`,
-`/compforge:consult`, `/compforge:jira`. Codex·Cursor에서는 `Use Compforge craft: …`처럼
+`/compforge:consult`, `/compforge:review`, `/compforge:jira`. Codex·Cursor에서는 `Use Compforge craft: …`처럼
 자연어로 호출한다 (`/` 없이).
 
 Craft는:
@@ -64,7 +64,9 @@ Craft는:
 4. 구현·테스트 후 프로젝트 규칙을 검증하고 완료 보고를 남긴다.
 
 명시적 Refactor는 동작을 보존한 채 구조만 바꾼다. Consult는 조언·리뷰·문서이며
-구현 코드를 바꾸지 않는다. Jira는 작업(Task)이 기본이고, 스토리·버그·에픽·백로그는
+구현 코드를 바꾸지 않는다. Review는 끝난 변경 하나(diff·브랜치·PR)를 기준 커밋에
+고정해 P1(머지 전 필수)·P2(머지 전 권장)·P3(선택) 의견으로 보고하고, 코드는
+바꾸지 않으며 PR 코멘트는 요청할 때만 단다. Jira는 작업(Task)이 기본이고, 스토리·버그·에픽·백로그는
 요청에 그 말이 있을 때만 각 템플릿으로 이슈 하나를 쓴다. 백로그는 이슈 타입이
 아니다. 본문은 배경·결과·범위·미결·참고이고, Jira 이슈 타입은 같이 말한
 스토리·작업·버그, 말이 없으면 스토리이며 스프린트는 비운다. 이미 있는 에픽이나

@@ -1,6 +1,7 @@
 ---
 name: craft
 description: Execute frontend component work with the smallest appropriate path.
+argument-hint: "[frontend task]"
 ---
 
 If the user request is exactly `COMPFORGE_ACTIVATION_PROBE`, output these three

@@ -7,6 +7,8 @@ stability: stable
 
 # Lint Enforcement
 
+Contents: When to use · Feature folders — ESLint zones · Next.js App Router — ESLint zones · Feature-Sliced Design — steiger + `any` · TypeScript `strict` and `tsc` · Staying alive · CI wiring · Blocking policy · Prohibited
+
 ## When to use
 
 When you want to enforce feature or FSD boundary rules **via the build, not docs**.

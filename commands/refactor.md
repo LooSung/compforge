@@ -1,6 +1,7 @@
 ---
 name: refactor
 description: Improve frontend structure while preserving behavior.
+argument-hint: "[code area and the smell to remove]"
 ---
 
 If the user request is exactly `COMPFORGE_ACTIVATION_PROBE`, output these three

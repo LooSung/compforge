@@ -12,6 +12,8 @@ Each release record includes:
 
 Records, newest first:
 
+- [`evals-2026-11-16.md`](evals-2026-11-16.md) — `claude plugin eval` with and
+  without the plugin, plus Haiku and Sonnet, for v1.7.0.
 - [`harness-cursor-negative-v1.3.5.md`](harness-cursor-negative-v1.3.5.md) —
   Cursor negative control passed after uninstalling HOME-scoped pack links.
 - [`harness-v1.3.4.md`](harness-v1.3.4.md) — live activation for the `refactor`

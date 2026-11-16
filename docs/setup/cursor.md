@@ -71,6 +71,7 @@ Use Compforge craft: Add a quantity stepper to the cart item
 Use Compforge craft: Read docs/screens/checkout.md and advise only.
 Use Compforge refactor: Split the cart page without changing behavior
 Use Compforge consult: Review the cart state placement
+Use Compforge review: Review the current branch
 Use Compforge jira: Write one work card for the cart quantity stepper. Do not edit files.
 ```
 

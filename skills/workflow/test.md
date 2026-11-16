@@ -24,11 +24,37 @@ connecting the app and using it.
 
 Do not add a third automated layer by default.
 
-## Connected check (manual)
+## Connected check
 
 CORS, cookies, auth, and live API shape are verified by running the app
 against the real backend. Record that you did it when the change touches
 server data. This is not an E2E suite and does not require Playwright.
+
+### Live run
+
+If the harness can launch and drive the app, use it for the connected check and
+for any change a person can see. In Claude Code, `/verify` confirms that one
+change does what it should; `/run` drives a scenario, which suits the Refactor
+before-and-after below. Craft and Refactor call this section; it is the one
+place the rules live.
+
+`/verify` may save its launch recipe to `.claude/skills/verify/SKILL.md` in the
+target project. That is a project file: report it under Scope drift and leave
+committing it to the user.
+
+- Start the app with the project's existing command. Never install a browser
+  driver, Playwright, or any dependency, and never create E2E files.
+- Drive only what changed: its named states (loading, empty, error, data) and
+  the interaction the change adds.
+- Record the command, what you observed (screenshot or visible text), and the
+  result. "It started" is not evidence.
+- A run never replaces the unit and component tests above. It shows the wiring
+  they cannot.
+- For Refactor, drive the same scenario before the first move and after the
+  last. The observed result must be identical.
+- Stop every process you started.
+- No such skill, or the app cannot start (missing env, backend down): check by
+  hand, or report it as not checked with the reason.
 
 ## Checklist
 - [ ] Every hook with branching logic has unit tests

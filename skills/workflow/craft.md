@@ -7,6 +7,8 @@ stability: stable
 
 # Workflow — Craft
 
+Contents: Purpose · Startup procedure · Execution-path selection · Ambiguity resolution (before implementation) · Assumptions (before Contract) · Component Contract · Verification · Completion report · Stage boundaries
+
 ## Purpose
 
 Run a frontend task via the smallest appropriate execution path.
@@ -101,6 +103,7 @@ Test Targets (hooks/components):
 - If broader review is needed, run the per-layer checks in
   `{pack}/docs/reference/reviewer-checklist.md`.
 - Run the necessary tests and record reproducible commands, toolchain identity (node/npm path or version, required env vars), and results.
+- For a change a person can see, or one that touches server data, do the **Live run** in `skills/workflow/test.md` after the tests are green.
 - For any failed or skipped verification, leave a reason and the risk.
 
 ## Completion report

@@ -1,6 +1,7 @@
 ---
 name: jira
 description: Write one Jira task, story, bug, epic, or backlog item, or the child tasks of one existing epic or story, in the fixed Korean template without changing code.
+argument-hint: "[card request, or the parent key for child tasks]"
 ---
 
 If the user request is exactly `COMPFORGE_ACTIVATION_PROBE`, output these three

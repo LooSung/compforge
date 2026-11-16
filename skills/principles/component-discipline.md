@@ -7,6 +7,8 @@ stability: stable
 
 # Component Discipline
 
+Contents: The ladder · 1. Components render; hooks decide · 2. Define boundaries before code · 3. Name the state's home before creating it · 4. Immutability is non-negotiable · 5. Composition before configuration · 6. Failing test before bug fix · 7. Subtract before abstracting · 8. Encode lessons in structure · 9. Duplicate before the wrong abstraction · 10. Surface assumptions before coding · 11. Surgical changes only · 12. Evidence before cause · 13. Comment discipline · 14. Product language at the human boundary · Rationalizations (do not accept these from yourself)
+
 Read this before starting frontend work.
 In the completion report, mention only the principles that actually changed a design decision.
 

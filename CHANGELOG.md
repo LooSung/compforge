@@ -5,6 +5,37 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+### Added
+
+- **Review** — `/compforge:review`는 끝난 변경 하나(현재 diff, 브랜치, PR, 붙여넣은 diff)를
+  기준 커밋에 고정해 리뷰한다. 의견은 P1(머지 전 필수)·P2(머지 전 권장)·
+  P3(선택)이고, 각 의견에 근거 줄과 가장 작은 수정 방향을 적는다. PR 본문의
+  "먼저 봐 주세요"·테스트·자가 점검을 읽기 순서와 검증할 주장으로 쓴다.
+  코드는 바꾸지 않고, PR 코멘트는 요청할 때만 단다. 팩 리뷰어
+  (`scripts/ci/review`)와 하네스의 버그 리뷰(`/code-review`)는 있으면 쓴다.
+- **Refactor cleanup pass** — 검증이 통과한 뒤 하네스에 diff 범위 정리
+  스킬(`/simplify`)이 있으면 한 번 돌리고, 테스트를 다시 돌리고, 바뀐 것을
+  Scope drift에 적는다.
+- **Live run** — `workflow/test.md`의 연결 확인에 하네스의 실행 스킬
+  (`/verify`, `/run`)을 쓴다. 기존 시작 명령만 쓰고 아무것도 설치하지 않으며,
+  관찰한 결과를 근거로 남긴다. Craft는 테스트 통과 후, Refactor는 첫 이동 전과
+  마지막 이동 후에 같은 시나리오로 이 섹션을 따른다.
+- **Evals** — `evals/`에 `claude plugin eval` 케이스 세 개(review, consult,
+  craft)가 있다. 플러그인 유무를 비교해 점수 차이를 보고한다.
+
+### Changed
+
+- **Consult Review** — 설계, 코드 영역, 기존 코드 질문을 다룬다. 끝난 diff나
+  PR은 `/compforge:review`로 안내한다.
+- **SKILL.md** — description을 3인칭으로, 핵심 용도부터 쓴다. `stability`는
+  Agent Skills 스펙에 맞춰 `metadata` 아래로 옮겼다(claude.ai 업로드와 Skills
+  API가 스펙 밖 키를 거부한다). 모든 스킬 파일을 SKILL.md에서 바로 링크하고,
+  compaction 뒤에는 라우팅된 workflow를 다시 읽는다.
+- **목차** — 100줄이 넘는 스킬 파일은 제목 아래 `Contents:` 한 줄을 둔다.
+- **명령** — 모든 명령에 `argument-hint`가 있다.
+- **패키징 검사** — SKILL.md frontmatter가 스펙 키만 쓰고 YAML을 깨는
+  `: `가 없는지 확인한다.
+
 ## [1.6.1] — 2026-10-28
 
 State placement and workflow wording fixes. Craft stays the default entry point.

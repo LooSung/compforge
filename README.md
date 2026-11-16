@@ -105,22 +105,22 @@ negative self-test. To re-run that proof later:
 ~/.compforge/scripts/setup/init.sh --verify
 ```
 
-The pointer does not copy Hard Rules that would go stale. Delivery details and
-self-test behavior live in [`templates/README.md`](./templates/README.md).
+The pointer does not copy Hard Rules that would go stale. Delivery details and self-test behavior live in [`templates/README.md`](./templates/README.md).
 
 ## Public commands
 
-Craft is the default. Refactor, Consult, and Jira keep separate write boundaries. There is no public `test` command.
+Craft is the default. Refactor, Consult, Review, and Jira keep separate write boundaries. There is no public `test` command.
 
 | Command | Use it when | Must not |
 |---|---|---|
 | `craft` | Implement or select the smallest frontend path | Skip required stages or broaden scope silently |
 | `refactor` | Improve structure while preserving behavior | Add features or change visible UI behavior |
 | `consult` | Ask, compare, review, or write one planning document | Change production, test, config, or CI code |
+| `review` | Review one diff, branch, or pull request with P1/P2/P3 findings | Change code, or post to a PR without being asked |
 | `jira` | Write one Jira card, or the child tasks of one epic or story | Change anything but those issues |
 
-Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:jira`.
-Codex and Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `jira: …`.
+Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:review`, `/compforge:jira`.
+Codex and Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `review: …`, `jira: …`.
 
 ## The Basic Workflow
 
@@ -272,7 +272,7 @@ Cursor and project-local removal steps live in
 ## What's included
 
 - `skills/` — workflow, React, stack, skeleton, playbooks, and review instructions
-- `commands/` — Claude Code command entry points (`craft`, `refactor`, `consult`, `jira`)
+- `commands/` — Claude Code command entry points (`craft`, `refactor`, `consult`, `review`, `jira`)
 - `examples/` — three runnable TypeScript + React todo references
 - `docs/` — harness guides, proof protocol, 1.x direction, support scope, verification
 - `scripts/` — setup, init, lint, proof runner, and smoke tests
