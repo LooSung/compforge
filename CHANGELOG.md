@@ -5,6 +5,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.7.0] — 2026-11-16
+
+Review command, live runs, and skill hygiene against the Claude Code skill
+guidance. Craft stays the default entry point.
+
 ### Added
 
 - **Review** — `/compforge:review`는 끝난 변경 하나(현재 diff, 브랜치, PR, 붙여넣은 diff)를
