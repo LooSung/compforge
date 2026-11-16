@@ -5,6 +5,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.7.2] — 2026-11-16
+
+Inlined workflows in multi-file commands. Craft stays the default entry point.
+
+### Changed
+
+- **명령에 workflow 본문 포함** — `craft`, `refactor` 명령은 workflow와 원칙 파일의
+  본문을 명령 안에 담는다. 파일을 하나씩 읽는 턴이 없어진다. `claude plugin eval`
+  측정에서 craft는 9턴에서 4턴, 비용 약 34% 감소(같은 점수)였다. refactor는 턴은
+  줄지만 계획을 더 길게 써서 비용은 비슷할 수 있다.
+  원본은 계속 `skills/`이고, `scripts/ci/build-commands.py`가 복사한다. lint가
+  `--check`로 어긋남을 잡는다. 스킬을 고친 뒤에는 이 스크립트를 다시 돌린다.
+
 ## [1.7.1] — 2026-11-16
 
 Live run and the cleanup pass are opt-in. Craft stays the default entry point.

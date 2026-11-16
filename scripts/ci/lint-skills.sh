@@ -202,6 +202,11 @@ cyan "--- Harness packaging"
 check_public_commands
 check_cursor_skill
 check_manifest_component_paths
+if python3 "$PACK_DIR/scripts/ci/build-commands.py" --check >/dev/null; then
+  ok "commands match skills (inlined workflows)"
+else
+  fail "commands out of date: run python3 scripts/ci/build-commands.py"
+fi
 
 cyan "--- Documentation links"
 check_doc_links
