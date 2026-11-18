@@ -111,19 +111,19 @@ Init은 자신이 만들지 않은 파일을 보존하고 negative self-test로 
 
 ## 공개 커맨드
 
-Craft가 기본입니다. Refactor, Consult, Review, Jira는 인가 경계가 달라서 따로 있습니다.
-공개 `test` 커맨드는 없습니다.
+Craft가 기본입니다. Refactor, Consult, Test, Review, Jira는 인가 경계가 달라서 따로 있습니다.
 
 | 커맨드 | 쓸 때 | 하면 안 되는 일 |
 |---|---|---|
 | `craft` | 구현하거나 가장 작은 프론트 경로를 고를 때 | 필수 단계를 건너뛰거나 범위를 몰래 넓히기 |
 | `refactor` | 동작을 유지한 채 구조를 정리할 때 | 기능 추가나 보이는 UI 동작 변경 |
 | `consult` | 질문, 비교, 리뷰, 계획 문서 하나 | 프로덕션·테스트·설정·CI 코드 변경 |
+| `test` | 훅·컴포넌트 테스트를 확인·작성·보강할 때 | 프로덕션 동작 변경, 기본값으로 E2E 추가 |
 | `review` | diff·브랜치·PR 하나를 P1/P2/P3 의견으로 리뷰할 때 | 코드 변경, 요청 없이 PR에 코멘트 게시 |
 | `jira` | 고정 템플릿으로 Jira 작업 카드 하나 | 카드 외의 모든 변경 |
 
-Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:review`, `/compforge:jira`.
-Codex·Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `review: …`, `jira: …`.
+Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:test`, `/compforge:review`, `/compforge:jira`.
+Codex·Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `test: …`, `review: …`, `jira: …`.
 
 ## 기본 워크플로
 
@@ -214,7 +214,7 @@ function CartPage() {
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v1.7.3
+git checkout v1.8.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh

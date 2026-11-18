@@ -127,8 +127,8 @@ before publishing, and record disagreements in the result.
 - Hard Rule violations not in the primary list: prop drilling beyond two levels,
   `any` in committed code, untested logic hooks.
 
-Elapsed time and token usage may be recorded as context, but they are not
-success metrics. Neither is line count: a run that deletes the empty state and
+Elapsed time, token usage, and decisions asked of the human are recorded as
+context in the result template, but they are not success metrics. Neither is line count: a run that deletes the empty state and
 the accessible label is shorter and worse.
 
 ## Run
@@ -254,6 +254,11 @@ the wrong patterns.
   Frozen diffs were re-scored with the fixed evaluator in
   [2026-08-20 evaluator rescore](./results/2026-08-20-evaluator-rescore.md);
   agents were not re-run.
+- Changing the evaluator after seeing results lets the result shape the scorer.
+  Record the evaluator commit before the next runs; a later change is a rescore
+  and is reported beside the original, never in place of it. A legacy starter
+  written by someone other than the maintainer would also remove authorship
+  bias.
 - Missing `.craft/` creation invalidates the treatment skill load.
 - A control workspace that can discover Compforge instructions invalidates the
   control run.

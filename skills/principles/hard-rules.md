@@ -41,7 +41,7 @@ is the mechanical subset a detector can read.
 - Shared state SHOULD use composition (`children`) before context.
 - `useEffect` SHOULD be a last resort: synchronize with an external system only.
 - A structure SHOULD earn its exemption by naming the invariant it protects
-  and the user's word for it.
+  and the user's word for it. Ask about public names only; default internal ones.
 - Ask for approval in the user's words, not Contract jargon.
 
 ## NEVER

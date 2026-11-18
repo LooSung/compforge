@@ -27,6 +27,7 @@ LEAD = (
 COMMANDS = {
     "craft": ["workflow/craft.md", "principles/component-discipline.md"],
     "refactor": ["workflow/refactor.md", "workflow/craft.md", "principles/component-discipline.md"],
+    "test": ["workflow/test.md", "workflow/craft.md", "principles/component-discipline.md"],
 }
 
 

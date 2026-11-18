@@ -5,8 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.8.0] — 2026-11-18
+
+Public `test` command, public-versus-internal names, and environment facts.
+
+### Added
+
+- **`/compforge:test`** — 훅·컴포넌트 테스트를 확인·작성·보강한다. Craft 시작·완료 게이트를 쓰고
+  프로덕션 동작을 바꾸지 않으며 E2E는 기본값이 아니다. 1.3.0의 "공개 `test` 커맨드 없음" 결정을
+  되돌린다. OOPforge와 명령 구성이 달라 FuseForge가 두 팩을 함께 쓸 때 혼동이 생겼다.
+
 ### Changed
 
+- **Names** — 구조를 정당화하는 "사용자의 단어" 규칙은 이름마다 묻게 하는 규칙이 아니다.
+  공개 이름(경로·엔드포인트·오류 코드·화면 문구·도메인 개념)만 묻고, 내부 이름은 기존 관례를 따른
+  기본값으로 정해 목록 하나로 보여준다.
+- **Environment Facts** — 완료 보고에 이번 세션에서 알게 된 환경 사실을 적는다. 사용자가 동의하면
+  대상 프로젝트 `AGENTS.md`에 덧붙이고, 에이전트 메모리나 `.craft/`에만 두지 않는다.
+- **Proof template** — 증명 결과에 걸린 시간, 토큰, 사람에게 물은 결정 수와 추천이 바뀐 수,
+  설계 단계에서 잡은 결함과 그 비용을 기록한다. 채점기는 실행 전에 커밋을 기록하고, 이후 수정은
+  재채점으로 따로 보고한다.
 - **Context budget** — 대화가 한 번 자동 요약되었거나, 단계 둘 이상을 끝냈거나, 같은 상태 질문·같은 파일 읽기가 반복되면 안전한 지점에서 세션을 끊는다.
   안전한 지점은 실행 중인 에이전트·명령·머지가 없고, 변경이 커밋·기록되었고, `next-session-prompt.md` 가 커밋·대화 속 결정·남은 순서를 담은 때다.
 

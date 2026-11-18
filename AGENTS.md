@@ -41,7 +41,7 @@ For new features or large screens, do not jump straight to code.
 
 Ask for human approval before moving from one stage to the next.
 
-**For smaller, focused tasks** (one component, extending an existing feature, refactoring) — start with `/compforge:craft` (`commands/craft.md`) unless the request is explicitly Refactor, Consult, Review, or Jira. Code review of a finished change goes to `/compforge:review`. Craft selects the smallest path and does not force the full pipeline.
+**For smaller, focused tasks** (one component, extending an existing feature, refactoring) — start with `/compforge:craft` (`commands/craft.md`) unless the request is explicitly Refactor, Consult, Test, Review, or Jira. Code review of a finished change goes to `/compforge:review`. Craft selects the smallest path and does not force the full pipeline.
 
 ## Default Entry Point
 
@@ -52,6 +52,7 @@ Use `/compforge:craft` (`commands/craft.md`) as the default Compforge user entry
 - Use `/compforge:craft` for single components, existing-feature additions, and UI bug fixes.
 - Use `/compforge:refactor` when the request is explicit behavior-preserving cleanup. Do not reclassify it as feature work.
 - Use `/compforge:consult` for advice, proposals, reviews, or one planning document. Do not change implementation code.
+- Use `/compforge:test` to verify, write, or strengthen hook and component tests; it does not change production behavior.
 - Use `/compforge:review` to review one diff, branch, or pull request; it reports P1/P2/P3 findings and changes no code.
 - Use `/compforge:jira` to write or rewrite one Jira work card, or the child tasks of one existing epic or story, in the fixed template; it changes nothing but those issues.
 - For ambiguous requests, Craft recommends the smallest path without implementing.

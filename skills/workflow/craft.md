@@ -142,7 +142,16 @@ Test Targets (hooks/components):
 
 ## Remaining Risks
 -
+
+## Environment Facts
+- none | <fact about this project's tooling or environment learned this session>
 ```
+
+An environment fact is something the next session would otherwise relearn the
+hard way, such as a hook that breaks the dev server or a check that is slow
+enough to run once at the end. Offer to add each one to the target project's
+`AGENTS.md`, and add it only after the user agrees. Never keep it only in agent
+memory or in `.craft/`.
 
 ## Stage boundaries
 

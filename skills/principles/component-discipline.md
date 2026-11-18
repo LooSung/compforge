@@ -91,6 +91,12 @@ boundary. A structure is essential only when you can name both:
 If the name is one the user never used, the structure goes back on rung 1.
 Calling it "the query layer" is not evidence.
 
+This rule is evidence that a structure is needed, not a reason to ask the user
+about every name. Ask only about public names — routes, endpoint paths, error
+codes, user-visible text, domain concepts. Give internal names (components,
+hooks, modules, files) a default that follows the project's existing convention,
+and list them once for the user to override.
+
 **Leave a marker for what you defer.** If you intentionally do the minimum,
 mark the spot with what you deferred and the upgrade path.
 

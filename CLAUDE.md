@@ -7,6 +7,7 @@ When working on this repository:
 - Use `/compforge:craft` as the default user entry point.
 - Use `/compforge:refactor` for explicit behavior-preserving cleanup.
 - Use `/compforge:consult` for advice, review, or one planning document.
+- Use `/compforge:test` to verify, write, or strengthen hook and component tests without changing production behavior.
 - Use `/compforge:review` to review one diff, branch, or pull request without changing code.
 - Use `/compforge:jira` to write one Jira card, or the child tasks of one epic or story, without changing code.
 - Keep Claude-specific packaging in `.claude-plugin/` and `commands/`.

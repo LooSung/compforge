@@ -98,8 +98,7 @@ with a PR-blocking GitHub Actions check. It is not required to try Craft.
 ~/.compforge/scripts/setup/init.sh
 ```
 
-Init preserves files it did not generate and proves the delivered guard with a
-negative self-test. To re-run that proof later:
+Init preserves files it did not generate and proves the delivered guard with a negative self-test. To re-run that proof later:
 
 ```bash
 ~/.compforge/scripts/setup/init.sh --verify
@@ -109,18 +108,19 @@ The pointer does not copy Hard Rules that would go stale. Delivery details and s
 
 ## Public commands
 
-Craft is the default. Refactor, Consult, Review, and Jira keep separate write boundaries. There is no public `test` command.
+Craft is the default. Refactor, Consult, Test, Review, and Jira keep separate write boundaries.
 
 | Command | Use it when | Must not |
 |---|---|---|
 | `craft` | Implement or select the smallest frontend path | Skip required stages or broaden scope silently |
 | `refactor` | Improve structure while preserving behavior | Add features or change visible UI behavior |
 | `consult` | Ask, compare, review, or write one planning document | Change production, test, config, or CI code |
+| `test` | Verify, write, or strengthen hook and component tests | Change production behavior, or add E2E by default |
 | `review` | Review one diff, branch, or pull request with P1/P2/P3 findings | Change code, or post to a PR without being asked |
 | `jira` | Write one Jira card, or the child tasks of one epic or story | Change anything but those issues |
 
-Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:review`, `/compforge:jira`.
-Codex and Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `review: …`, `jira: …`.
+Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:test`, `/compforge:review`, `/compforge:jira`.
+Codex and Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `test: …`, `review: …`, `jira: …`.
 
 ## The Basic Workflow
 
@@ -211,7 +211,7 @@ release instead:
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v1.7.3
+git checkout v1.8.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh

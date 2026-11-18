@@ -50,10 +50,10 @@ Discovery → Design → Delivery Plan → Skeleton → Implement → Test
 
 ## 3. 공개 커맨드
 
-기본 진입점은 **Craft**다. Refactor, Consult, Review, Jira는 인가 경계가 다를 때만 쓴다.
+기본 진입점은 **Craft**다. Refactor, Consult, Test, Review, Jira는 인가 경계가 다를 때만 쓴다.
 
 Claude Code에서는 `/compforge:craft`, `/compforge:refactor`,
-`/compforge:consult`, `/compforge:review`, `/compforge:jira`. Codex·Cursor에서는 `Use Compforge craft: …`처럼
+`/compforge:consult`, `/compforge:test`, `/compforge:review`, `/compforge:jira`. Codex·Cursor에서는 `Use Compforge craft: …`처럼
 자연어로 호출한다 (`/` 없이).
 
 Craft는:

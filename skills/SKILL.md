@@ -1,6 +1,6 @@
 ---
 name: compforge
-description: Guides TypeScript + React frontend work with component boundaries, state placement (server/client/URL), and a staged delivery workflow. Use when building, refactoring, reviewing a diff or pull request, consulting on, or writing one Jira card or the child tasks of one epic or story for a TypeScript + React frontend — including vague build prompts like "make a todo app" or "add a settings page" — for custom hooks or feature-sliced structure, or for the /compforge:craft, /compforge:refactor, /compforge:consult, /compforge:review, and /compforge:jira prompts.
+description: Guides TypeScript + React frontend work with component boundaries, state placement (server/client/URL), and a staged delivery workflow. Use when building, refactoring, reviewing a diff or pull request, consulting on, or writing one Jira card or the child tasks of one epic or story for a TypeScript + React frontend — including vague build prompts like "make a todo app" or "add a settings page" — for custom hooks or feature-sliced structure, or for the /compforge:craft, /compforge:refactor, /compforge:consult, /compforge:test, /compforge:review, and /compforge:jira prompts.
 license: MIT
 compatibility: Claude Code, Codex CLI, Cursor Agent, and Agent Skills-compatible clients with access to the complete Compforge pack.
 metadata:
@@ -28,14 +28,14 @@ One thing to remember before any frontend change: **decide what not to write, th
 
 ## Command Routing
 
-Treat **`/compforge:craft`** as the default Compforge entry point on **Claude Code**. Use **`/compforge:refactor`** for explicit behavior-preserving cleanup, **`/compforge:consult`** for advice, proposals, review, or explicit planning documents without implementation changes, **`/compforge:review`** for prioritized findings on one finished diff, branch, or pull request without changing code, and **`/compforge:jira`** to write one Jira work card, or the child tasks of one existing epic or story, without touching code.
+Treat **`/compforge:craft`** as the default Compforge entry point on **Claude Code**. Use **`/compforge:refactor`** for explicit behavior-preserving cleanup, **`/compforge:consult`** for advice, proposals, review, or explicit planning documents without implementation changes, **`/compforge:test`** to verify, write, or strengthen hook and component tests without changing production behavior, **`/compforge:review`** for prioritized findings on one finished diff, branch, or pull request without changing code, and **`/compforge:jira`** to write one Jira work card, or the child tasks of one existing epic or story, without touching code.
 
-On **Codex CLI**, do not type Compforge `/` commands at the composer — Codex reserves `/` for built-in commands. Use `/skills` → **compforge**, then `craft: …`, `refactor: …`, `consult: …`, `review: …`, or `jira: …` (no leading `/`).
+On **Codex CLI**, do not type Compforge `/` commands at the composer — Codex reserves `/` for built-in commands. Use `/skills` → **compforge**, then `craft: …`, `refactor: …`, `consult: …`, `test: …`, `review: …`, or `jira: …` (no leading `/`).
 
 On **Cursor Agent CLI**, pass `--plugin-dir` (or the project-local skill plus
 `--add-dir`) as in `{pack}/docs/setup/cursor.md`, then prompt
 `Use Compforge craft: …`, `Use Compforge refactor: …`,
-`Use Compforge consult: …`, `Use Compforge review: …`, or
+`Use Compforge consult: …`, `Use Compforge test: …`, `Use Compforge review: …`, or
 `Use Compforge jira: …`.
 
 ## Project vs pack (paths)
@@ -53,6 +53,7 @@ On **Cursor Agent CLI**, pass `--plugin-dir` (or the project-local skill plus
 | `/compforge:craft …` (Claude) or `Use Compforge craft: …` (Codex/Cursor) | `workflow/craft.md` + `principles/component-discipline.md` | select the smallest frontend path; execute unless advisory only |
 | `/compforge:refactor …` (Claude) or `Use Compforge refactor: …` (Codex/Cursor) | `workflow/craft.md` + `workflow/refactor.md` + `principles/component-discipline.md` | preserve behavior while improving one structural decision |
 | `/compforge:consult …` (Claude) or `Use Compforge consult: …` (Codex/Cursor) | `workflow/consult.md` | answer, propose, review, or explicitly write one planning document without implementation changes |
+| `/compforge:test …` (Claude) or `Use Compforge test: …` (Codex/Cursor) | `workflow/craft.md` + `workflow/test.md` + `principles/component-discipline.md` | verify, write, or strengthen hook and component tests; production behavior unchanged |
 | `/compforge:review …` (Claude) or `Use Compforge review: …` (Codex/Cursor) | `workflow/review.md` | P1/P2/P3 findings on one diff, branch, or pull request at a recorded base commit; posts only on explicit request |
 | `/compforge:jira …` (Claude) or `Use Compforge jira: …` (Codex/Cursor) | `workflow/jira-card.md`; `workflow/jira-children.md` for the children of one existing epic or story | one card, or that parent's `[F.E]` `[B.E]` `[AI]` `[DOC]` tasks; writes to Jira only on explicit request |
 
@@ -69,11 +70,12 @@ Natural language also works, for example: "Use Compforge Discovery for the check
 3. For `/compforge:craft`, follow `workflow/craft.md`; it owns classification, the Component Contract, execution path, and verification.
 4. For an explicit Refactor request, use Craft's startup and completion gates, select `workflow/refactor.md` without reclassification, and preserve behavior.
 5. For Consult, follow `workflow/consult.md`; default to read-only and write one planning document only after explicit document wording.
-6. For Review, follow `workflow/review.md`; report findings on one change and change nothing.
-7. For Jira, follow `workflow/jira-card.md` for one issue. When the request creates the children of an existing epic or story, follow `workflow/jira-children.md` instead. Change nothing else.
-8. Keep the normal order for new work: Discovery -> Design -> Delivery Plan -> Skeleton -> Implement -> Test.
-9. Ask for human approval before moving from one workflow stage to the next.
-10. Do not merge planning, implementation, and verification in a single step unless the user explicitly asks.
+6. For an explicit Test request, use Craft's startup and completion gates, select `workflow/test.md` without reclassification, and do not change production behavior.
+7. For Review, follow `workflow/review.md`; report findings on one change and change nothing.
+8. For Jira, follow `workflow/jira-card.md` for one issue. When the request creates the children of an existing epic or story, follow `workflow/jira-children.md` instead. Change nothing else.
+9. Keep the normal order for new work: Discovery -> Design -> Delivery Plan -> Skeleton -> Implement -> Test.
+10. Ask for human approval before moving from one workflow stage to the next.
+11. Do not merge planning, implementation, and verification in a single step unless the user explicitly asks.
 
 ## Supporting Skills
 
