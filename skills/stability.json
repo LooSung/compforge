@@ -14,6 +14,7 @@
     "skills/skeleton/lint-enforcement.md",
     "skills/workflow/continuity.md",
     "skills/workflow/craft.md",
+    "skills/workflow/gates.md",
     "skills/workflow/delivery-plan.md",
     "skills/workflow/design.md",
     "skills/workflow/discovery.md",
@@ -23,6 +24,7 @@
     "skills/workflow/test.md"
   ],
   "experimental": [
+    "skills/workflow/crucible.md",
     "skills/antipatterns/god-component.md",
     "skills/antipatterns/prop-drilling.md",
     "skills/antipatterns/useeffect-abuse.md",

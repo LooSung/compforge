@@ -74,12 +74,15 @@ def check_required_paths(root: Path) -> None:
         "commands/refactor.md",
         "commands/consult.md",
         "commands/test.md",
+        "commands/crucible.md",
         "commands/jira.md",
         "commands/review.md",
         "skills/workflow/craft.md",
+        "skills/workflow/gates.md",
         "skills/workflow/refactor.md",
         "skills/workflow/consult.md",
         "skills/workflow/test.md",
+        "skills/workflow/crucible.md",
         "skills/workflow/jira-card.md",
         "skills/workflow/jira-children.md",
         "skills/workflow/review.md",
@@ -102,6 +105,7 @@ def check_required_paths(root: Path) -> None:
         "commands/refactor.md",
         "commands/consult.md",
         "commands/test.md",
+        "commands/crucible.md",
         "commands/jira.md",
         "commands/review.md",
         "skills/SKILL.md",
@@ -118,6 +122,7 @@ def check_required_paths(root: Path) -> None:
         ("refactor", "refactor.md"),
         ("consult", "consult.md"),
         ("test", "test.md"),
+        ("crucible", "crucible.md"),
         ("jira", "jira-card.md"),
         ("review", "review.md"),
     ):
@@ -132,10 +137,10 @@ def check_required_paths(root: Path) -> None:
 
     refactor_command = (root / "commands/refactor.md").read_text()
     if (
-        f"{expected_root}/craft.md" not in refactor_command
-        or f"{expected_link}/craft.md" not in refactor_command
+        f"{expected_root}/gates.md" not in refactor_command
+        or f"{expected_link}/gates.md" not in refactor_command
     ):
-        raise SystemExit("Claude Refactor command does not load Craft gates")
+        raise SystemExit("Claude Refactor command does not load the shared gates")
 
     jira_skill = (root / "skills/workflow/jira-card.md").read_text()
     for marker in (

@@ -20,16 +20,18 @@ The three todo apps are executable references, not product boilerplates.
 
 | Harness | Supported load path | Invocation |
 |---|---|---|
-| Claude Code | `~/.claude/skills/compforge` and `~/.claude/commands/compforge` symlinks | `/compforge:craft …` (default); `/compforge:refactor …`; `/compforge:consult …`; `/compforge:test …`; `/compforge:review …`; `/compforge:jira …` |
-| Codex CLI | `~/.codex/skills/compforge` symlink | select `compforge`, then `Use Compforge craft: …` (default); `refactor: …`; `consult: …`; `test: …`; `review: …`; `jira: …` |
-| Cursor Agent CLI | explicit `--plugin-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …`; `Use Compforge test: …`; `Use Compforge review: …`; `Use Compforge jira: …` |
-| Cursor Agent CLI | `.cursor/skills/compforge` plus pack `--add-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …`; `Use Compforge test: …`; `Use Compforge review: …`; `Use Compforge jira: …` |
+| Claude Code | `~/.claude/skills/compforge` and `~/.claude/commands/compforge` symlinks | `/compforge:craft …` (default); `/compforge:refactor …`; `/compforge:consult …`; `/compforge:test …`; `/compforge:crucible …`; `/compforge:review …`; `/compforge:jira …` |
+| Codex CLI | `~/.codex/skills/compforge` symlink | select `compforge`, then `Use Compforge craft: …` (default); `refactor: …`; `consult: …`; `test: …`; `crucible: …`; `review: …`; `jira: …` |
+| Cursor Agent CLI | explicit `--plugin-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …`; `Use Compforge test: …`; `Use Compforge crucible: …`; `Use Compforge review: …`; `Use Compforge jira: …` |
+| Cursor Agent CLI | `.cursor/skills/compforge` plus pack `--add-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …`; `Use Compforge test: …`; `Use Compforge crucible: …`; `Use Compforge review: …`; `Use Compforge jira: …` |
 
 Cursor directory auto-discovery, marketplace installation, and automatic Cursor
 setup via `install.sh` are not currently supported paths.
 
 `/compforge:craft` is Claude Code's default installed slash command. Refactor,
-Consult, Test, Review, and Jira are additional installed commands. `test` was
+Consult, Test, Crucible, Review, and Jira are additional installed commands.
+Crucible is experimental and was added in 1.9.0; its activation probe has run
+live on Claude Code only. `test` was
 added in 1.8.0; its activation probe has run live on Claude Code only, and on
 Codex and Cursor it is covered by static packaging checks. On Cursor Agent CLI with
 `--plugin-dir`, `/compforge:craft` entered Craft in a clean headless session; the

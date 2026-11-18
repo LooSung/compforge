@@ -13,7 +13,7 @@ Use this when fixing a wrong state home, a broken interaction, an accessibility
 regression, a filter/query mismatch, or any UI regression.
 
 Follow `skills/workflow/test.md` for test design and run records.
-Follow `skills/workflow/craft.md` for the Component Contract format and final verification.
+Follow `skills/workflow/craft.md` for the Component Contract format and `skills/workflow/gates.md` for final verification.
 
 ## Checklist
 
@@ -24,7 +24,7 @@ Follow `skills/workflow/craft.md` for the Component Contract format and final ve
 - [ ] Write down the root cause. → verify: cause points at a state home, effect, or transition (`component-discipline` #12)
 - [ ] Fix with the smallest code change. → verify: diff limited to the failing path (surgical)
 - [ ] Confirm the failing test and related regression tests pass. → verify: green run recorded
-- [ ] Follow the verification and completion report in `skills/workflow/craft.md`. → verify: Scope drift is `none` (or justified)
+- [ ] Follow the verification and completion report in `skills/workflow/gates.md`. → verify: Scope drift is `none` (or justified)
 
 ## Prohibited
 

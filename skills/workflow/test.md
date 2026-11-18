@@ -7,9 +7,43 @@ stability: stable
 
 # Workflow — Test
 
+Contents: When to use · Authorization · Level selection · Scope block · Default surface · Connected check · Checklist · Reporting · Prohibited · Bug fixes
+
 ## When to use
 During Implement (hooks, then components) and as a standalone pass for
 regression coverage or TDD. Not a Playwright / browser-suite stage.
+`gates.md` supplies startup, plan input, verification, and the completion report.
+
+## Authorization
+
+| Request | Write permission |
+|---|---|
+| Run, check, or report existing tests | none |
+| Write or strengthen tests | test code and existing test configuration |
+| Add test infrastructure (MSW setup, a new runner, E2E) | only after explicit approval |
+| Fix production behavior | none; stop and propose a separate Craft job |
+
+## Level selection
+
+1. Inspect existing tests, test configuration, setup files, and naming.
+2. If the request names `unit` or `component`, use that level.
+3. Otherwise pick the smallest level that proves the behavior: a hook or pure
+   function gets a unit test; a named UI state or interaction gets a component
+   test.
+4. E2E requires explicit user wording; otherwise report it only as a gap.
+5. When earlier work in this run already recorded tests, read that record and
+   target only what it left uncovered.
+
+## Scope block
+
+Before writing or running tests, report:
+
+```markdown
+Test target:
+Level: auto | unit | component
+Write permission: none | tests | approved test infrastructure
+Evidence: <existing test/config paths or missing context>
+```
 
 ## Default surface
 
@@ -68,6 +102,13 @@ committing it to the user.
 - [ ] Component tests query by role/text, not test-id, unless there is no accessible handle
 - [ ] Mock at the network boundary (MSW or fetch mock), not inside hooks
 - [ ] Record commands and results; failing tests are reported, never hidden
+
+## Reporting
+
+Report scope, commands, pass/fail counts, skipped checks, and remaining risks in
+the `gates.md` completion report. When a test fails, decide whether the cause is
+the test, the setup, or production behavior. Fix only within the authorized
+write permission; otherwise report the evidence and stop.
 
 ## Prohibited
 - **No snapshot-only coverage** — a snapshot asserts nothing about behavior.

@@ -53,6 +53,7 @@ Use `/compforge:craft` (`commands/craft.md`) as the default Compforge user entry
 - Use `/compforge:refactor` when the request is explicit behavior-preserving cleanup. Do not reclassify it as feature work.
 - Use `/compforge:consult` for advice, proposals, reviews, or one planning document. Do not change implementation code.
 - Use `/compforge:test` to verify, write, or strengthen hook and component tests; it does not change production behavior.
+- Use `/compforge:crucible` to run Consult → Craft → Refactor (when earned) → Test for one change; it stops for plan approval and adds no rules of its own.
 - Use `/compforge:review` to review one diff, branch, or pull request; it reports P1/P2/P3 findings and changes no code.
 - Use `/compforge:jira` to write or rewrite one Jira work card, or the child tasks of one existing epic or story, in the fixed template; it changes nothing but those issues.
 - For ambiguous requests, Craft recommends the smallest path without implementing.
@@ -151,6 +152,7 @@ and `skills/skeleton/lint-enforcement.md` for delivered enforcement.
 
 - Do not add runtime dependencies for installer scripts unless there is no simpler shell-based alternative.
 - Update `CHANGELOG.md` for user-visible changes.
+- **Command budgets** — each generated `commands/*.md` must fit `scripts/ci/command-budget.json` (`build-commands.py --check`). Raising a budget is a reviewed decision in the same diff: say what the added text is worth, or remove something else. Shared startup, plan input, verification, and the completion report live once in `skills/workflow/gates.md`.
 - When changing install behavior, verify with a clean temporary `HOME`.
 - Do not claim a harness integration works until documented setup steps and a clean-session smoke test prove it. Cursor's documented paths are `--plugin-dir` and the project-local skill; both are pinned by `scripts/ci/harness-smoke.sh live cursor`.
 - **Effect claims need runs.** Any statement that Compforge improves an outcome must cite a published pair in `docs/proof/results/`. Unfavorable runs get published too; a measure changed after seeing the data must say so in the result.

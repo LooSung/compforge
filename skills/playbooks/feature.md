@@ -13,7 +13,7 @@ Use this when adding one new behavior or screen slice to an existing feature.
 For a new feature area or large screen, start from Discovery.
 
 Follow `skills/workflow/implement.md` for the detailed implementation order.
-Follow `skills/workflow/craft.md` for the Component Contract format and final verification.
+Follow `skills/workflow/craft.md` for the Component Contract format and `skills/workflow/gates.md` for final verification.
 
 ## Checklist
 
@@ -22,7 +22,7 @@ Follow `skills/workflow/craft.md` for the Component Contract format and final ve
 - [ ] Decide which hook or pure function will own the new behavior. → verify: owner is a hook/pure function, not JSX
 - [ ] Minimize the scope of component and query changes. → verify: only the nodes the behavior needs
 - [ ] Follow the single-feature procedure in `skills/workflow/implement.md`. → verify: one behavior + tests green
-- [ ] Follow the verification and completion report in `skills/workflow/craft.md`. → verify: Scope drift is `none` (or justified)
+- [ ] Follow the verification and completion report in `skills/workflow/gates.md`. → verify: Scope drift is `none` (or justified)
 
 ## Prohibited
 

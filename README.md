@@ -84,8 +84,7 @@ Cursor is not configured by `install.sh`; follow the
 
 Craft is the default. It surfaces Assumptions and a Component Contract before
 UI logic. Use Refactor or Consult when their authorization fits. Exact setup:
-[Claude Code](docs/setup/claude-code.md) · [Codex](docs/setup/codex.md) ·
-[Cursor](docs/setup/cursor.md).
+[Claude Code](docs/setup/claude-code.md) · [Codex](docs/setup/codex.md) · [Cursor](docs/setup/cursor.md).
 
 ### 5. Optional: leave the pack in the project
 
@@ -108,7 +107,7 @@ The pointer does not copy Hard Rules that would go stale. Delivery details and s
 
 ## Public commands
 
-Craft is the default. Refactor, Consult, Test, Review, and Jira keep separate write boundaries.
+Craft is the default. Refactor, Consult, Test, Review, and Jira keep separate write boundaries; Crucible chains Consult → Craft → Refactor → Test.
 
 | Command | Use it when | Must not |
 |---|---|---|
@@ -116,11 +115,12 @@ Craft is the default. Refactor, Consult, Test, Review, and Jira keep separate wr
 | `refactor` | Improve structure while preserving behavior | Add features or change visible UI behavior |
 | `consult` | Ask, compare, review, or write one planning document | Change production, test, config, or CI code |
 | `test` | Verify, write, or strengthen hook and component tests | Change production behavior, or add E2E by default |
+| `crucible` | Plan, build, refactor, and test one change in one request | Start building before the plan is approved |
 | `review` | Review one diff, branch, or pull request with P1/P2/P3 findings | Change code, or post to a PR without being asked |
 | `jira` | Write one Jira card, or the child tasks of one epic or story | Change anything but those issues |
 
-Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:test`, `/compforge:review`, `/compforge:jira`.
-Codex and Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `test: …`, `review: …`, `jira: …`.
+Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:test`, `/compforge:crucible`, `/compforge:review`, `/compforge:jira`.
+Codex and Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `test: …`, `crucible: …`, `review: …`, `jira: …`.
 
 ## The Basic Workflow
 
@@ -211,7 +211,7 @@ release instead:
 ```bash
 git clone https://github.com/LooSung/compforge ~/.compforge
 cd ~/.compforge
-git checkout v1.8.0
+git checkout v1.9.0
 chmod +x scripts/setup/*.sh
 ./scripts/setup/install.sh
 ./scripts/setup/doctor.sh

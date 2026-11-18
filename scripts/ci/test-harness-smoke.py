@@ -26,8 +26,8 @@ class HarnessSmokeTests(unittest.TestCase):
             self.assertIn(f"{expected_link}/{name}.md", command)
             self.assertIn("COMPFORGE_ACTIVATION_PROBE", command)
         refactor = (ROOT / "commands/refactor.md").read_text(encoding="utf-8")
-        self.assertIn(f"{expected_root}/craft.md", refactor)
-        self.assertIn(f"{expected_link}/craft.md", refactor)
+        self.assertIn(f"{expected_root}/gates.md", refactor)
+        self.assertIn(f"{expected_link}/gates.md", refactor)
 
     def test_claude_manifest_uses_plugin_root_contract(self) -> None:
         manifest = json.loads(
