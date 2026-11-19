@@ -40,9 +40,10 @@ On **Cursor Agent CLI**, pass `--plugin-dir` (or the project-local skill plus
 
 ## Project vs pack (paths)
 
-- **Pack** — `$COMPFORGE_HOME`, then `~/.compforge`; when maintaining Compforge
-  itself, the repository checkout is the final fallback. This is not where user
-  app code lives.
+- **Pack** — `$COMPFORGE_HOME`, then `~/.compforge`; when loaded as a Claude
+  Code plugin, the plugin root (the parent of this `skills/` directory); when
+  maintaining Compforge itself, the repository checkout is the final fallback.
+  This is not where user app code lives.
 - **Skill references** — paths such as `workflow/...` and `react/...` resolve from `{pack}/skills`; paths prefixed with `{pack}` resolve from the pack root.
 - **Target project** — the repo the user is working on; start the agent **from this directory**.
 - **Compforge maintenance** — if the user asks to change Compforge itself, the pack repository is the work target; do not reject it as the wrong directory.

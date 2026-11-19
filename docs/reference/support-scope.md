@@ -21,12 +21,19 @@ The three todo apps are executable references, not product boilerplates.
 | Harness | Supported load path | Invocation |
 |---|---|---|
 | Claude Code | `~/.claude/skills/compforge` and `~/.claude/commands/compforge` symlinks | `/compforge:craft …` (default); `/compforge:refactor …`; `/compforge:consult …`; `/compforge:test …`; `/compforge:crucible …`; `/compforge:review …`; `/compforge:jira …` |
+| Claude Code | `forge` plugin marketplace: `/plugin marketplace add LooSung/compforge`, then `/plugin install compforge@forge` | same slash commands |
 | Codex CLI | `~/.codex/skills/compforge` symlink | select `compforge`, then `Use Compforge craft: …` (default); `refactor: …`; `consult: …`; `test: …`; `crucible: …`; `review: …`; `jira: …` |
 | Cursor Agent CLI | explicit `--plugin-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …`; `Use Compforge test: …`; `Use Compforge crucible: …`; `Use Compforge review: …`; `Use Compforge jira: …` |
 | Cursor Agent CLI | `.cursor/skills/compforge` plus pack `--add-dir` | `Use Compforge craft: …` (default); `Use Compforge refactor: …`; `Use Compforge consult: …`; `Use Compforge test: …`; `Use Compforge crucible: …`; `Use Compforge review: …`; `Use Compforge jira: …` |
 
-Cursor directory auto-discovery, marketplace installation, and automatic Cursor
-setup via `install.sh` are not currently supported paths.
+The marketplace path is **experimental**: install, update, removal, and
+positive live probes passed, but a clean negative control is still pending
+([marketplace-2026-11-19](../verification/marketplace-2026-11-19.md)). Use
+one Claude Code path, not both: the symlinks and the plugin register the same
+commands.
+
+Cursor directory auto-discovery and automatic Cursor setup via `install.sh` are
+not currently supported paths.
 
 `/compforge:craft` is Claude Code's default installed slash command. Refactor,
 Consult, Test, Crucible, Review, and Jira are additional installed commands.
@@ -112,7 +119,8 @@ path unverified rather than claiming support.
 
 ## Not currently supported
 
-A Compforge MCP server, Vue stacks, marketplace publication, a standalone
+A Compforge MCP server, Vue stacks, a listing in the official Claude plugin
+directory, a standalone
 Compforge CLI, and a claim that Compforge universally improves agent output are
 outside this 1.0 scope.
 

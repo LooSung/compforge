@@ -35,6 +35,37 @@ block is committed, so a teammate who clones only that repository gets it too.
 ~/.compforge/scripts/setup/init.sh --verify   # later: is the guard still alive?
 ```
 
+## Plugin marketplace (experimental)
+
+Instead of the symlink install, add the `forge` catalog and install the plugin:
+
+```text
+/plugin marketplace add LooSung/compforge
+/plugin install compforge@forge
+```
+
+If `forge` is already added from OOPforge or FuseForge, skip the first line;
+one catalog lists all three packs. `init.sh` and `doctor.sh` come with the
+script install, not the plugin.
+
+The slash commands carry their main workflow, so they start without reading
+plugin files; supporting skills and documents are read on demand.
+
+Plugin files live in `~/.claude/plugins/cache/`, outside your project, so
+Claude Code asks before reading them. Approve the prompt when it appears, or
+add this rule to `~/.claude/settings.json` (required for `claude -p`):
+
+```json
+{ "permissions": { "allow": ["Read(~/.claude/plugins/cache/forge/**)"] } }
+```
+
+Update with `claude plugin marketplace update forge` and
+`claude plugin update compforge@forge`; remove with
+`claude plugin uninstall compforge@forge`. The plugin registers the same
+`/compforge:*` commands as the symlink install, so use one path, not both.
+Evidence and limits:
+[marketplace-2026-11-19](../verification/marketplace-2026-11-19.md).
+
 ## Slash commands
 
 ```text

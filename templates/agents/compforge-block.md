@@ -4,8 +4,9 @@
 This project follows **Compforge**, a component-architecture methodology pack for
 TypeScript + React. Read the pack before writing or changing UI code.
 
-**Resolve the pack root in order:** `$COMPFORGE_HOME` → `~/.compforge`.
-If neither exists, say so and stop — do not reconstruct the rules from this block.
+**Resolve the pack root in order:** `$COMPFORGE_HOME` → `~/.compforge` → the
+Claude Code plugin at `~/.claude/plugins/cache/forge/compforge/<version>`.
+If none exists, say so and stop — do not reconstruct the rules from this block.
 Install: <https://github.com/LooSung/compforge>
 
 | Read | For |
@@ -18,7 +19,7 @@ Install: <https://github.com/LooSung/compforge>
 | `{pack}/skills/workflow/jira-children.md` | child tasks of one existing epic or story, titled `[F.E]` `[B.E]` `[AI]` `[DOC]` |
 | `{pack}/skills/principles/component-discipline.md` | component boundaries, state ladder |
 | `{pack}/skills/principles/hard-rules.md` | MUST / SHOULD / NEVER (canonical) |
-| `{pack}/AGENTS.md` | stage and task routing tables |
+| `{pack}/skills/SKILL.md` | command routing and the supporting-skill index |
 
 Entry point: `Use Compforge craft: <task>` (Claude Code: `/compforge:craft`).
 Explicit cleanup: `Use Compforge refactor: <task>`. Advice or review:

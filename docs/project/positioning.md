@@ -17,7 +17,7 @@ references, and fitness functions.
 The operating model is:
 
 - skills are the grammar;
-- `AGENTS.md` is the constitution;
+- `skills/SKILL.md` is the entry point that routes every request;
 - hard rules and CI checks are the lint;
 - runnable examples are the reference implementations;
 - Craft is the default entry point. Refactor and Consult are additional

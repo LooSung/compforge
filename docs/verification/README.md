@@ -12,6 +12,9 @@ Each release record includes:
 
 Records, newest first:
 
+- [`marketplace-2026-11-19.md`](marketplace-2026-11-19.md) — Claude Code
+  plugin marketplace install, update, and removal, plus live root and
+  activation probes on the installed copies.
 - [`evals-2026-11-16.md`](evals-2026-11-16.md) — `claude plugin eval` with and
   without the plugin, plus Haiku and Sonnet, for v1.7.0.
 - [`harness-cursor-negative-v1.3.5.md`](harness-cursor-negative-v1.3.5.md) —

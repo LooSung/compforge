@@ -1,165 +1,87 @@
-# Compforge — Agent Instructions
+# Compforge — agent notes
 
-If you are an AI coding agent working in this repository, follow Compforge itself.
+These notes are for agents changing **Compforge itself**. To *use* Compforge on a
+frontend project, follow `skills/SKILL.md` instead; it owns command routing and
+skill selection for every harness.
 
 Compforge continuity: off
 
-## Mission
+## What Compforge is
 
-Compforge is a portable component-architecture methodology pack for coding agents — **methodology plus agent harness** for frontend work.
+A frontend methodology pack. Skills are the grammar, Hard Rules are the lint,
+`examples/` are the reference implementations, and commands plus install scripts
+are the runtime. Protect the core promise: small components, explicit state
+placement, clear boundaries, and human checkpoints.
 
-It defines disciplined React/TypeScript as a **dialect agents follow** (skills = grammar, hard rules = lint, `examples/` = reference implementations, install/commands = runtime). Protect the core promise: small components, explicit state placement, clear boundaries, and human checkpoints.
+Sister packs: [OOPforge](https://github.com/LooSung/oopforge) (backend) and
+[FuseForge](https://github.com/LooSung/fuseforge) (full-stack coordinator).
 
-Sister project: [OOPforge](https://github.com/LooSung/oopforge) applies the same harness model to backend OOP/DDD.
+## Layout
 
-## Maintainer Management
-
-Maintainer direction is private and local. When present, its single source is
-`docs/planning/management.md`, which is gitignored.
-
-- Do not add future plans, backlogs, internal metrics, or release drafts to
-  tracked files.
-- `CHANGELOG.md` records completed user-visible changes under `Unreleased`; it
-  never carries future plans.
-- Public docs describe current behavior, support, evidence, and positioning.
-- Do not create `.craft/` continuity state while maintaining this repository.
-
-Before a Compforge upgrade, architecture change, or release, read the private
-management file when it exists. If it is absent, the user's explicit request or
-linked issue defines scope; do not infer private priorities or block the work.
-
-## Required Workflow
-
-For new features or large screens, do not jump straight to code.
-
-1. **Discovery** — read `skills/workflow/discovery.md`; produce user flows, screen inventory, domain terms, open questions.
-2. **Design** — read `skills/workflow/design.md`; produce component tree, state placement plan, API contracts.
-3. **Delivery Plan** — read `skills/workflow/delivery-plan.md`; align requirements, scope, implementation order, tests, and release risks.
-4. **Skeleton** — read `skills/workflow/skeleton.md`; create folder structure and empty components/hooks only.
-5. **Implement** — read `skills/workflow/implement.md`; implement one feature with tests.
-6. **Test** — read `skills/workflow/test.md`; run unit and component (DOM) checks. Connected verification is manual.
-
-Ask for human approval before moving from one stage to the next.
-
-**For smaller, focused tasks** (one component, extending an existing feature, refactoring) — start with `/compforge:craft` (`commands/craft.md`) unless the request is explicitly Refactor, Consult, Test, Review, or Jira. Code review of a finished change goes to `/compforge:review`. Craft selects the smallest path and does not force the full pipeline.
-
-## Default Entry Point
-
-Use `/compforge:craft` (`commands/craft.md`) as the default Compforge user entry point.
-
-`/compforge:craft` delegates orchestration to `skills/workflow/craft.md`, reads `skills/principles/component-discipline.md` and `skills/principles/hard-rules.md`, requires Assumptions then a Component Contract before UI implementation, and verifies Hard Rules (including surgical scope) before completion.
-
-- Use `/compforge:craft` for single components, existing-feature additions, and UI bug fixes.
-- Use `/compforge:refactor` when the request is explicit behavior-preserving cleanup. Do not reclassify it as feature work.
-- Use `/compforge:consult` for advice, proposals, reviews, or one planning document. Do not change implementation code.
-- Use `/compforge:test` to verify, write, or strengthen hook and component tests; it does not change production behavior.
-- Use `/compforge:crucible` to run Consult → Craft → Refactor (when earned) → Test for one change; it stops for plan approval and adds no rules of its own.
-- Use `/compforge:review` to review one diff, branch, or pull request; it reports P1/P2/P3 findings and changes no code.
-- Use `/compforge:jira` to write or rewrite one Jira work card, or the child tasks of one existing epic or story, in the fixed template; it changes nothing but those issues.
-- For ambiguous requests, Craft recommends the smallest path without implementing.
-- For a new feature area or large screen, Craft routes into the Discovery → Test workflow and keeps the human checkpoints.
-
-## Skill Path Convention
-
-Resolve the Compforge pack root in order: `$COMPFORGE_HOME` → `~/.compforge` → repository root (when developing this pack).
-
-Skill files live at `{pack}/skills/...`. Do **not** use legacy
-`skills/compforge/...` paths. See `docs/reference/path-convention.md`.
-
-## Project Configuration (target project `AGENTS.md`)
-
-Optional single-line directives the target project can set to control Compforge behavior:
-
-| Directive | Effect |
+| Path | Holds |
 |---|---|
-| `Compforge work dir: <path>` | Override the continuity work dir (default `.craft/`). |
-| `Compforge continuity: off` | Disable automatic `.craft/` work-doc creation. |
-| `Compforge live run: on` | Let Craft and Refactor launch the app for the Live run in `skills/workflow/test.md`. Off by default. |
-| `Compforge cleanup pass: on` | Let Refactor run the harness cleanup skill (`/simplify`) after verification. Off by default. |
+| `skills/SKILL.md` | Entry point and command routing |
+| `skills/workflow/` | One file per workflow; `skills/workflow/gates.md` holds the shared startup, plan input, verification, and report gates |
+| `skills/principles/hard-rules.md` | The only copy of the Hard Rules (MUST / SHOULD / NEVER) |
+| `skills/react/`, `lang/`, `skeleton/`, `playbooks/`, `antipatterns/` | Topic skills that workflows load on demand |
+| `skills/stability.json` | Skill maturity, explained in `docs/reference/skill-stability.md` |
+| `commands/` | **Generated** from the skill sources by `scripts/ci/build-commands.py` |
+| `.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/` | Harness packaging only; `.claude-plugin/marketplace.json` is the `forge` catalog of all three packs, kept identical across the three repositories except for which entry is `./` |
+| `examples/` | Runnable todo app on the three shipped stacks |
+| `templates/` | What `scripts/setup/init.sh` copies into a target project |
+| `scripts/setup/`, `scripts/ci/` | Install lifecycle and CI checks |
+| `docs/` | Human docs, indexed by `docs/README.md` |
 
-By default, continuity work docs are **auto-created (opt-out)** for execution tasks (feature/refactor/bugfix); advisory and tiny tasks never create one. If previous work exists, Craft emits a **Resume block** (previous work / last verified / proposed job / parked) **before any code** and re-scopes an inherited prompt to one decision — the user does not have to mention it. When a session unit ends with work remaining, Craft writes `.craft/next-session-prompt.md` without being asked. See `skills/workflow/continuity.md`.
+## Checks
 
-## Skill Routing
+CI runs these (full list: `.github/workflows/lint.yml`); all must pass before a
+change is done:
 
-Use this table to decide **which skill to read first**. Workflow stage always wins over ad-hoc coding.
+```bash
+./scripts/ci/lint-skills.sh                       # skills, links, AGENTS.md paths, command freshness
+python3 scripts/ci/check-maintained-file-sizes.py # tracked text ≤ 300 lines
+python3 scripts/ci/test-doc-links.py
+python3 scripts/ci/test-run-with-timeout.py
+./scripts/ci/harness-smoke.sh static
+python3 scripts/ci/test-harness-smoke.py
+python3 scripts/proof/test-evaluate-run.py
+python3 scripts/proof/test-proof-runner.py
+python3 scripts/proof/test-rescore-published.py
+python3 scripts/ci/test-review.py
+python3 scripts/ci/test-review-a11y.py
+bash scripts/setup/doctor.sh
+./scripts/ci/smoke-test.sh                        # clean-HOME install lifecycle
+./scripts/ci/init-smoke.sh                        # when touching init or templates/
+```
 
-| Workflow stage | Goal | Read first |
-|---|---|---|
-| Craft (default entrypoint) | Select and execute the smallest frontend path, or recommend only for advisory requests | `skills/workflow/craft.md` + `skills/principles/component-discipline.md` |
-| Refactor | Behavior-preserving cleanup | `skills/workflow/refactor.md` |
-| Consult | Advice, proposal, review, or one planning document | `skills/workflow/consult.md` |
-| Review | Prioritized findings on one finished diff, branch, or pull request | `skills/workflow/review.md` + `docs/reference/reviewer-checklist.md` |
-| Jira | One Jira task, story, bug, epic, or backlog item, or the `[F.E]` `[B.E]` `[AI]` `[DOC]` child tasks of one existing epic or story | `skills/workflow/jira-card.md`; `skills/workflow/jira-children.md` when the parent already exists |
-| Discovery | User flows, screens, domain terms | `skills/workflow/discovery.md` |
-| Design | Component tree, state placement, API contracts | `skills/workflow/design.md` + `skills/react/component-boundary.md` |
-| Delivery Plan | Scope, order, tests, risks | `skills/workflow/delivery-plan.md` |
-| Skeleton | Folders, empty components/hooks | `skills/workflow/skeleton.md` + `skills/skeleton/frontend-skeleton.md` (stack via `skills/lang/frontend-stack.md`) |
-| Implement | One feature + tests | `skills/workflow/implement.md` + `skills/react/state-placement.md` |
-| Test | Unit / component (DOM) | `skills/workflow/test.md` |
-| Continuity | Resume work across sessions | `skills/workflow/continuity.md` |
-| Code review | Detect rule violations | `skills/principles/hard-rules.md` + `skills/antipatterns/` + `docs/reference/reviewer-checklist.md` |
+After editing a workflow skill, regenerate commands with
+`python3 scripts/ci/build-commands.py`.
 
-### Task → skill (within a stage)
+## Rules
 
-| Task | Skill |
-|---|---|
-| Component boundary, splitting, composition | `skills/react/component-boundary.md` |
-| Server vs client vs URL state placement | `skills/react/state-placement.md` |
-| Custom hook extraction, effect discipline | `skills/react/hooks-discipline.md` |
-| Frontend stack selection | `skills/lang/frontend-stack.md` |
-| Folder structure / skeleton | `skills/skeleton/frontend-skeleton.md` |
-| Lint enforcement (ESLint zones / steiger) | `skills/skeleton/lint-enforcement.md` |
-| Hard Rules (MUST / SHOULD / NEVER) | `skills/principles/hard-rules.md` |
-| Add one behavior to an existing feature | `skills/playbooks/feature.md` |
-| Reproduce a UI bug with a failing test | `skills/playbooks/bug-fix.md` |
-| God component | `skills/antipatterns/god-component.md` |
-| useEffect abuse (derived state, fetch chains) | `skills/antipatterns/useeffect-abuse.md` |
-| Prop drilling | `skills/antipatterns/prop-drilling.md` |
-
-### Harness setup
-
-| Harness | Guide |
-|---|---|
-| Codex | `docs/setup/codex.md` |
-| Claude Code | `docs/setup/claude-code.md` |
-| Cursor | `docs/setup/cursor.md` |
-
-Reference implementations: [examples/README.md](examples/README.md) — the same todo app on the three shipped stacks.
-
-## Support Scope
-
-Canonical harness paths, supported stacks, compatibility, and exclusions are
-defined in `docs/reference/support-scope.md`. Skill maturity is machine-readable
-in `skills/stability.json` and explained in
-`docs/reference/skill-stability.md`. Harness
-smoke evidence lives in `docs/verification/`.
-
-## Hard Rules (v1.0)
-
-Canonical detector-readable list: [`skills/principles/hard-rules.md`](skills/principles/hard-rules.md) (MUST / SHOULD / NEVER). Do not keep a second prose copy here.
-
-Validated against `examples/` at todo scale and published proof runs; surgical scope narrowed from run evidence. Larger examples may re-baseline. Decisions: `docs/research/competitor-skills.md`, runs: `docs/proof/`.
-
-Blocking versus review: import zones, FSD steiger, `any`, and `strict: true` fail CI where `compforge init` installed them. Detector findings are non-blocking PR comments. See `skills/skeleton/lint-enforcement.md`.
-
-### Layer layout
-
-Layer requirements live in `skills/principles/hard-rules.md`; do not restate them
-here. Use `skills/skeleton/frontend-skeleton.md` for the post-skeleton self-check
-and `skills/skeleton/lint-enforcement.md` for delivered enforcement.
-
-## Repository Discipline
-
-- Do not add runtime dependencies for installer scripts unless there is no simpler shell-based alternative.
-- Update `CHANGELOG.md` for user-visible changes.
-- **Command budgets** — each generated `commands/*.md` must fit `scripts/ci/command-budget.json` (`build-commands.py --check`). Raising a budget is a reviewed decision in the same diff: say what the added text is worth, or remove something else. Shared startup, plan input, verification, and the completion report live once in `skills/workflow/gates.md`.
-- When changing install behavior, verify with a clean temporary `HOME`.
-- Do not claim a harness integration works until documented setup steps and a clean-session smoke test prove it. Cursor's documented paths are `--plugin-dir` and the project-local skill; both are pinned by `scripts/ci/harness-smoke.sh live cursor`.
-- **Effect claims need runs.** Any statement that Compforge improves an outcome must cite a published pair in `docs/proof/results/`. Unfavorable runs get published too; a measure changed after seeing the data must say so in the result.
-
-## What Not To Do
-
-- Do not merge workflow stages to save time.
-- Do not put data fetching, routing, or store wiring inside presentational components.
-- Do not create mega-prompts, mega-skills, or broad abstractions without evidence.
-- Do not mix refactoring with feature changes; use `skills/workflow/refactor.md` only for behavior-preserving cleanup.
+- A new capability or architecture change goes through Discovery → Design →
+  Delivery Plan → Skeleton → Implement → Test, with human approval between
+  stages. A focused fix does not need the full flow.
+- One source of truth: Hard Rules live only in `skills/principles/hard-rules.md`,
+  routing only in `skills/SKILL.md`, and support facts only in
+  `docs/reference/support-scope.md`. Point to them; never copy them.
+- Each `commands/*.md` must fit `scripts/ci/command-budget.json`. Raising a
+  budget is a reviewed decision in the same diff: say what the added text is
+  worth, or remove something else.
+- Do not claim a harness integration works until documented setup and a
+  clean-session smoke prove it. Cursor's paths are pinned by
+  `scripts/ci/harness-smoke.sh live cursor`.
+- Effect claims need a published pair in `docs/proof/results/`. Publish
+  unfavourable runs too, and say so when a measure changed after seeing data.
+- When changing install behavior, verify with a clean temporary `HOME`. Add no
+  runtime dependencies to installer scripts when shell will do.
+- Do not mix refactoring with feature changes. Do not create mega-prompts,
+  mega-skills, or abstractions without evidence.
+- Skills, scripts, and agent instructions are in English. Korean readers get
+  `README.ko.md` and `docs/reference/methodology.ko.md`, not per-skill
+  translations.
+- Record completed user-visible changes in `CHANGELOG.md` under `Unreleased`.
+  Never put future plans in tracked files. Private maintainer direction lives in
+  the gitignored `docs/planning/management.md`: read it first when it exists;
+  otherwise the user's request or linked issue defines scope.
+- Do not create `.craft/` state in this repository.

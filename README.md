@@ -5,188 +5,110 @@
 ![License](https://img.shields.io/github/license/LooSung/compforge)
 
 > **AI ships the UI. Compforge keeps the component architecture.**
->
-> *Harness engineering that stops vibe coding from wrecking your frontend.*
 
-**Forge small. Compose forever.** Compforge is a portable component-architecture
-methodology pack and agent harness. Skills teach the grammar, hard rules act as
-lint, runnable examples provide references, and Craft selects the smallest
-workflow for the job.
+Compforge is a skill pack for coding agents working on **TypeScript + React**
+frontends (Vite or Next.js). Before your agent writes UI, it decides component
+boundaries and where each piece of state lives (server / client / URL). Then it
+checks the result against measurable Hard Rules.
 
-Use it when a **TypeScript + React** frontend (Vite or Next.js) needs explicit
-component boundaries, state placement (server / client / URL), and reviewable
-feature structure. It is not a UI library, general agent framework, or automatic
-code generator.
-
-Sister pack for backends: [OOPforge](https://github.com/LooSung/oopforge).
-
-[Positioning](docs/project/positioning.md) ·
-[Support scope](docs/reference/support-scope.md) ·
-[Proof protocol](docs/proof/README.md) · [Docs index](docs/README.md)
+Works with **Claude Code**, **Codex CLI**, and **Cursor Agent CLI**.
 
 [English](./README.md) · [한국어](./README.ko.md)
 
-## Quickstart
+## The Forge family
 
-### 1. Install the latest `main`
+| Pack | For | Stack |
+|---|---|---|
+| **Compforge** (this repo) | Frontend | TypeScript + React |
+| [OOPforge](https://github.com/LooSung/oopforge) | Backend | Java Spring · Python FastAPI |
+| [FuseForge](https://github.com/LooSung/fuseforge) | One feature across both | Coordinates Compforge + OOPforge (experimental) |
+
+Each pack works on its own. In Claude Code, the `forge` marketplace offers all three.
+
+## Install
+
+**Claude Code**, from the plugin marketplace (experimental):
+
+```text
+/plugin marketplace add LooSung/compforge
+/plugin install compforge@forge
+```
+
+If `forge` is already added from another Forge repo, skip the first line.
+Plugin files sit outside your project, so allow reading them once:
+[read permission](docs/setup/claude-code.md#plugin-marketplace-experimental).
+
+**Codex CLI**, or Claude Code without plugins, with the install script:
 
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/LooSung/compforge/main/scripts/setup/bootstrap.sh)"
 ```
 
-The bootstrap clones or updates `~/.compforge` and installs detected Claude Code
-and Codex links. It does not configure Cursor automatically.
+The script clones `~/.compforge` and links it into Claude Code and Codex. Pick one
+path per harness, then restart your agent. Cursor needs one manual step: [Cursor setup](docs/setup/cursor.md).
+Pinned releases, updates, and removal: [install guide](docs/setup/install.md).
 
-### 2. Check the pack and installed links
+## Use
 
-```bash
-~/.compforge/scripts/setup/doctor.sh
-```
-
-`doctor.sh` validates pack structure and links; it does not prove Craft loaded.
-Use the harness-specific setup in step 4 to verify activation.
-
-### 3. Open your frontend project
-
-Compforge lives in `~/.compforge`. Your app code lives in **your frontend repo**.
-Always start the agent from that project:
-
-```bash
-cd /path/to/your-frontend-project
-```
-
-### 4. Load Compforge and make one request
-
-| Harness | Load and invoke |
-|---|---|
-| **Claude Code** | Restart Claude Code, then `/compforge:craft <request>` |
-| **Codex CLI** | Restart Codex, use `/skills` to select **compforge**, then prompt without a leading `/` |
-| **Cursor Agent CLI** | `cursor-agent --plugin-dir ~/.cursor/plugins/local/compforge`, then `Use Compforge craft: …` |
-
-Claude Code:
+Start your agent from **your frontend project**, not from `~/.compforge`:
 
 ```text
 /compforge:craft Add a quantity stepper to the cart item
 /compforge:refactor Split the cart page without changing behavior
-/compforge:consult Review the cart state placement
+/compforge:review Review PR 42
 ```
 
-Codex CLI:
-
-```text
-Use Compforge craft: Add a quantity stepper to the cart item
-Use Compforge refactor: Split the cart page without changing behavior
-Use Compforge consult: Review the cart state placement
-```
-
-Cursor is not configured by `install.sh`; follow the
-[Cursor setup](docs/setup/cursor.md) for the local-plugin or project-skill path.
-
-Craft is the default. It surfaces Assumptions and a Component Contract before
-UI logic. Use Refactor or Consult when their authorization fits. Exact setup:
-[Claude Code](docs/setup/claude-code.md) · [Codex](docs/setup/codex.md) · [Cursor](docs/setup/cursor.md).
-
-### 5. Optional: leave the pack in the project
-
-`compforge init` writes an `AGENTS.md` pointer and `compforge-lock.json` so an
-agent that clones only your repository knows to read Compforge, and copies the
-stack's ESLint import zones (feature folders / Next App Router) or steiger (FSD)
-with a PR-blocking GitHub Actions check. It is not required to try Craft.
-
-```bash
-~/.compforge/scripts/setup/init.sh
-```
-
-Init preserves files it did not generate and proves the delivered guard with a negative self-test. To re-run that proof later:
-
-```bash
-~/.compforge/scripts/setup/init.sh --verify
-```
-
-The pointer does not copy Hard Rules that would go stale. Delivery details and self-test behavior live in [`templates/README.md`](./templates/README.md).
-
-## Public commands
-
-Craft is the default. Refactor, Consult, Test, Review, and Jira keep separate write boundaries; Crucible chains Consult → Craft → Refactor → Test.
-
-| Command | Use it when | Must not |
-|---|---|---|
-| `craft` | Implement or select the smallest frontend path | Skip required stages or broaden scope silently |
-| `refactor` | Improve structure while preserving behavior | Add features or change visible UI behavior |
-| `consult` | Ask, compare, review, or write one planning document | Change production, test, config, or CI code |
-| `test` | Verify, write, or strengthen hook and component tests | Change production behavior, or add E2E by default |
-| `crucible` | Plan, build, refactor, and test one change in one request | Start building before the plan is approved |
-| `review` | Review one diff, branch, or pull request with P1/P2/P3 findings | Change code, or post to a PR without being asked |
-| `jira` | Write one Jira card, or the child tasks of one epic or story | Change anything but those issues |
-
-Claude: `/compforge:craft`, `/compforge:refactor`, `/compforge:consult`, `/compforge:test`, `/compforge:crucible`, `/compforge:review`, `/compforge:jira`.
-Codex and Cursor: `Use Compforge craft: …`, `refactor: …`, `consult: …`, `test: …`, `crucible: …`, `review: …`, `jira: …`.
-
-## The Basic Workflow
-
-Craft selects a focused path for small changes and preserves the full sequence
-for a new feature area or large screen:
-
-```text
-Discovery → Design → Delivery Plan → Skeleton → Implement → Test
-```
-
-Each stage ends with a human checkpoint. Outputs and routing are canonical in
-[`AGENTS.md`](AGENTS.md#required-workflow); refactoring remains a separate,
-behavior-preserving workflow.
-
-Shipped stack identifiers are `react-vite-feature`, `react-vite-fsd`, and
-`react-next-app` — a ladder, not a menu. Compforge starts on
-`react-vite-feature` (or `react-next-app` when you need SSR) and steps up to the
-Feature-Sliced layers of `react-vite-fsd` only past roughly five feature areas
-or multiple teams, so a small screen never begins on FSD. Next.js is the SSR
-axis, not a thicker rung. Vue is outside the 1.x support scope. See
-[docs/reference/support-scope.md](docs/reference/support-scope.md).
-
-### Resume work across sessions
-
-Execution tasks keep lightweight `.craft/` notes and resume unfinished work
-before editing. See [`skills/workflow/continuity.md`](skills/workflow/continuity.md).
-
-## Learn by example
-
-| Resource | Purpose |
+| Harness | How to call |
 |---|---|
-| [Examples index](examples/README.md) | Same todo app on the three shipped stacks |
-| [Cart walkthrough](docs/guides/cart/README.md) | Discovery → Test on one real screen |
-| [Docs index](docs/README.md) | Setup, project, reference, guides, evidence |
-| [Harness verification](docs/verification/README.md) | What was actually smoked for v1.0.0 |
-| [Support scope](docs/reference/support-scope.md) | Tested scope, verified harness paths, 1.x compatibility contract |
-| [Skill stability](docs/reference/skill-stability.md) | Which skills are stable and which are still experimental |
-| [Reviewer checklist](docs/reference/reviewer-checklist.md) | Post-implementation rule check |
-| [Templates](templates/README.md) | Enforcement `init` copies into a project |
+| Claude Code | `/compforge:craft <request>` |
+| Codex CLI | `/skills` → **compforge**, then `Use Compforge craft: <request>` (no leading `/`) |
+| Cursor Agent CLI | Load the plugin per [Cursor setup](docs/setup/cursor.md), then `Use Compforge craft: <request>` |
 
-## Why Compforge
+## Commands
 
-Most teams know what a clean React codebase looks like. The hard part is
-stopping an agent from collapsing a screen into a 600-line page with eleven
-`useState`s and a `useEffect` chain.
+| Command | Use it for | It never |
+|---|---|---|
+| `craft` | **Default.** A component, a feature addition, a UI bug | Skips required stages or widens scope silently |
+| `refactor` | Restructure without changing behavior | Adds features or changes visible UI |
+| `consult` | Ask, compare, review, or write one plan document | Changes code |
+| `test` | Verify, write, or strengthen hook and component tests | Changes production behavior or adds E2E by default |
+| `crucible` | Plan → build → refactor → test one change in one request | Builds before you approve the plan |
+| `review` | P1/P2/P3 findings on one diff, branch, or PR | Changes code or posts to a PR unless asked |
+| `jira` | One Jira card, or the child tasks of one epic or story | Touches anything but those issues |
 
-The canonical [product principles](docs/project/positioning.md#product-principles)
-define the small, measurable, workflow-first, state-first approach.
+Not sure which one? Use `craft`. It picks the smallest path.
 
-### Before
+## How it works
+
+1. **Contract first.** Before UI logic, Craft states its Assumptions and a
+   Component Contract: what each component owns and where state lives.
+2. **Smallest path.** A one-line fix stays one line. A new feature area or a
+   large screen goes through the full flow, and you approve each stage:
+
+   ```text
+   Discovery → Design → Delivery Plan → Skeleton → Implement → Test
+   ```
+
+3. **Checked.** Craft verifies the result against the
+   [Hard Rules](skills/principles/hard-rules.md) (MUST / SHOULD / NEVER) before
+   it reports done.
+
+Stacks form a ladder, not a menu: `react-vite-feature` by default,
+`react-next-app` when you need SSR, and `react-vite-fsd` only past about five
+feature areas or several teams. Vue is outside the 1.x scope.
+
+### Before → after
 
 ```tsx
+// Before: god page, server data in client state, derived state synced by effects
 function CartPage() {
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
   useEffect(() => { fetch('/cart').then(...) }, []);
   useEffect(() => { setTotal(items.reduce(...)) }, [items]);
 }
-```
 
-**Problems:** god page · server data in client state · derived state synced by
-effects · untestable JSX
-
-### After
-
-```tsx
+// After: one state home, logic testable without rendering, small components
 function CartPage() {
   const { items, addItem, removeItem } = useCart();
   const total = sumTotal(items);
@@ -194,106 +116,38 @@ function CartPage() {
 }
 ```
 
-**Effects:** one state home · logic tested without rendering · small components ·
-a repeatable layout. See the runnable [examples](examples/README.md).
+## Keep it in your project (optional)
 
-### Evidence and limits
-
-The [evidence standard](docs/project/positioning.md#evidence-standard) defines which
-claims the [proof protocol and published runs](docs/proof/README.md) support.
-Unfavourable runs are published too; no universal percentage is claimed.
-
-## Installation, updates, and removal
-
-The Quickstart bootstrap tracks the latest `main`. To install a reproducible
-release instead:
+`init.sh` writes an `AGENTS.md` pointer and `compforge-lock.json`, and installs
+the stack's import-zone lint with a PR-blocking check. A teammate who clones only
+your repository then gets the same rules. It never overwrites files it did not
+generate. `init.sh` comes with the script install.
 
 ```bash
-git clone https://github.com/LooSung/compforge ~/.compforge
-cd ~/.compforge
-git checkout v1.9.1
-chmod +x scripts/setup/*.sh
-./scripts/setup/install.sh
-./scripts/setup/doctor.sh
+~/.compforge/scripts/setup/init.sh            # install
+~/.compforge/scripts/setup/init.sh --verify   # later: is the guard still alive?
 ```
 
-### Install targets
+Project switches, one line each in your project's `AGENTS.md`:
 
-Canonical paths and invocation contracts live in
-[`docs/reference/support-scope.md`](docs/reference/support-scope.md#canonical-harness-paths).
-Harness-specific install controls remain in the
-[Claude](docs/setup/claude-code.md), [Codex](docs/setup/codex.md), and
-[Cursor](docs/setup/cursor.md) guides.
+| Line | Effect |
+|---|---|
+| `Compforge continuity: off` | Stop keeping `.craft/` work notes. By default, execution tasks keep them and resume unfinished work before editing. |
+| `Compforge work dir: <path>` | Keep work notes somewhere other than `.craft/` |
+| `Compforge live run: on` | Let Craft and Refactor launch the app to check it |
+| `Compforge cleanup pass: on` | Let Refactor run `/simplify` after verification |
 
-### Update
+## Learn more
 
-A GitHub Release does not update an existing clone:
-
-```bash
-cd ~/.compforge && git pull && ./scripts/setup/install.sh update
-```
-
-That command is for a `main`-tracking clone. A release-pinned clone must
-`git fetch --tags`, check out the chosen newer tag, and then run
-`./scripts/setup/install.sh update`.
-
-Cursor's `--plugin-dir` link and any project-local skill are not managed by
-`install.sh`; after the pull, restart the agent.
-
-### Verify and troubleshoot
-
-Run these commands from `~/.compforge`:
-
-```bash
-./scripts/setup/doctor.sh              # pack structure and installed links
-./scripts/setup/install.sh --dry-run   # planned link changes
-./scripts/setup/install.sh --force     # replace conflicting symlinks
-./scripts/ci/harness-smoke.sh static   # packaged harness contracts
-./scripts/ci/smoke-test.sh             # clean-HOME install lifecycle
-```
-
-From a development checkout, doctor checks that checkout's structure but
-validates links against `$COMPFORGE_HOME` or `~/.compforge`; another valid pack
-warns, while a non-pack target fails. These checks do not execute Craft. Verify
-activation with the relevant harness guide:
-[Claude Code](docs/setup/claude-code.md) · [Codex](docs/setup/codex.md) ·
-[Cursor](docs/setup/cursor.md).
-
-### Remove
-
-```bash
-./scripts/setup/uninstall.sh
-```
-
-This removes only managed Claude and Codex links that still point at this pack.
-Cursor and project-local removal steps live in
-[`docs/setup/cursor.md`](docs/setup/cursor.md#4-update-or-remove).
-
-## What's included
-
-- `skills/` — workflow, React, stack, skeleton, playbooks, and review instructions
-- `commands/` — Claude Code command entry points (`craft`, `refactor`, `consult`, `review`, `jira`)
-- `examples/` — three runnable TypeScript + React todo references
-- `docs/` — harness guides, proof protocol, 1.x direction, support scope, verification
-- `scripts/` — setup, init, lint, proof runner, and smoke tests
-- `templates/` — ESLint zones, steiger, blocking CI, non-blocking architecture review
-
-## Project policy
-
-[`AGENTS.md`](./AGENTS.md) is the shared constitution and routing source;
-detector-readable Hard Rules live in
-[`skills/principles/hard-rules.md`](./skills/principles/hard-rules.md), and
-[`CLAUDE.md`](./CLAUDE.md) is the Claude Code adapter.
-Skill files, scripts, CI, and agent instructions use English as their canonical
-language. Korean readers can use the conceptual
-[`docs/reference/methodology.ko.md`](./docs/reference/methodology.ko.md) guide instead of unstable
-per-skill translations.
-
-Compforge remains a frontend component-architecture methodology layer, not a
-model wrapper or general orchestration framework. See
-[1.x direction](./docs/project/direction.md) for maintenance and non-goals, the
-[support scope](./docs/reference/support-scope.md) for the 1.x compatibility contract,
-and the [changelog](./CHANGELOG.md) for completed releases.
+- [Examples](examples/README.md): the same todo app on all three stacks
+- [Cart walkthrough](docs/guides/cart/README.md): Discovery → Test on one real screen
+- Setup: [Claude Code](docs/setup/claude-code.md) · [Codex](docs/setup/codex.md) ·
+  [Cursor](docs/setup/cursor.md) · [Install, update, remove](docs/setup/install.md)
+- [Support scope](docs/reference/support-scope.md) ·
+  [Proof runs](docs/proof/README.md), unfavourable ones included ·
+  [All docs](docs/README.md)
+- [Changelog](CHANGELOG.md) · [Contributing](.github/CONTRIBUTING.md) ·
+  [Agent notes for maintainers](AGENTS.md)
 
 ## License
 

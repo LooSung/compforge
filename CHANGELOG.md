@@ -5,6 +5,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.10.0] — 2026-11-19
+
+Forge 마켓플레이스, 짧아진 README·AGENTS·CLAUDE.
+
+### Added
+
+- Claude Code 플러그인 마켓플레이스 `forge` (`.claude-plugin/marketplace.json`, 실험적). `/plugin marketplace add LooSung/compforge` 후 `/plugin install compforge@forge`. 같은 카탈로그에 `oopforge@forge`, `fuseforge@forge`도 있다. 설치·업데이트·제거와 실제 로드 검증: `docs/verification/marketplace-2026-11-19.md`.
+- `skills/SKILL.md`: 플러그인으로 로드되면 플러그인 루트를 팩 루트로 본다. `init` 포인터 블록도 `~/.claude/plugins/cache/forge/compforge/<version>`을 마지막 팩 위치로 찾는다.
+
+### Changed
+
+- `README.md`·`README.ko.md`를 설치 한 줄 → 사용 예시 → 명령 표 → 동작 방식 순서의 짧은 문서로 다시 썼다. Forge 패밀리(Compforge·OOPforge·FuseForge) 표와 프로젝트 스위치 표를 추가했다.
+- `AGENTS.md`를 이 저장소를 수정하는 에이전트용 지도(구조·CI 체크·규칙)로 줄였다. 명령 라우팅은 `skills/SKILL.md`에만 둔다.
+- `CLAUDE.md`는 `@AGENTS.md`와 Claude 전용 두 줄만 남겼다.
+- 설치·업데이트·제거 상세는 `docs/setup/install.md`로 옮겼다.
+- `init`이 대상 프로젝트 `AGENTS.md`에 쓰는 포인터 블록이 라우팅 출처로 `{pack}/AGENTS.md` 대신 `{pack}/skills/SKILL.md`를 가리킨다. 기존 프로젝트는 `init.sh`를 다시 실행하면 갱신된다.
+
 ## [1.9.1] — 2026-11-18
 
 ### Fixed

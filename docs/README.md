@@ -8,6 +8,7 @@ do not rewrite them to match the current pack.
 
 ## Setup
 
+- [Install, update, remove](setup/install.md)
 - [Claude Code](setup/claude-code.md)
 - [Codex CLI](setup/codex.md)
 - [Cursor Agent CLI](setup/cursor.md)
@@ -48,4 +49,5 @@ claim.
 - [Security policy](../.github/SECURITY.md)
 
 Agent-facing canonical instructions remain under [`../skills/`](../skills/).
-The shared constitution is [`../AGENTS.md`](../AGENTS.md).
+The skill entry point is [`../skills/SKILL.md`](../skills/SKILL.md); notes for
+agents changing Compforge itself are in [`../AGENTS.md`](../AGENTS.md).
