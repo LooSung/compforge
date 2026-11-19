@@ -32,3 +32,5 @@ Follow `skills/workflow/craft.md` for the Component Contract format and `skills/
 - Do not add a `useEffect` that only masks the symptom.
 - Do not mix a bug fix with structural rework.
 - Do not claim done if you could not reproduce it.
+- Do not change code to match a comment. A comment that contradicts passing
+  tests is a stale comment to report, not the bug (`component-discipline` #13).

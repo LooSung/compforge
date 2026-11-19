@@ -32,7 +32,8 @@ The architecture review comments only **new** findings on the diff.
 - [ ] Each feature is its own folder (no app-wide type dumping ground).
 - [ ] Pages/routes contain no business logic.
 - [ ] Import direction holds: feature folders never import siblings; FSD goes through public APIs.
-- [ ] Comments explain why; names explain what. No narration comments.
+- [ ] No narration comments; each remaining why points at an existing test or link.
+- [ ] No comment the change left contradicting its code, and no code changed only to match a comment.
 - [ ] The generated design can be explained using Discovery → Design → Delivery Plan → Skeleton → Implement → Test.
 
 ## Accessibility

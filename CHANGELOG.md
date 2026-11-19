@@ -5,6 +5,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.11.0] — 2026-11-19
+
+주석 규율(쓰기·읽기), Review의 `Next` 명령.
+
+### Added
+
+- Review: 지적마다 바로 실행할 수 있는 `Next:` 명령을 붙인다. 동작 결함은 `/compforge:craft`, 빠지거나 약한 테스트는 `/compforge:test`, 동작을 바꾸지 않는 구조 개선은 `/compforge:refactor`. 보고서 끝 `Next` 묶음은 craft → test → refactor 순서로, 테스트가 동작을 고정한 뒤 refactor한다. Review 자체는 여전히 코드를 바꾸지 않는다.
+
+### Changed
+
+- 주석 규율(`component-discipline` #13)을 쓰기·읽기 두 쪽으로 바꿨다. 쓰기: 의도는 이름 → 타입 → 깨지는 테스트 순으로 담고, 주석은 그걸로 못 담는 why만 이미 있는 테스트나 링크를 근거로 남긴다. 문서 주석과 도구 지시 주석은 대상이 아니다. 읽기: 주석은 주장이지 근거가 아니다. 주석이 코드와 어긋나면 테스트나 어느 쪽이 나중에 바뀌었는지 보여 주는 이력으로만 움직이고, 없으면 둘 다 두고 보고한다. 내 변경이 틀리게 만든 주석만 고치고 나머지는 보고한다.
+- Hard Rules: SHOULD 문구를 위와 맞추고 NEVER "주석에만 맞춰 코드를 바꾸지 않는다"를 추가했다. Review는 diff가 틀리게 만든 주석을 P2, 새 서술 주석을 P3로 본다. 버그 수정 플레이북·리뷰어 체크리스트·한국어 방법론도 같은 규칙으로 맞췄다.
+- `refactor` 명령 예산을 19000 → 19200바이트로 올렸다. 원칙 파일이 craft·refactor에 통째로 인라인되는데, 위 읽기 규칙이 오래된 주석을 근거로 고쳐진 코드를 되돌리는 실수를 막는 유일한 문장이라 줄이지 않았다. 실제 크기 19175바이트.
+
 ## [1.10.0] — 2026-11-19
 
 Forge 마켓플레이스, 짧아진 README·AGENTS·CLAUDE.

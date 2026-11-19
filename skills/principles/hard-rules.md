@@ -37,7 +37,9 @@ is the mechanical subset a detector can read.
 
 ## SHOULD
 
-- Comments SHOULD explain why; names SHOULD explain what.
+- Intent SHOULD live in names, types, and tests. A comment SHOULD carry only a
+  why they cannot, anchored to an existing test or link. Doc comments and tool
+  directives are exempt.
 - Shared state SHOULD use composition (`children`) before context.
 - `useEffect` SHOULD be a last resort: synchronize with an external system only.
 - A structure SHOULD earn its exemption by naming the invariant it protects
@@ -57,6 +59,8 @@ is the mechanical subset a detector can read.
   `shared ← features ← app`; FSD
   `shared ← entities ← features ← widgets ← pages ← app`.
 - NEVER narrate code in comments.
+- NEVER change code only to match a comment. Act on a test or on history that
+  shows which side changed last; otherwise change neither and report it.
 - NEVER mix unrelated refactors into a feature or bug fix.
 - NEVER ship a defect your change makes newly reachable; fix it minimally.
 

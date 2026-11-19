@@ -132,7 +132,7 @@ In addition to the `gates.md` Verification gate:
 - Spot-check relevant `skills/antipatterns/` symptoms on the diff (god component, useEffect abuse, prop drilling).
 - For each structure you added (feature folder, hook, query, context), name the invariant it protects and the user's word for it, or put it back on the ladder (`component-discipline` #7).
 - Confirm anything a person was asked to approve was written in their words, not Contract jargon (`component-discipline` #14).
-- Check comment discipline: no narration comments; names explain what, comments explain why.
+- Check comment discipline (`component-discipline` #13): no narration; each new comment is a why with an existing anchor; no code changed only to match a comment.
 - If broader review is needed, run the per-layer checks in
   `{pack}/docs/reference/reviewer-checklist.md`.
 
@@ -370,9 +370,13 @@ differently, compare the thing you believe differs before documenting it.
 
 ## 13. Comment discipline
 
-Do not narrate code. If a comment explains what adjacent code does, delete it
-or rename/extract until the comment is unnecessary. Keep comments only for
-why, external constraints, hidden invariants, or tracked temporary decisions.
+Carry intent in a name, a type, or a test that fails when it breaks. Comment
+only a why none of these can hold, and point it at an existing test or link.
+Never narrate code. Doc comments and tool directives are out of scope.
+
+A comment is a claim, not evidence. If it contradicts the code, act only on a
+test or on history showing which side changed last; otherwise change neither
+and report it. Fix comments your change made stale; report the rest.
 
 ## 14. Product language at the human boundary
 
