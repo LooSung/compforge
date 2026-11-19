@@ -44,7 +44,6 @@ claim.
 ## Archives and governance
 
 - [Release archive](releases/)
-- [Historical Hard Rules research](research/competitor-skills.md)
 - [Contributing](../.github/CONTRIBUTING.md)
 - [Security policy](../.github/SECURITY.md)
 

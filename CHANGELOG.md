@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+### Removed
+
+- 2026-07 경쟁 스킬 조사 기록 `docs/research/competitor-skills.md`. Hard Rules의 정본은 `skills/principles/hard-rules.md`이고, 조사 결과는 릴리스 아카이브(`docs/releases/changelog-0.1-0.4.md`)에 남아 있다.
+
 ## [1.11.0] — 2026-11-19
 
 주석 규율(쓰기·읽기), Review의 `Next` 명령.
