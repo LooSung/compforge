@@ -20,7 +20,7 @@ Works with **Claude Code**, **Codex CLI**, and **Cursor Agent CLI**.
 | Pack | For | Stack |
 |---|---|---|
 | **Compforge** (this repo) | Frontend | TypeScript + React |
-| [OOPforge](https://github.com/LooSung/oopforge) | Backend | Java Spring · Python FastAPI |
+| [OOPforge](https://github.com/LooSung/oopforge) | Backend | Java Spring · Python FastAPI · Kotlin Spring and TypeScript Next.js (experimental) |
 | [FuseForge](https://github.com/LooSung/fuseforge) | One feature across both | Coordinates Compforge + OOPforge (experimental) |
 
 Each pack works on its own. In Claude Code, the `forge` marketplace offers all three.

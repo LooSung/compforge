@@ -12,7 +12,8 @@ guide for a skill pack, not a hosted-service SLA.
   `no-explicit-any`, and a `strict: true` tsconfig check).
 
 Vue, Angular, Svelte, plain JS, mobile-native, and backend work are outside
-this pack. OOPforge covers backend OOP/DDD.
+this pack. OOPforge covers backend OOP/DDD, including experimental Next.js
+server code under `src/server/` (route handlers, server actions).
 
 The three todo apps are executable references, not product boilerplates.
 

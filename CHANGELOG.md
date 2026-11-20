@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+### Changed
+
+- Next.js 앱의 서버 도메인 코드(`src/server/`, route handler, server action)는 OOPforge의 실험적 `typescript-next` 스택으로 안내한다. 페이지·컴포넌트·클라이언트 상태는 계속 Compforge 몫이다. `SKILL.md` 스택 범위, `frontend-stack.md`, 지원 범위 문서, README의 자매 팩 표와 `forge` 마켓플레이스의 OOPforge 설명을 맞췄다.
+
 ## [1.11.1] — 2026-11-19
 
 문서 정리만 있고 동작 변경은 없다.
