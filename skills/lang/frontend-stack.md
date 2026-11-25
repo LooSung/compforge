@@ -18,7 +18,6 @@ Supported: **TypeScript + React**.
 | JavaScript (no TS) React | Recommend TS; proceed plain-JS only if the user insists (note the risk) |
 | Vue | **Outside the 1.x support scope** — say so; do not apply Compforge rules to Vue code |
 | Angular, Svelte, mobile-native, backend | Compforge does not apply; plain task only if the user insists |
-| Next.js server code (`src/server/`, route handlers, server actions) | OOPforge's experimental `typescript-next` stack |
 
 ## Stack identifiers
 

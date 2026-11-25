@@ -20,7 +20,7 @@ Compforge는 **TypeScript + React**(Vite 또는 Next.js) 프론트엔드에서 �
 | 팩 | 대상 | 스택 |
 |---|---|---|
 | **Compforge** (이 저장소) | 프론트엔드 | TypeScript + React |
-| [OOPforge](https://github.com/LooSung/oopforge) | 백엔드 | Java Spring · Python FastAPI · Kotlin Spring·TypeScript Next.js (실험적) |
+| [OOPforge](https://github.com/LooSung/oopforge) | 백엔드 | Java Spring · Python FastAPI · Kotlin Spring·TypeScript NestJS (실험적) |
 | [FuseForge](https://github.com/LooSung/fuseforge) | 두 쪽에 걸친 기능 하나 | Compforge + OOPforge 조율 (실험적) |
 
 각 팩은 단독으로 쓸 수 있습니다. Claude Code에서는 `forge` 마켓플레이스 하나로 셋 다 받을 수 있습니다.

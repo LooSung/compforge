@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+### Changed
+
+- Next.js 앱의 서버 코드(`src/server/`, route handler, server action)를 더 이상 OOPforge로 안내하지 않는다. OOPforge v1.15.0이 실험적 `typescript-next` 스택을 빼고 TypeScript 백엔드로 NestJS를 넣었다. Next.js 앱 전체가 다시 Compforge 범위이고, 비즈니스 규칙은 OOPforge가 지원하는 별도 백엔드에 둔다. `SKILL.md` 스택 범위, `frontend-stack.md`, 지원 범위 문서를 v1.11.1 문구로 되돌렸고, README의 자매 팩 표와 `forge` 마켓플레이스의 OOPforge 설명을 맞췄다.
+
 ## [1.12.0] — 2026-11-25
 
 대상 코드를 좁게 읽는 Startup 규칙, Next.js 서버 코드는 OOPforge로 안내.
