@@ -146,8 +146,6 @@ sections once — not once per stage.
 <!-- skills/workflow/gates.md -->
 # Workflow — Gates
 
-Contents: Startup · Plan input · Verification · Completion report
-
 Craft, Refactor, Test, and Crucible open and close with these gates. Each
 workflow adds only its own steps; none repeats them.
 
@@ -167,7 +165,10 @@ workflow adds only its own steps; none repeats them.
 3. Resolve a path the user gives (`@…`, absolute, or relative) against the work
    target, never under `{pack}/docs/…` or `~/.compforge/…`. If it is missing,
    confirm the absolute path or project root with the user.
-4. If you skip any step, leave a one-line reason.
+4. **Read narrowly**: in target code and logs, search first, read only the
+   needed range, and print only summaries and failures. Read plans, work docs,
+   rules, and skill files whole.
+5. If you skip any step, leave a one-line reason.
 
 ## Plan input
 

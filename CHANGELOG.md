@@ -5,8 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/); versions follow 
 
 ## [Unreleased]
 
+## [1.12.0] — 2026-11-25
+
+대상 코드를 좁게 읽는 Startup 규칙, Next.js 서버 코드는 OOPforge로 안내.
+
 ### Changed
 
+- 공통 Startup 게이트에 **Read narrowly** 단계를 추가했다: 대상 코드와 로그는 검색으로 위치를 찾아 필요한 범위만 읽고, 명령 출력은 요약과 실패만 받는다. 계획, 작업 문서, 규칙, 스킬 파일은 전체를 읽는다. 요청마다 이미 읽은 내용을 다시 싣는 비용을 줄이기 위한 규칙이며, 효과는 측정하지 않았다. `gates.md`의 목차 줄은 뺐다.
 - Next.js 앱의 서버 도메인 코드(`src/server/`, route handler, server action)는 OOPforge의 실험적 `typescript-next` 스택으로 안내한다. 페이지·컴포넌트·클라이언트 상태는 계속 Compforge 몫이다. `SKILL.md` 스택 범위, `frontend-stack.md`, 지원 범위 문서, README의 자매 팩 표와 `forge` 마켓플레이스의 OOPforge 설명을 맞췄다.
 
 ## [1.11.1] — 2026-11-19
